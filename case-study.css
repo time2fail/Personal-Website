@@ -344,22 +344,6 @@
   .glossary-float { right: 16px; bottom: 16px; width: 260px; }
 }
 
-/* ---- Footer note ---- */
-.cs-footer {
-  border-top: 1px solid var(--grid-line);
-  padding: 2rem var(--edge) 2.5rem;
-  text-align: center;
-}
-.cs-footer p {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--ink-soft);
-  max-width: 60ch;
-  margin: 0 auto;
-}
-.cs-footer a { border-bottom: 1px solid var(--ink-soft); }
-.cs-footer a:hover { color: var(--blue); border-color: var(--blue); }
-
 /* ---- Responsive ---- */
 @media (max-width: 760px) {
   .metric-grid { grid-template-columns: 1fr; }

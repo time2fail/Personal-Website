@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic Sort — Level Tasarımı Metrik Analizi | Utku Cengiz Acar</title>
+<meta name="description" content="Grand Games'in Magic Sort vaka dosyasındaki 25 level için 7 türetilmiş metrikle zorluk eğrisi, korelasyon ve cross-section analizi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="case-study.css">
+</head>
+<body>
+
+<div class="cs-topbar">
+  <div class="cs-topbar-inner">
+    <a class="cs-mark" href="index.html">← utkucengizacar.net</a>
+    <a class="cs-back" href="mailto:utkucengizacar@gmail.com">İletişim</a>
+  </div>
+</div>
+
+<main id="main">
+
+  <section class="cs-hero">
+    <p class="eyebrow">Vaka Analizi / Grand Games — Mülakat Hazırlığı</p>
+    <h1 class="headline">25 level, 7 metrik: bir sıralama bulmacasının zorluk eğrisini sayılarla okumak.</h1>
+    <p class="subhead">Grand Games'in mülakat sürecinde paylaştığı "Magic Sort" vaka dosyasındaki ham level parametrelerinden (renk, şişe, parça, boş şişe sayısı) <strong>yedi türetilmiş metrik</strong> çıkardım; zorluk etiketlerinin (Hard, Super Hard) bu metriklerle ne kadar örtüştüğünü ve <strong>hangi metriklerin birbirinin tekrarı olduğunu</strong> test ettim.</p>
+    <p class="cs-source">Kaynak — Grand Games, "Magic Sort" Level Tasarım Vaka Dosyası (25 level) · Python/pandas ile hesaplandı</p>
+
+    <figure class="bottle-figure">
+      <div class="bottle-racks" id="bottleRacks"></div>
+      <figcaption class="bottle-figure-caption">FIG. 1 — Level 1, 19 ve 25'te şişe doluluğu. <strong>Level 19 (Super Hard) hiç boş şişe bırakmıyor</strong>; Level 20'de gelen perde mekaniği zorluğu resetleyip manevra alanını yeniden açıyor, bu yüzden <strong>Level 25 yeniden boş şişelere sahip</strong>.</figcaption>
+    </figure>
+
+    <div class="legend-card">
+      <p class="legend-card-head">Metrik Sözlüğü</p>
+      <table class="legend-table" id="legendTable">
+        <tbody>
+          <tr><td class="legend-code">M1</td><td class="legend-formula">Renk / Şişe</td><td class="legend-meaning">Renk yoğunluğu</td></tr>
+          <tr><td class="legend-code">M2</td><td class="legend-formula">(Şişe − Boş) / Şişe</td><td class="legend-meaning">Dolu şişe oranı — manevra alanının tersi</td></tr>
+          <tr><td class="legend-code">M3</td><td class="legend-formula">Parça / (Şişe − Boş)</td><td class="legend-meaning">Dolu şişe başına yük</td></tr>
+          <tr><td class="legend-code">M4</td><td class="legend-formula">(Bilinmez + Perdeli + Karanlık) / Parça</td><td class="legend-meaning">Toplam "gizli bilgi" oranı</td></tr>
+          <tr><td class="legend-code">M5</td><td class="legend-formula">Renk / (Şişe − Boş)</td><td class="legend-meaning">Renk / dolu şişe — yapısal kural kontrolü</td></tr>
+          <tr><td class="legend-code">M6</td><td class="legend-formula">Boş / Renk</td><td class="legend-meaning">Renk başına manevra alanı — headroom</td></tr>
+          <tr><td class="legend-code">M7</td><td class="legend-formula">Parça / Renk</td><td class="legend-meaning">Renk başına parça — kapasite tavanı</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="part" id="part-01">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 01 — Ham Parametreler</p>
+      <h2 class="part-title">Önce ham sayılar: renk, şişe, parça, boş şişe</h2>
+      <p class="part-intro">Türetilmiş metriklerin okunuşu, ham parametrelerin level ile nasıl arttığına bağlı. <strong>Turuncu bant Hard, kırmızı bant Super Hard</strong> levelleri gösteriyor; kesikli çizgiler yeni mekaniklerin geldiği <strong>Level 7</strong> (Bilinmez Parça), <strong>Level 20</strong> (Perdeli Şişe/Parça) ve <strong>Level 24'ü</strong> (Karanlık Parça) işaretliyor — sonraki tüm grafiklerde aynı okuma geçerli.</p>
+      <div class="diff-legend">
+        <span><i class="diff-swatch is-normal"></i>Normal</span>
+        <span><i class="diff-swatch is-hard"></i>Hard</span>
+        <span><i class="diff-swatch is-superhard"></i>Super Hard</span>
+        <span><i class="diff-swatch is-mechanic"></i>Yeni mekanik</span>
+      </div>
+
+      <div class="part-body chart-grid-2 cols-2">
+        <div class="chart-card reveal">
+          <h4>Renk Sayısı</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartRenk"></canvas></div>
+        </div>
+        <div class="chart-card reveal">
+          <h4>Şişe Sayısı</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartSise"></canvas></div>
+        </div>
+        <div class="chart-card reveal">
+          <h4>Parça Sayısı</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartParca"></canvas></div>
+        </div>
+        <div class="chart-card reveal">
+          <h4>Boş Şişe Sayısı</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartBos"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part part-alt" id="part-02">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 02 — Türetilmiş Oranlar</p>
+      <h2 class="part-title">M1 → M2 → M5 → M3 → M7 → M6: tek tek oranlar</h2>
+      <p class="part-intro">Altı oran metriği, analizdeki asıl sırasıyla: önce yoğunluk ve doluluk, ardından oyunun <strong>yapısal kuralını doğrulayan bir kontrol (M5)</strong>, sonra yük ve kapasite metrikleri, en sonda manevra alanı.</p>
+
+      <div class="part-body metric-grid">
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M1</span><h4>Renk Yoğunluğu</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM1"></canvas></div>
+          <p class="metric-note">Toplam şişe kapasitesine göre kaç farklı renk sıkıştırılmış; level ilerledikçe <strong>taban seviyesi yükseliyor</strong>.</p>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M2</span><h4>Dolu Şişe Oranı</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM2"></canvas></div>
+          <p class="metric-note">1.0'a ne kadar yakınsa manevra alanı o kadar az demek. <strong>Super Hard'da (Level 19) boş şişe hiç yok</strong>, oran tam 1.0.</p>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M5</span><h4>Renk / Dolu Şişe — Yapısal Kural</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM5"></canvas></div>
+          <p class="metric-note">Neredeyse tüm levellerde tam 1.0: oyunun temel kuralı <strong>"her dolu şişe tek renkle başlar"</strong>. Sapan levellar (1, 2, 19) özel ya da bilerek zorlaştırılmış anları işaret ediyor.</p>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M3</span><h4>Dolu Şişe Başına Yük</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM3"></canvas></div>
+          <p class="metric-note">Ortalama bir dolu şişenin kaç parça taşıdığı; şişe kapasitesinin ne kadar dolu kullanıldığını gösterir.</p>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M7</span><h4>Renk Başına Parça</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM7"></canvas></div>
+          <p class="metric-note">Her rengin ortalama kaç parçaya karşılık geldiği; <strong>~4 civarında bir kapasite tavanına</strong> doygunlaşıyor.</p>
+        </div>
+        <div class="metric-card reveal">
+          <div class="metric-card-head"><span class="code-chip">M6</span><h4>Renk Başına Manevra Alanı</h4></div>
+          <div class="chart-canvas-wrap is-short"><canvas id="chartM6"></canvas></div>
+          <p class="metric-note">Her renge düşen boş şişe (headroom) miktarı; zorluk arttıkça daralıyor, <strong>Super Hard'da sıfırlanıyor</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="part-03">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 03 — Gizli Bilgi Mekanikleri</p>
+      <h2 class="part-title">M4: bilinmeyen, perdeli ve karanlık parçaların toplam payı</h2>
+      <p class="part-intro">Üstteki grafik toplam gizli bilgi oranını (Bilinmez + Perdeli + Karanlık), alttaki üç mekaniği ayrı ayrı gösteriyor. <strong>Bilinmez Parça Level 7–19</strong> arası aktif, <strong>Perdeli Şişe/Parça Level 20</strong> sonrası devam ediyor, <strong>Karanlık Parça</strong> ise yalnızca <strong>Level 24'te</strong> görülüyor.</p>
+
+      <div class="part-body chart-grid-2">
+        <div class="chart-card reveal">
+          <h4>M4 — Toplam Gizli Bilgi Oranı</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartM4Total"></canvas></div>
+        </div>
+        <div class="chart-card reveal">
+          <h4>M4a / M4b / M4c — Ayrıştırılmış Kanallar</h4>
+          <div class="chart-canvas-wrap"><canvas id="chartM4Split"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part part-alt" id="part-04">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 04 — Level Başına Değişim Hızı</p>
+      <h2 class="part-title">Bir önceki levele göre artış: Δ Parça, Δ Renk, Δ Şişe</h2>
+      <div class="part-body">
+        <div class="chart-card reveal">
+          <h4>Level (n) − Level (n−1)</h4>
+          <div class="chart-canvas-wrap is-tall"><canvas id="chartDelta"></canvas></div>
+        </div>
+        <div class="insight reveal">
+          <p><strong>Level 20'deki büyük negatif sıçrama</strong>, perde mekaniği tanıtılırken zorluğun <strong>bilinçli olarak sıfırlandığını</strong> gösteriyor; Level 15'teki küçük düşüş de benzer bir ara mola.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part" id="part-05">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 05 — Zorluk Gruplarına Göre Özet</p>
+      <h2 class="part-title">Hangi metrik zorluk etiketini en net ayırıyor?</h2>
+      <p class="part-intro">Normal / Hard / Super Hard grupları için tüm metriklerin ortalaması — <strong>hangi metriğin zorluk etiketini en net ayırdığını</strong> tek bakışta karşılaştırmak için.</p>
+      <div class="part-body">
+        <div class="chart-card reveal">
+          <div class="chart-canvas-wrap is-tall"><canvas id="chartGroupMeans"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="part part-alt" id="part-06">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 06 — Tüm Metrikler</p>
+      <h2 class="part-title">Grafiklerin kaynağı: tam tablo</h2>
+      <p class="part-intro">İleride cross-section ya da korelasyon analizi için buradan devam edilebilir.</p>
+      <details class="data-details">
+        <summary>Tabloyu göster — 25 level</summary>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Level</th><th>Zorluk</th><th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>M5</th><th>M6</th><th>M7</th>
+              </tr>
+            </thead>
+            <tbody id="dataTableBody"></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="part" id="part-07">
+    <div class="part-inner">
+      <p class="part-label">Bölüm 07 — Cross-Section Analizi</p>
+      <h2 class="part-title">Metrikler birbirine karşı: tekrar mı, bağımsız bilgi mi?</h2>
+      <p class="part-intro">Buraya kadar her metriği tek başına level'a karşı çizdik. Burada metrikler birbirine karşı inceleniyor: <strong>hangileri aynı bilgiyi tekrar ediyor</strong>, hangi çift zorluk gruplarını en net ayırıyor.</p>
+
+      <div class="part-body">
+        <p class="part-label" style="margin-top:0">7.1 — Korelasyon Matrisi</p>
+        <div class="chart-card reveal">
+          <h4>M1–M7 (ve Level) Arası İlişkiler</h4>
+          <div class="corr-scroll"><div class="corr-grid" id="corrGrid"></div></div>
+        </div>
+        <div class="insight reveal">
+          <p><strong>M2 ↔ M6</strong> neredeyse birebir ters orantılı <strong>(r = −0.98)</strong>: M2 = 1 − Boş/Şişe, M6 = Boş/Renk. Aynı Boş Şişe değişkeni ikisinde de var ama zıt yönde etki ediyor; Renk ve Şişe birbirine çok yakın seyrettiği için (M5 ≈ 1) bu ters ilişki neredeyse tüm levellerde bozulmadan kalıyor.</p>
+          <p><strong>M3 ↔ M7</strong> ise aynı yönde neredeyse birebir <strong>(r = 0.94)</strong>: M5 ≈ 1 olduğundan Renk ≈ Dolu Şişe, bu da iki metriğin paydasını eşitliyor — ikisi de pratikte aynı sayıyı ölçüyor. Pratik sonuç: <strong>bu iki çiftten birer tanesini taşımak yeterli</strong>, ikisini birden "bağımsız kanıt" gibi kullanmak yanıltıcı olur. Level ile en güçlü korelasyon <strong>M4</strong>'te <strong>(r = 0.80)</strong>.</p>
+        </div>
+
+        <p class="part-label" style="margin-top:3rem">7.2 — M4 vs M6: Zorluk Kümeleri</p>
+        <div class="chart-card reveal">
+          <h4>Gizli Bilgi Oranı × Manevra Alanı (etiketler level numarası)</h4>
+          <div class="chart-canvas-wrap is-tall"><canvas id="chartScatter"></canvas></div>
+        </div>
+        <div class="insight reveal">
+          <p>X ekseni tersten: sağa doğru manevra alanı azalıyor, sağ-üst köşe "en zor" bölgeyi temsil ediyor. <strong>Level 19 (Super Hard) gerçekten de eksenin en ucunda</strong> — manevra alanı sıfır. Ama Level 14 ve 24 (Hard) Normal levellerin arasına serpişmiş durumda: <strong>tek başına bu iki metrik Hard'ı Normal'den görsel olarak ayırmıyor.</strong></p>
+          <p>Hard etiketi, iki metriğin ortalama seviyesinden çok, <strong>tekil bir parametredeki ani sıçramadan</strong> geliyor: Level 13→14'te bilinmez parça, Level 23→24'te karanlık parça.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="glossary-float" id="glossaryFloat">
+  <div class="glossary-handle" id="glossaryHandle">
+    <span class="glossary-grip" aria-hidden="true">⠿</span>
+    <span class="glossary-title">Metrik Sözlüğü</span>
+    <span class="glossary-chevron" aria-hidden="true">›</span>
+  </div>
+  <div class="glossary-body" id="glossaryBody">
+    <table class="legend-table" id="glossaryTable"><tbody></tbody></table>
+  </div>
+</div>
+
+<footer class="cs-footer">
+  <p>Bu analiz, Grand Games'in mülakat sürecinde paylaştığı vaka dosyası üzerine Eylül 2026'da hazırlanmıştır. Ham Excel dosyası bu sayfada yer almıyor; yukarıdaki tüm sayılar o dosyadan türetildi. Diğer projeler için <a href="index.html">ana sayfaya</a> dönebilirsiniz.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+<script src="case-study.js"></script>
+</body>
+</html>

@@ -123,6 +123,17 @@
     margin-top:10px;
     max-width:46ch;
   }
+  .level-counts{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.78rem;
+    color:var(--muted);
+    letter-spacing:.02em;
+    margin-top:14px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .level-counts .sep{ color:var(--line); }
 
   section.sec{ margin-bottom:8px; }
   .sec .eyebrow{ margin-bottom:10px; }
@@ -847,6 +858,7 @@
       <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> GAME MECHANICS ANALİZİ</div>
       <h1>Royal Match & Toon Blast</h1>
       <div class="sub">Dream Games'in iki match/blast oyununun çekirdek mekanikleri üzerine karşılaştırmalı bir analiz. Doğrudan oynanış gözlemine ve resmi kaynaklara dayanıyor.</div>
+      <div class="level-counts">Royal Match 80 seviye <span class="sep">·</span> Royal Kingdom 180 seviye <span class="sep">·</span> Toon Blast 80 seviye</div>
     </div>
     <div class="progress">§ 1-6 / 7</div>
   </header>
@@ -914,7 +926,7 @@
     <p>Bunlara ek olarak, bazı levellerde kullanılan bir beşinci element vardır.</p>
 
     <div class="secret">
-      <img src="assets/elmas.jpg" alt="Beşinci element - elmas (taslak görsel)">
+      <img src="assets/elmas.jpg" alt="Beşinci element - elmas">
       <div>
         <div class="badge">Gizli · Sessiz Zorluk Aracı</div>
         <div class="name-tr">Pembe Elmas</div>
@@ -1497,7 +1509,7 @@
         <img class="stack-front" src="assets/obs_kutu.jpg" alt="Kutu">
       </div>
       <div>
-        <strong>Katmanlama:</strong> Aynı hücrede iki farklı engel üst üste bulunabilir, ör. <strong>Kutu(1) üzerinde koyu Çimen(2)</strong>. Bu durumda hedef sayacı aynı anda iki farklı engel tipi gösterir, ama board'da bunu ele veren ayrı bir ikinci doku her zaman görünmeyebilir.
+        <strong>Katmanlama:</strong> Aynı hücrede iki farklı engel üst üste bulunabilir, ör. <strong>Kutu(1) üzerinde koyu Çimen(2)</strong>. Bu durumda hedef sayacı aynı anda iki farklı engel tipi gösterir.
       </div>
     </div>
   </section>
@@ -1909,7 +1921,7 @@
     </div>
 
     <div class="callout">
-      Çekiç → tek hücre, Boks Eldiveni → satır, Örs → sütun: üçü aynı "1 katman indirme" etkisinin farklı geometrik kapsamlarda tekrarı, booster ailesi kademeli olarak kapsama alanını büyüterek tanıtılıyor. İlk booster'ın (Çekiç) L9-10 civarında açılması, Royal Match'in "L8'de ilk booster açılıyor" zamanlamasına çok yakın; iki oyunun da ilk 10 seviye içinde tek bir booster'ı erken açması ortak bir FTUE prensibi gibi duruyor.
+      Çekiç → tek hücre, Boks Eldiveni → satır, Örs → sütun: üçü aynı "1 katman indirme" etkisinin farklı geometrik kapsamlarda tekrarı, booster ailesi kademeli olarak kapsama alanını büyüterek tanıtılıyor. İlk booster'ın (Çekiç) L9-10 civarında açılması, Royal Match'in "L8'de ilk booster açılıyor" zamanlamasına çok yakın.
     </div>
   </section>
 
@@ -1923,7 +1935,7 @@
     <div class="eyebrow">BÖLÜM 6</div>
     <h2>Engeller</h2>
 
-    <p>Şimdiye kadar üç engel ailesi doğrulandı. Dış kaynaklar ilk 50 seviyede toplam 8 aile olduğunu söylüyor, geri kalan beşi henüz kendi verimizde görülmedi.</p>
+    <p>Aynı tanım çerçevesi burada da geçerli: footprint, komşuluk kuralı, katman sayısı, eşleşme türü. Şapka, Posta Kutusu ile aynı eksende ayrışıyor: temizlenmiyor, sadece üretim yapıyor.</p>
 
     <div class="obs-list">
 
@@ -2002,9 +2014,6 @@
 
     </div>
 
-    <div class="callout">
-      Board şekli her zaman dikdörtgen değil: köşeleri kesik ya da girintili dış hatlar görülüyor, Royal Match'te de var olan bir Level Design ekseni burada da doğrulandı. Dış kaynaklar 4 engel ailesi daha listeliyor (İngilizce isimlerden tahmini: Ampul, Can Toss, Sabun, Lastik Ördek), kendi verimizle henüz doğrulanmadı.
-    </div>
   </section>
 
   <div class="part-break">
@@ -2039,7 +2048,7 @@
     </div>
 
     <div class="callout">
-      <strong>Çıkarım:</strong> power-up kombinasyon formülleri (Roket+Roket, Roket+TNT, Lightball+Lightball), booster'ların ilk açılış zamanlaması ve hatta booster ailesinin kendisi (4 tane, aynı hücre→satır→sütun→karıştırma ilerlemesi) neredeyse birebir örtüşüyor; bunlar muhtemelen türün oturmuş standartları. Statik üretici engel tipi de (Posta Kutusu / Şapka) her iki oyunda da var, aynı işlevle. Asıl ayrışma çekirdek mekanikte: Royal Match derinliği swap kombinatoriğinden, Toon Blast ise grup okumaktan alıyor, bu da cascade var/yok kararını doğrudan belirliyor. Kendi oyunumuz için çıkarım: kombinasyon ve booster ritmi gibi standart hale gelmiş kuralları yeniden icat etmeye gerek yok, asıl farklılaşma alanı çekirdek dokunuş mekaniği ve onun getirdiği tempo kararı olmalı.
+      <strong>Çıkarım:</strong> power-up kombinasyon formülleri (Roket+Roket, Roket+TNT, Lightball+Lightball), booster'ların ilk açılış zamanlaması ve hatta booster ailesinin kendisi (4 tane, aynı hücre→satır→sütun→karıştırma ilerlemesi) neredeyse birebir örtüşüyor; bunlar muhtemelen türün oturmuş standartları. Statik üretici engel tipi de (Posta Kutusu / Şapka) her iki oyunda da var, aynı işlevle. Asıl ayrışma çekirdek mekanikte: Royal Match derinliği swap kombinatoriğinden, Toon Blast ise grup okumaktan alıyor, bu da cascade var/yok kararını doğrudan belirliyor.
     </div>
   </section>
 

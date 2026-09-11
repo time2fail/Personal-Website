@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animasyon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --ink:#241F33; --ink-soft:#4A4358;
+    --muted:#8A7F68; --line:#E3D8BE; --accent:#B07C22; --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2; --crown:#E8A320; --book:#D14B3C; --shield:#3C74C4;
+    --leaf:#4C9A4E; --diamond:#CE4FAE; --warn:#B24444; --warn-soft:#F6E2DE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+      --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+      --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+      --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+    --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+    --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+    --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--ground); color:var(--ink); font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .page{ max-width:900px; margin:0 auto 0 clamp(32px, 10vw, 160px); padding:56px 24px 90px; }
+  h1,h2,h3{ font-family:'Fraunces', Georgia, 'Times New Roman', serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink); }
+  .eyebrow{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; color:var(--accent-strong); font-weight:500; display:flex; align-items:center; gap:10px; }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); letter-spacing:.02em; }
+  .masthead{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:28px; border-bottom:1px solid var(--line); margin-bottom:44px; flex-wrap:wrap; }
+  .masthead h1{ font-size:clamp(2rem, 5vw, 2.7rem); line-height:1.08; margin-top:8px; }
+  .masthead .sub{ color:var(--ink-soft); font-size:1.02rem; margin-top:10px; max-width:50ch; }
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{ font-size:1.62rem; margin-bottom:18px; }
+  .sec p{ font-size:1.02rem; line-height:1.68; color:var(--ink-soft); max-width:64ch; margin:0 0 16px; }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+  .flag{ display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:.64rem; letter-spacing:.04em; padding:2px 8px; border-radius:20px; margin-left:8px; position:relative; top:-2px; }
+  .flag.unverified{ background:var(--warn-soft); color:var(--warn); }
+  .callout{ border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:24px 0 8px; font-size:.98rem; line-height:1.62; color:var(--ink-soft); }
+  .callout strong{ color:var(--ink); }
+  .divider{ display:flex; align-items:center; gap:16px; margin:52px 0; color:var(--accent); }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+  .site-nav{ display:flex; align-items:center; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:22px; flex-wrap:wrap; }
+  .site-nav a{ color:var(--muted); text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{ color:var(--accent-strong); border-bottom-color:var(--accent); }
+  .site-nav .sep{ color:var(--line); }
+
+  .timeline{ display:flex; flex-direction:column; margin:22px 0 8px; border-left:2px solid var(--line); padding-left:26px; }
+  .tl-step{ position:relative; padding-bottom:26px; }
+  .tl-step:last-child{ padding-bottom:0; }
+  .tl-step::before{ content:""; position:absolute; left:-31px; top:4px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--surface); }
+  .tl-step .t{ font-family:'IBM Plex Mono', monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:4px; }
+  .tl-step p{ margin:0; font-size:.96rem; color:var(--ink-soft); max-width:58ch; }
+  .tl-step p strong{ color:var(--ink); }
+
+  .note-list{ display:flex; flex-direction:column; gap:0; margin:22px 0 8px; }
+  .note-row{ padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:190px 1fr; gap:24px; }
+  .note-row:last-child{ border-bottom:1px solid var(--line); }
+  .note-row .term{ font-family:'Fraunces', serif; font-weight:600; font-size:1.02rem; color:var(--ink); padding-top:1px; }
+  .note-row .term .cite{ display:block; font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:.66rem; letter-spacing:.03em; color:var(--muted); margin-top:6px; }
+  .note-row p{ margin:0 0 8px; font-size:.96rem; }
+  .note-row p:last-child{ margin-bottom:0; }
+  .note-row.img-right{ grid-template-columns:190px 1fr 210px; }
+
+  .scene-row{ display:grid; grid-template-columns:1fr 240px; gap:32px; align-items:start; margin:22px 0 8px; }
+  .scene-art img{ width:100%; display:block; border-radius:14px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .scene-art .cap{ padding:8px 2px 0; font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); text-align:center; }
+
+  .shot-row{ display:flex; gap:10px; align-items:flex-start; }
+  .shot{ width:100px; flex-shrink:0; border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface); }
+  .shot.lg{ width:210px; }
+  .shot img{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+  .shot .cap{ padding:5px 7px 6px; font-family:'IBM Plex Mono', monospace; font-size:.6rem; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
+
+  .game-header{ margin:0 0 40px; padding-bottom:20px; border-bottom:3px solid var(--accent); }
+  .game-header .eyebrow{ margin-bottom:8px; }
+  .game-header h2{ font-size:2.1rem; }
+
+  footer{ margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); line-height:1.7; }
+  @media (max-width:760px){
+    .note-row{ grid-template-columns:1fr; gap:6px; }
+    .note-row.img-right{ grid-template-columns:1fr; }
+    .note-row.img-right .shot-row{ margin-top:10px; }
+    .scene-row{ grid-template-columns:1fr; }
+    .scene-art{ max-width:260px; margin:14px auto 0; }
+  }
+
+  .part-break{
+    margin:72px 0 44px;
+    padding:30px 0;
+    border-top:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    text-align:center;
+  }
+  .part-break .eyebrow{
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .part-break h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .part-break p{
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:10px auto 0;
+    font-size:1rem;
+    line-height:1.6;
+  }
+
+  .compare-table-wrap{
+    overflow-x:auto;
+    margin:22px 0;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .compare-table{
+    width:100%;
+    min-width:520px;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  .compare-table th,
+  .compare-table td{
+    padding:12px 18px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .compare-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+  }
+  .compare-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .compare-table td{
+    color:var(--ink-soft);
+  }
+  .compare-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a><span class="sep">·</span>
+    <a href="level-design.html">Level Design</a><span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a><span class="sep">·</span>
+    <a href="graphics.html">Grafik</a><span class="sep">·</span>
+    <a href="animation.html" class="active">Animasyon</a><span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a><span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> ANİMASYON ANALİZİ</div>
+      <h1>Bir Karenin B Kareye Geçişi</h1>
+      <div class="sub">HUD, kazanma ve kaybetme geçişleri, kademe (cascade) davranışı üzerine bir inceleme: tekil obje ve arayüz geçişlerinin nasıl ve ne kadar sürede gerçekleştiğine odaklanıyor.</div>
+    </div>
+    <div class="progress">§ 1-17 / 17</div>
+  </header>
+
+  <div class="game-header">
+    <div class="eyebrow">OYUN 1</div>
+    <h2>Royal Match</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Kazanma Ekranının Beş Adımı</h2>
+    <p>Board üstünde oynayan tek bir katman değil: sırayla açılan, her biri <strong>kendi süresine sahip beş ayrı animasyon parçası.</strong></p>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <div class="timeline">
+          <div class="tl-step"><div class="t">~0.0sn</div><p>Tahta kararır, üstüne bir kurdele açılır.</p></div>
+          <div class="tl-step"><div class="t">~0.3sn</div><p><strong>"ROYAL MATCH!"</strong> yazısı tek seferde belirmiyor: harf öbekleri halinde aşamalı yazılıyor, R → RO → ROYA → ROYAL MATCH!</p></div>
+          <div class="tl-step"><div class="t">~0.6sn</div><p>Kurdele ve borazan çerçevesi oturur, borazanlar konfeti fırlatır.</p></div>
+          <div class="tl-step"><div class="t">~1.0sn</div><p>Bağımsız bir havai fişek parçacık sistemi devreye giriyor, konfetiden ayrı ve kendi zamanlamasıyla.</p></div>
+          <div class="tl-step"><div class="t">~2.5sn</div><p>Her şey sönümlenir, tahta geri döner.</p></div>
+        </div>
+      </div>
+      <div class="scene-art">
+        <img src="assets/win_banner.png" alt="ROYAL MATCH! kazanma banner'ı">
+        <div class="cap">Level 12</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      Havai fişek ve konfeti görsel olarak aynı anda oluyor gibi görünse de <strong>iki ayrı parçacık sistemi</strong> çalışıyor: biri kurdele ve borazan kaynaklı, diğeri bağımsız bir havai fişek katmanı. Detaylı parçacık dökümü Özel Efektler sayfasında.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>HUD ve Girdi Zamanlaması</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Hamle sayacı<span class="cite">tween yok</span></div>
+        <div class="txt"><p>Kademeli azalma yok: <strong>sayaç girdi anında direkt yeni değere atlıyor</strong> (24→23 arası ara değer gösterilmiyor). Bu değişim, o hamlenin görsel sonucu (ör. engel kırılması) ekranda oynamaya başlamadan önce gerçekleşiyor: girdi kabul, sayaç anında güncellenir, sonuç animasyonu oynar.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/win_pre.png" alt="Hedef ve Hamle panelleri"><div class="cap">Level 12</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Kademe kuyruğu<span class="cite">oyuncu deneyimi</span></div>
+        <div><p>Bir hamlenin animasyonu tamamlanmadan sıradaki hamle yapılabiliyor; kuyruğa alınan hamlenin animasyonu, oynanmakta olan animasyon bitince başlıyor. <strong>Board hiçbir zaman girdiye kapanmıyor</strong>, bu da oyunu belirgin biçimde akıcı hissettiriyor.</p></div>
+      </div>
+      <div class="note-row">
+        <div class="term">Kalan hamle → ödül</div>
+        <div>
+          <p>Kazanma anında hedefler tamamlandıktan hemen sonra <strong>HUD'daki "Hedef" etiketi "Ödül"e dönüşüyor</strong> ve üç adımlı bir sekans başlıyor. (1) Kalan her "Hamle" birimi tek tek, yukarı doğru bir ışın efektiyle fırlayıp ödül sayacına ekleniyor, sayaç adım adım azalıyor. (2) Board'da o ana kadar biriken, henüz ateşlenmemiş power-up'lar (TNT, roket) <strong>kendiliğinden art arda patlamaya</strong> başlıyor. (3) Bu patlamalarla temizlenen hücreler tek tek altın paraya dönüşüp ekranı dolduran büyük bir <strong>altın sağanağı</strong> halinde ödül kutusuna akıyor.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/rm_reward_beam.jpg" alt="Hamle sayacının ışın efektiyle azalması"><div class="cap">1. Hamle → ödül</div></div>
+            <div class="shot"><img src="assets/rm_reward_powerups.jpg" alt="Bekleyen power-up'ların kendiliğinden patlaması"><div class="cap">2. Zincirleme patlama</div></div>
+            <div class="shot"><img src="assets/rm_reward_goldshower.jpg" alt="Büyük altın sağanağı"><div class="cap">3. Altın sağanağı</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Tap-to-skip<span class="cite">oyuncu deneyimi</span></div>
+        <div><p>Seviye sonundaki geçiş animasyonu <strong>dokunarak atlanabiliyor</strong>, Toon Blast'la aynı davranış. Fark davranışta değil, iletişimde: Toon Blast bunu ekranda "Geçmek İçin Dokun" yazısıyla açıkça bildirirken, Royal Match aynı imkânı hiçbir yazıyla söylemiyor, oyuncu kendi keşfetmek zorunda.</p></div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Boşta bekleme ipucu<span class="cite">var</span></div>
+        <div class="txt"><p>Toon Blast'ta karşılığı olmayan bir özellik: bir süre dokunmadan beklendiğinde board'da geçerli bir eşleşme <strong>ipucu olarak vurgulanıyor</strong>. Örnekteki karede sol üstteki iki yaprak ikonu diğerlerinden <strong>daha parlak</strong> gösteriliyor ve eşleşmeyi tamamlayacak konuma doğru <strong>hafifçe hareket ediyor</strong>. Royal Match'in "hamle önerisi" dediğimiz bu davranış, önceki oturumlarda net doğrulanamamıştı, artık gerçek kareyle kesinleşti.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_idle_hint.jpg" alt="Sol üstteki iki yaprağın parlayıp eşleşmeye doğru hareket ettiği ipucu anı"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Kaybetme Akışı</h2>
+    <div class="scene-row">
+      <div class="scene-text">
+        <div class="timeline">
+          <div class="tl-step"><div class="t">Hamle 0</div><p>Sayaç 0'a düşer, ama son hamlenin kademe animasyonları ~5sn boyunca oynamaya devam eder (Bölüm 2'deki kuyruk davranışıyla tutarlı).</p></div>
+          <div class="tl-step"><div class="t">+5sn</div><p><strong>"Hamlen Kalmadı!"</strong> yazılı bir şerit ekranı yatay geçer.</p></div>
+          <div class="tl-step"><div class="t">Hemen ardından</div><p>Ücretli <strong>"Devam Et?"</strong> modalı çıkar: "+5 hamle" rozeti, "Devam etmek için 5 hamle daha alın!" metni, 900 elmas karşılığı bir buton.</p></div>
+          <div class="tl-step"><div class="t">Reddedilirse</div><p>Statik <strong>"Bölüm Başarısız!"</strong> ekranına geçilir: kırık kalp ikonu, hedeflerin tek tek yeşil tik/kırmızı çarpı ile durumu, "Güçlendirici Seç:" başlığıyla 3 power-up'tan biri seçilip bir sonraki denemeye taşınabiliyor, "Tekrar Dene" butonu.</p></div>
+        </div>
+        <p style="margin-top:18px"><strong>Üç bağımsız örnekte de akış birebir aynı.</strong> Toon Blast'ın kendi başarısızlık ekranıyla (bkz. Toon Blast §15) neredeyse birebir aynı yapı: kırık kalp + booster seçimi + Tekrar Dene.</p>
+      </div>
+      <div>
+        <div class="scene-art" style="margin-bottom:14px">
+          <img src="assets/lose_banner.jpg" alt="Hamlen Kalmadı! ekranı">
+          <div class="cap">17:52</div>
+        </div>
+        <div class="scene-art" style="margin-bottom:14px">
+          <img src="assets/lose_continue.jpg" alt="Devam Et? modalı">
+          <div class="cap">17:55</div>
+        </div>
+        <div class="scene-art">
+          <img src="assets/rm_lose_failed.jpg" alt="Bölüm Başarısız! ekranı, güçlendirici seçimi ve Tekrar Dene">
+          <div class="cap">Bölüm 19</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Dekorasyon Açılışı</h2>
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Taht Odası, kazanılan coin karşılığında parça parça dekore ediliyor: taht, vitray pencereler, sancaklar ayrı ayrı satın alınıyor. <strong>Her yeni parça, savaş efektlerinden tamamen farklı bir dille</strong> ortaya çıkıyor: nesnenin duracağı noktadan yukarı doğru fışkıran ince, beyaz bir ışık huzmesi belirip birkaç saniye parlıyor, sonra nesne yerinde beliriyor.</p>
+        <p>Bu bir kombo patlaması ya da bir kazanma efekti değil, sakin ve "ödül açılışı" hissi veren ayrı bir görsel kategori. Kaynağı coin harcamaya dayalı bir meta ilerleme sistemi olduğu için sistemin kendisi burada incelenmedi.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/decor_reveal.jpg" alt="Taht Odası dekorasyon açılış animasyonu">
+        <div class="cap">4:23</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Alan Kutlaması: Kesmeli Bir İnşa Slaytı</h2>
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Bir "Alan" (bir grup seviye) tamamlandığında ayrı bir kutlama devreye giriyor: <strong>"Alan Tamamlandı!"</strong> banner'ı borazan ve altın/mavi konfetiyle açılıyor, King Robert karanlık kalenin önünde yumruklarını sıkıp havai fişeklerle poz veriyor.</p>
+        <p>Ardından ekran gündüze kesiyor ve <strong>oyuncunun o ana kadar açtığı tüm inşa aşamaları art arda, sert kesmelerle</strong> tekrar oynatılıyor: önce çıplak çim ve göl, sonra sade bir kale ve fıskiye, sonra çalı labirenti ve akan su, ve böyle devam ederek en son ulaşılan hale kadar. Bölüm 4'teki tam dekore Kale &amp; Bahçe görseli, bu slaytın vardığı son durak.</p>
+      </div>
+      <div>
+        <div class="scene-art" style="margin-bottom:14px">
+          <img src="assets/area_celebration.jpg" alt="Alan Tamamlandı! kutlama ekranı">
+          <div class="cap">15:46</div>
+        </div>
+        <div class="scene-art">
+          <img src="assets/area_empty.jpg" alt="Slaytın ilk karesi: çıplak arazi">
+          <div class="cap">15:48</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Yıldız Ekonomisi: Bölüm Ödülünden Kale İnşasına</h2>
+    <p>Alan Kutlaması'nın (Bölüm 5) beslendiği kaynak burada ortaya çıkıyor: bir "Bölüm" bitince kazanılan <strong>Yıldız</strong>, altın'dan tamamen ayrı ikinci bir para birimi olarak Kale'nin inşa aşamalarını satın almakta kullanılıyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Bölüm ödülü</div>
+        <div class="txt"><p>Bir "Bölüm" tamamlandığında kırmızı kadife bir yastık üzerinde parlayan tek bir altın yıldız beliriyor, "Tebrikler!" yazısıyla birlikte. Roket/TNT/Lightball'ın ani patlama diliyle hiç ilgisi yok, sakin ve törensel bir "ödül sunumu" hissi var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_star_reward.jpg" alt="Bölüm 1 Tebrikler ekranı, yastık üzerinde yıldız"><div class="cap">Bölüm ödülü</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">İki ayrı para, iki ayrı animasyon</div>
+        <div>
+          <p>Harita ekranına dönüldüğünde yıldız gökten süzülüp aynı noktaya iniyor, HUD'daki yıldız sayacı artıyor; hemen ardından <strong>ayrı bir altın kazanç animasyonu</strong> ("+67") aynı konumda beliriyor. Aynı ana denk gelseler de görsel olarak birbirinden bağımsız iki ayrı ödül akışı, tek bir "kazanç" animasyonuna birleştirilmemiş.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/rm_star_land.jpg" alt="Yıldızın haritaya inişi"><div class="cap">Yıldız iniyor</div></div>
+            <div class="shot"><img src="assets/rm_star_add.jpg" alt="Altın kazanç animasyonu, +67"><div class="cap">Altın ekleniyor</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Yıldızı harcama</div>
+        <div class="txt"><p>"Kale" panelinde "Kaleyi inşa et" satırı, maliyeti bir yıldız ikonuyla gösteriyor; buton yanındaki <strong>altın ok sürekli yukarı zıplayarak</strong> dikkat çekiyor. Royal Match'in genelinde gördüğümüz "buraya dokun" vurgu dilinin (yeni seviye butonundaki kıvılcım gibi) bir başka örneği.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_star_spend.jpg" alt="Kale panelinde yıldız harcama butonu"><div class="cap">Harcama anı</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Kale inşaatı</div>
+        <div>
+          <p>Yıldız harcanınca inşaat alanından <strong>toz/döküntü bulutu yükseliyor</strong>, ardından kamera yakınlaşıp tamamlanmış kaleyi kutluyor, son olarak geniş açıya dönülüyor: kale artık yerinde duruyor ve "Alan" ilerleme çubuğu bir birim artmış (0/6 → 1/6). Bu üç kare, Bölüm 5'teki kesmeli inşa slaydının besleneceği ham malzeme.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/rm_castle_dust.jpg" alt="İnşaat tozu bulutu"><div class="cap">Toz bulutu</div></div>
+            <div class="shot"><img src="assets/rm_castle_reveal.jpg" alt="Kalenin yakın çekimle ortaya çıkışı"><div class="cap">Yakın çekim</div></div>
+            <div class="shot"><img src="assets/rm_castle_after.jpg" alt="Kale tamamlandıktan sonra geniş açı, Alan 1/6"><div class="cap">Alan 1/6</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Atölye Araçlarının Aktivasyonu</h2>
+    <p>Standart 4 power-up'tan (Roket/TNT/Lightball/Pervane) ayrı, sadece belirli seviyelerde beliren "atölye" araçlarının her biri kendi <strong>aktivasyon animasyonu</strong> kullanıyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Ok/Yay</div>
+        <div class="txt"><p>Seçilen satırın kenarından ince, hızlı bir ok uçuyor; geçtiği her objeyi <strong>ahşap ve altın renkli döküntüye</strong> çeviriyor, ardında kısa bir ışın izi bırakıyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_anim_ok.jpg" alt="Ok'un satır boyunca uçup objeleri parçalaması"><div class="cap">Ok aktivasyonu</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Top</div>
+        <div class="txt"><p>Küçük bir gülle, arkasında <strong>alev ve kıvılcım izi</strong> bırakarak seçilen sütun boyunca aşağıdan yukarı uçuyor, önüne çıkan objeleri parçalıyor. Ok'a göre daha "ağır ve fiziksel" bir uçuş hissi var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_anim_top.jpg" alt="Topun sütun boyunca alevli izle yukarı uçması"><div class="cap">Top aktivasyonu</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Soytarı Şapkası</div>
+        <div class="txt"><p>Bir yok etme animasyonu değil: dev bir soytarı şapkası ekranın kenarından içeri kayıyor, tahtadaki <strong>tüm objelerin yerini karıştırıyor</strong>. Diğer üç aracın "isabet" temalı dilinden tamamen ayrı, tek başına bir "karıştırma" görseli.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_anim_soytari.jpg" alt="Soytarı şapkasının tahtayı karıştırması"><div class="cap">Karıştırma anı</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Çekiç<span class="cite">Kraliyet Çekici</span></div>
+        <div>
+          <p>Diğer üç aracın alan-etkili diline karşı en <strong>doğrudan/fiziksel</strong> olanı: oyuncu önce aracı seçiyor, sonra hedef objeye dokunuyor; büyük bir çekiç yukarıdan aşağı iniyor ve tek bir hücreye <strong>tam isabetle</strong> vuruyor, ahşap döküntü ve parlak bir flaşla obje anında yok oluyor. Ok/Top/Soytarı Şapkası kendiliğinden geniş bir alanı etkilerken, Çekiç <strong>oyuncunun elle seçtiği tek bir hedefe</strong> odaklanan tek araç.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/rm_anim_cekic_swing.jpg" alt="Çekicin hedefe inişi"><div class="cap">İniş</div></div>
+            <div class="shot"><img src="assets/rm_anim_cekic_impact.jpg" alt="Çekicin isabet anı, flaş ve döküntü"><div class="cap">İsabet anı</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Mini Oyun: Mutfak Kurtarması</h2>
+    <p>Standart seviyelerden tamamen ayrı bir mod: board <strong>H harfi şeklinde</strong>, "Hedef" kutusu yok, sadece "Hamle" sayacı ve bir çıkış (X) butonu var. Sahne de farklı: kral'ın alev almış bir mutfağı, board'un iki üst köşesine yerleşmiş birer <strong>vana/boru</strong> ile çerçeveleniyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Eşleşme = su doldurma</div>
+        <div class="txt"><p>Oyuncu eşleştirme yaptıkça hücreler tek tek <strong>mavi/su dokusu</strong> kazanıyor; henüz eşleşmemiş hücreler kuru ahşap renginde kalıyor. Board bu yüzden bir ilerleme çubuğu gibi de okunabiliyor: ne kadarı maviye döndüyse mini oyunda o kadar yol alınmış.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_minigame_fire.jpg" alt="Mini oyun başında, board çoğunlukla kuru, mutfak alevli"><div class="cap">Erken evre</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Sahneyle bağlantı: fıskiye sahneyi söndürüyor</div>
+        <div class="txt"><p>Board mavileştikçe arka plandaki vanadan çıkan <strong>su fışkırma efekti büyüyor</strong>, alevli mutfağı söndürmeye başlıyor. Board üzerindeki soyut ilerleme, sahnede somut bir "yangın söndürme" anlatısına dönüşüyor. Dekorasyon Açılışı ve Alan Kutlaması'ndan farklı bir örnek, çünkü burada bağlantı seviye sonunda değil, <strong>oyun sırasında sürekli</strong> güncelleniyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_minigame_water.jpg" alt="Board neredeyse tamamen su dolu, büyük su fışkırması yangını söndürüyor"><div class="cap">İleri evre</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>Mini Oyun: Ejderha Kapanı</h2>
+    <p>Mutfak Kurtarması'ndan (Bölüm 8) tamamen ayrı, üçüncü bir mini oyun modu daha var: karanlık bir zindan, kralı parmaklıkların arkasına sıkıştırmış kızıl bir ejderha. HUD da farklı bir dil kullanıyor: "Hamle" yerine <strong>geri sayan bir süre</strong>, "Hedef" yerine bir anahtar ikonuyla <strong>ilerleme çubuğu</strong> (ör. 43/65).</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Sahne kurulumu</div>
+        <div class="txt"><p>Ejderha solda, kral sağda parmaklıklara yaslanmış duruyor; oyuncu eşleştirdikçe anahtar sayacı yükseliyor. Diğer iki mini oyundan (Kale inşası, Mutfak) farklı olarak burada <strong>zaman baskısı ana gerilim kaynağı.</strong></p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_dragon_scene.jpg" alt="Ejderha mini oyunu sahnesi, süre ve anahtar sayacı"><div class="cap">Sahne + HUD</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Ateş püskürtme saldırısı</div>
+        <div class="txt"><p>Süre azalırken ejderha zaman zaman kralın üstüne <strong>doğrudan bir ateş huzmesi</strong> püskürtüyor. Board'u veya ilerlemeyi doğrudan etkilediğine dair bir işaret yok, sahnede periyodik bir tehdit/baskı anı olarak duruyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_dragon_firebreath.jpg" alt="Ejderhanın ateş püskürtmesi"><div class="cap">Ateş saldırısı</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Kritik süre uyarısı</div>
+        <div class="txt"><p>Süre 10 saniyenin altına inince saat ikonu <strong>siyaha/kırmızıya dönüyor</strong>, ekranın tamamını çevreleyen kırmızı bir vinyet beliriyor, bir siren sesi çalıyor ve ekran hafifçe titriyor (ses/titreşim video karesinden değil, oyuncunun kendi deneyiminden). Royal Match'in normal oynanışında hiç kullanılmayan ekran sarsıntısı, oyuncunun teyidine göre <strong>sadece mini oyunlarda</strong> devreye giriyor, bu mini oyuna özel bir "acil durum" görsel dili.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_dragon_warning.jpg" alt="Süre 10 saniyenin altına inince kırmızı vinyet uyarısı"><div class="cap">Kritik uyarı</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="game-header" style="margin-top:64px;">
+    <div class="eyebrow">OYUN 2</div>
+    <h2>Toon Blast</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 10</div>
+    <h2>Board Kilitleniyor: Kademe Kuyruğu Yok</h2>
+    <p>Royal Match'te bir hamlenin animasyonu bitmeden sıradaki hamle sıraya alınabiliyordu, board hiç kapanmıyordu. Toon Blast'ta tam tersi: <strong>bir hamlenin patlama/düşme animasyonu tamamlanana kadar board geçici olarak kilitleniyor</strong>, sıradaki dokunuş kabul edilmiyor.</p>
+    <div class="callout">
+      Aynı tür (match-3/blast) iki oyun, aynı sorunu (art arda hamle) <strong>zıt kararlarla</strong> çözüyor: biri akıcılığı, diğeri her hamlenin sonucunu net görmeyi önceliklendiriyor.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 11</div>
+    <h2>Power-up'ın İki Aşamalı Doğuşu</h2>
+    <p>Bir grup eşiğe ulaştığında power-up'ın ortaya çıkışı <strong>tek bir anlık olay değil, iki ayrı adım</strong> halinde oynuyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Önizleme deseni<span class="cite">oluşma öncesi</span></div>
+        <div class="txt"><p>Eşiğe ulaşan gruptaki <strong>tüm hücreler, kendi rengini koruyarak</strong> oluşacak power-up'ın dokusunu üstlerine alıyor: roket için küçük bir roket ikonu, bomba için yıldız/patlama deseni, disco ball için küre/ağ deseni. Oyuncu grubu elle saymak zorunda kalmıyor, dokuya bakması yetiyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_preview_overlay.png" alt="Bomba önizleme dokusu almış küpler"><div class="cap">Bomba deseni</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Beyaz glow<span class="cite">oluşma anı</span></div>
+        <div class="txt"><p>Desen belirdikten sonra, hücreler power-up ikonuna dönüşmeden hemen önce <strong>kısa bir beyaz glow ile işaretleniyor</strong>. Dönüşüm anlık değil, gözle takip edilebilen ayrı bir vurgulama adımı var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_formation_glow.jpg" alt="Roket oluşumu öncesi beyaz glow"><div class="cap">Roket oluşumu</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 12</div>
+    <h2>Geri Bildirim: Yıldız Çubuğu ve İpuçları</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">3-yıldız çubuğu</div>
+        <div class="txt"><p><strong>Her başarılı patlama çubuğu bir miktar dolduruyor</strong> (grup patlatma ya da power-up tetikleme fark etmiyor). Aşağıdaki iki kare aynı seviyeden: solda henüz boş, sağda ilk yıldıza ulaşılmış hâli. Tam matematiksel oranı (kaç patlama = ne kadar dolum) çıkarmaya çalışmadık, çubuğun dolma davranışı bu iki kareden zaten okunuyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_starbar_compare.jpg" alt="3-yıldız çubuğu, boş ve ilk yıldıza ulaşmış hali"><div class="cap">Aynı seviye, iki an</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Boşta bekleme ipucu<span class="cite">yok</span></div>
+        <div><p>Royal Match'teki "hamle önerisi parlaması"nın bir karşılığı <strong>Toon Blast'ta yok</strong>. Bir süre dokunmadan beklendiğinde tahtada herhangi bir ipucu belirmiyor.</p></div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Yeni seviye vurgusu</div>
+        <div class="txt"><p>Ana menüde henüz oynanmamış, yeni açılan seviye butonu <strong>sürekli döngüsel bir altın kıvılcım animasyonuyla</strong> vurgulanıyor, çevresindeki yıldız desenleri de aynı ritimde parlıyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_newlevel.jpg" alt="Ana menüde altın kıvılcımla vurgulanan yeni seviye butonu"><div class="cap">Seviye 7</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 13</div>
+    <h2>Kazanma Akışı: Banner, Atlama Seçeneği, Balon Patlaması</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">"TOON BLAST!" banner'ı</div>
+        <div class="txt"><p>Board arkada tam görünür kalırken üstüne yarı saydam dairesel bir logo kartı biniyor. Royal Match'in kararan tahtasından farklı: burada <strong>board hiç kararmıyor, oyun tahtasının üstünden geçen bir katman</strong> gibi çalışıyor. Hedef'te yeşil tik beliriyor, kalan hamle sayısı sıfır olmak zorunda değil.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_win_banner.jpg" alt="TOON BLAST! kazanma banner'ı"><div class="cap">Kazanma anı</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">"Geçmek İçin Dokun"<span class="cite">oyuncu kontrolünde, zorunlu değil</span></div>
+        <div><p>Son hamlede hedef tamamlanınca ve tahtada biriken roket zinciri (10+ roket birikebiliyor) patlamaya başlayınca bu yazı beliriyor: <strong>oyuncu isterse zinciri atlayabiliyor, isterse izleyebiliyor</strong>, zorunlu bir duraklama değil, tercih. Royal Match'te de aynı davranış (dokunarak atlama) mümkün, ama ekranda bunu söyleyen bir yazı yok, fark davranışta değil, bu imkânı oyuncuya açıkça bildirip bildirmemekte.</p></div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Balon patlaması</div>
+        <div class="txt"><p>Her balon kendi başına, ayrı bir <strong>beyaz dairesel "pat" flaşı</strong> üretiyor; flaşın ardından konfeti parçacığı ve pembe kurdele döküntüsü saçılıyor, altındaki küp ortaya çıkıyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_anim_balloon_pop.jpg" alt="Balon patlatma animasyonu, art arda pat flaşları"><div class="cap">Balon patlaması</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Kutlama: sabit 3 karakter<span class="cite">düzeltildi</span></div>
+        <div><p>Seviye sonunda her zaman <strong>üç karakterin (Bruno Bear, Cooper Cat, Wally Wolf) hepsi birden</strong> zıplama animasyonu oynuyor, sayı seviyeden seviyeye değişmiyor.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 14</div>
+    <h2>Kaybetme Akışı</h2>
+    <p>Teklif reddedilince gerçekten statik bir "Başarısız" ekranına geçiliyor, ve Toon Blast'ın kendi akışı Royal Match'ten iki noktada ayrışıyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">"Hamle Kalmadı!" ve devam teklifi</div>
+        <div class="txt"><p>Hamle sıfırlanınca ekrana <strong>"Hamle Kalmadı!"</strong> modalı geliyor: "+5" rozeti, izleyerek (reklam) veya 100 coin karşılığı devam etme seçeneği, altında ayrıca bir indirimli coin paketi reklamı ("%90 UCUZ, 250 coin, 29.99 TL") kayıyor içeri.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_lose_nomoves.jpg" alt="Hamle Kalmadı! modalı, +5 devam teklifi"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">İkinci uyarı: taç/seri kaybı</div>
+        <div class="txt"><p>Bunun ardından ayrı bir modal daha çıkabiliyor: <strong>"Tacını ve Topladıklarını kaybedeceksin"</strong> uyarısı, taç ikonu + günlük seri sayacı ("2" günlük ateş rozeti) ile. Altında bir "Başlangıç Paketi" teklifi de var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_lose_crownwarning.jpg" alt="Tacını ve topladıklarını kaybedeceksin uyarısı"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">"Seviye başarısız oldu!"</div>
+        <div class="txt"><p>Teklifler reddedilince gerçekten statik bir başarısızlık ekranına düşülüyor: kırık kalp ikonu, <strong>"Takviye seç:"</strong> başlığı altında Roket/Bomba/Disco Ball'dan birini seçme seçeneği (bir sonraki denemeye götürülüyor), ve "Tekrar Dene" butonu. Altta ayrıca zamanlı bir "Taca Hücum!" etkinlik çubuğu (2/3) görünüyor. Royal Match'in kendi "Bölüm Başarısız!" ekranıyla neredeyse birebir aynı yapı.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_lose_failed.jpg" alt="Seviye başarısız oldu ekranı, takviye seçimi ve Tekrar Dene"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 15</div>
+    <h2>Mini Oyun: Dondan Kurtarma</h2>
+    <p>Royal Match'in Mutfak Kurtarması'na (bkz. Royal Match §9) çok yakın bir karşılığı var: burada Bruno Bear, buzlu bir odada üşüyerek titriyor, yanındaki sobayı çalıştırmak oyuncunun eşleştirmesine bağlı.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Erime, borudan yükselen ısı</div>
+        <div class="txt"><p>Bruno'nun önündeki buzlu/camsı bir insan silüetinin içinden altın renkli bir <strong>boru hattı</strong> geçiyor. Oyuncu eşleştirdikçe boruda kızgın/erimiş bir sıvı yükselip yayılıyor, buzlu panel yavaşça temizleniyor. Royal Match'teki su dolan board yerine burada <strong>ısı dolan bir boru şebekesi</strong> var, aynı "ilerleme = sahnede görünür bir değişim" mantığı.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_minigame_frost_early.jpg" alt="Buzlu panelde erimenin başladığı an"><div class="cap">Erime başlıyor</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Panel tamamen temizleniyor</div>
+        <div class="txt"><p>Isı borunun tamamını doldurunca buzlu panel <strong>tamamen saydamlaşıyor</strong>, Bruno'nun titremesi duruyor. Kullanıcı doğruladı: kurtarma tamamlanan <strong>o anda, aynı seviyenin ekranı ısınıyor</strong> (sonraki seviyeye ertelenmiyor).</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_minigame_frost_melted.jpg" alt="Panel tamamen erimiş, saydam"><div class="cap">Tamamen erimiş</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">"Bravo!" ödül ekranı</div>
+        <div class="txt"><p>Bruno artık rahat, başparmaklarını kaldırmış gülümsüyor; "İşte ödülün: +5" coin ödülüyle ekran kapanıyor. Royal Match'in mini oyunlarındaki ayrı ödül dilinin (yıldız/coin) burada da bir karşılığı var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_minigame_bravo.jpg" alt="Bravo! ödül ekranı, Bruno kurtuldu"><div class="cap">Bravo ödülü</div></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Ödül HUD'a taşınıyor: altın animasyonu<span class="cite">YENİ</span></div>
+        <div>
+          <p>"Bravo!" ekranından ana haritaya dönülünce ödül orada bitmiyor: karakterlerin yanında yükselen bir <strong>"+5" rozeti</strong> beliriyor, ardından tek tek altın paralar dönerek yukarı doğru uçuyor, HUD'daki coin sayacına ulaşınca sayaç (burada 205→210) bir <strong>kıvılcım patlamasıyla</strong> güncelleniyor. Bu örnekte mini oyunun tamamen farklı, "acı biber" temalı bir varyantı var: Bruno bu sefer Dondan Kurtarma'daki buzdan değil, <strong>acı bir yemekten</strong> kurtarılıyor, sombrero+poncho kostümüyle Meksika temalı bir sahnede. Royal Match'in yıldız/altın ekleme sahnesine (bkz. Royal Match §7) yakın bir "ödül gerçek bir nesne olarak taşınıyor" mantığı.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/tb_gold_badge.jpg" alt="+5 rozeti karakterlerin yanında beliriyor"><div class="cap">Rozet beliriyor</div></div>
+            <div class="shot"><img src="assets/tb_gold_flying.jpg" alt="Altın paraların HUD'a doğru uçması"><div class="cap">Paralar uçuyor</div></div>
+            <div class="shot"><img src="assets/tb_gold_counted.jpg" alt="HUD sayacının kıvılcımla güncellenmesi"><div class="cap">Sayaç güncelleniyor</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 16</div>
+    <h2>Araç Çubuğu: Çekiç, Örs, Boks Eldiveni, Zar</h2>
+    <p>Royal Match'in atölye araçlarına (bkz. Royal Match §8) karşılık gelen bir satır burada da var: oyuncunun eşleştirmeden bağımsız, tek başına dokunarak kullandığı tekrar kullanılabilir araçlar. Dört tanesini bu turda inceledik.</p>
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">Çekiç</div>
+        <div>
+          <p>Tutorial'da "ÇEKİÇ Takviyesini seçmek için dokun!" uyarısı, ardından "Balonu patlatmak için ona dokun!" ile hedef hücre seçtiriliyor. Çekiç sapı ekranın dışından girip <strong>hedef hücreye vuruyor</strong>, vuruş noktasında kısa bir beyaz flaş halkası açılıyor, isabet alan hücre ve komşuları yeni renklere dönüşüyor. Royal Match'in Çekici ile aynı temel dil (tek hücre hedefi + vuruş flaşı), ama Toon Blast'ta vuruş sonucu doğrudan bir <strong>renk dönüşümü/mini patlama</strong> gibi davranıyor.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/tb_hammer_tutorial.jpg" alt="ÇEKİÇ Takviyesi tutorial kartı"><div class="cap">Tutorial</div></div>
+            <div class="shot"><img src="assets/tb_hammer_swing.jpg" alt="Çekiç hedef hücreye inerken"><div class="cap">Vuruş</div></div>
+            <div class="shot"><img src="assets/tb_hammer_impact.jpg" alt="Çekicin isabet anındaki flaşı"><div class="cap">İsabet flaşı</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Örs<span class="cite">yeni bulgu</span></div>
+        <div>
+          <p>Araç çubuğundaki "Örs" ikonuna dokunulunca önce kısa bir açıklama kartı çıkıyor: "bir sütundaki her şeyi ortadan kaldırır." Oyuncu bir sütun seçtiğinde, ekranın altından gerçek bir örs objesi düşüp <strong>o sütuna çarpıyor</strong>, küpler tahta parçası gibi dağılıyor, toz bulutu kalkıyor; ardından sütun normal cascade akışıyla yeniden doluyor. Çekiç tek hücreyi hedeflerken, Örs doğrudan <strong>bütün bir sütunu</strong> temizliyor.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot lg"><img src="assets/tb_anvil_impact.jpg" alt="Örsün sütuna çarpıp küpleri dağıttığı an"><div class="cap">Çarpma anı</div></div>
+            <div class="shot lg"><img src="assets/tb_anvil_refill.jpg" alt="Temizlenen sütunun yeniden dolması"><div class="cap">Yeniden dolum</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Boks Eldiveni<span class="cite">yeni bulgu</span></div>
+        <div>
+          <p>İlk kez açılınca ekrana bir tanıtım kartı düşüyor: "BOKS ELDİVENİ, bir sıradaki her şeyi ortadan kaldırır!", altında araç çubuğundaki simgeyi işaret eden bir ok. Örs'ün sütun mantığının <strong>satır karşılığı</strong>: eldiven ekranın kenarından girip seçilen satırı baştan sona yumruklayarak temizliyor, kırık kutu parçaları her yöne saçılıyor. Üç aracın üçü de (Çekiç/tek hücre, Örs/sütun, Boks Eldiveni/satır) aynı "geometrik temizlik" ailesinden, sadece kapsamları farklı.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/tb_glove_tutorial.jpg" alt="Boks Eldiveni ilk açılış tanıtım kartı, araç çubuğunu işaret eden ok"><div class="cap">Tanıtım</div></div>
+            <div class="shot lg"><img src="assets/tb_glove_impact.jpg" alt="Boks Eldiveni'nin bir satırı temizlerken"><div class="cap">Satır temizliği</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Zar<span class="cite">özel bir animasyonu yok</span></div>
+        <div><p>Zar aracının kendine ait bir aktivasyon animasyonu <strong>yok</strong>: oyuncu zar ikonuna, ardından hedef hücreye dokunuyor, hücre doğrudan normal bir eşleşmeymiş gibi işleniyor. Dört araç arasında kendine özgü görsel bir "imza" taşımayan tek araç.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 17</div>
+    <h2>Meta Ödül Ekranları: Şanslı Takviye ve Günlük Bonus</h2>
+    <p>Board dışında, ana menüde çalışan iki zamanlı ödül sistemi bulundu; ikisi de Royal Match'te görmediğimiz bir dil kullanıyor.</p>
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">Şanslı Takviye</div>
+        <div>
+          <p>Haritada belirli bir eşiğe yaklaşılınca ekranın ortasında ateş parçacıklarıyla çevrili bir <strong>"Şanslı Takviye" rozeti</strong>, yanında 15 dakikalık bir geri sayım beliriyor. Kısa süre sonra, aynı süreyi tekrar gösteren ve haritadaki ilgili ikonu okla işaret eden açıklayıcı bir modal açılıyor: "Aşamaları süre dolmadan tamamla ve bonus ödüller kazan!"</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot lg"><img src="assets/tb_luckyboost_badge.jpg" alt="Şanslı Takviye rozeti ve 15 dakikalık geri sayım"><div class="cap">Rozet</div></div>
+            <div class="shot lg"><img src="assets/tb_luckyboost_modal.jpg" alt="Şanslı Takviye açıklayıcı modalı, oka işaret ediyor"><div class="cap">Açıklayıcı modal</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Günlük Bonus</div>
+        <div>
+          <p>Ekran koyu mavi bir zemine geçiyor, tek bir kart alttan kayarak beliriyor, ardından sekiz kart daha art arda kayarak <strong>3x3'lük bir düzene</strong> yerleşiyor. Son olarak "Kartını seç ve ödülünü al!" yazısı beliriyor. Royal Match'te bu satıra karşılık gelen bir ekran bu oturumda görülmedi.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot lg"><img src="assets/tb_dailybonus_start.jpg" alt="Günlük Bonus, tek kart alttan kayarak beliriyor"><div class="cap">Kartlar geliyor</div></div>
+            <div class="shot lg"><img src="assets/tb_dailybonus_full.jpg" alt="Günlük Bonus, 3x3 tam düzen ve seçim çağrısı"><div class="cap">Tam düzen</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">SENTEZ <span class="sep">·</span> İKİ OYUN YAN YANA</div>
+    <h2>Çapraz Analiz</h2>
+    <p>Animasyon bölümlerini aynı sırayla yazmamızın sebebi buydu: yan yana koyunca nerede aynı dili konuştukları, nerede bilinçli olarak ayrıştıkları netleşiyor.</p>
+  </div>
+
+  <section class="sec">
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Boyut</th><th>Royal Match</th><th>Toon Blast</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cascade / kuyruk</td><td>Var, board hiç kilitlenmiyor</td><td>Yok, board hamle boyunca geçici kilitleniyor</td></tr>
+          <tr><td>Kazanma ekranı dili</td><td>5 adımlı sekans: karartma, kurdele, harf harf logo, konfeti, havai fişek</td><td>Tek banner, board hiç kararmıyor, üstünden geçen bir katman</td></tr>
+          <tr><td>Statik başarısızlık ekranı</td><td>Kırık kalp + booster seçimi + Tekrar Dene</td><td>Kırık kalp + booster seçimi + Tekrar Dene (neredeyse birebir aynı)</td></tr>
+          <tr><td>Tap-to-skip</td><td>Var, ama ekranda bildirilmiyor, oyuncu kendi keşfediyor</td><td>Var, "Geçmek İçin Dokun" yazısıyla açıkça bildiriliyor</td></tr>
+          <tr><td>Boşta bekleme ipucu</td><td>Var (ikon parlayıp eşleşmeye hareket ediyor)</td><td>Yok</td></tr>
+          <tr><td>Ekran sarsıntısı</td><td>Sadece mini oyunlarda</td><td>Hiç yok</td></tr>
+          <tr><td>Araç çubuğu booster'ları</td><td>4 tane: hücre, satır, sütun, karıştırma</td><td>4 tane: hücre, satır, sütun, karıştırma (aynı ilerleme)</td></tr>
+          <tr><td>Ödülün HUD'a taşınması</td><td>İki ayrı para, iki ayrı animasyon (yıldız + altın)</td><td>Tek akış: rozet coinlere dönüşüp HUD'a uçuyor</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Çıkarım:</strong> statik başarısızlık ekranının yapısı (kırık kalp + booster seçimi + Tekrar Dene), araç çubuğu booster ilerlemesi (hücre→satır→sütun→karıştırma) ve tap-to-skip'in kendisi (ikisinde de dokunarak atlanabiliyor) neredeyse birebir örtüşüyor; bunlar muhtemelen türün oturmuş standartları. Asıl ayrışma iki yerde: cascade kararında (Royal Match board'u hiç kilitlemeyip akıcılığı önceliklendiriyor, Toon Blast geçici kilitlemeyle netlik kazandırıyor) ve iletişimde (Toon Blast atlama imkânını ekranda açıkça yazarken, Royal Match aynı imkânı hiç söylemiyor, oyuncu kendi keşfetmek zorunda).
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

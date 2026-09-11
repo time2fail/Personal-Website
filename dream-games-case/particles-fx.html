@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Özel Efektler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --ink:#241F33; --ink-soft:#4A4358;
+    --muted:#8A7F68; --line:#E3D8BE; --accent:#B07C22; --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2; --crown:#E8A320; --book:#D14B3C; --shield:#3C74C4;
+    --leaf:#4C9A4E; --diamond:#CE4FAE; --warn:#B24444; --warn-soft:#F6E2DE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+      --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+      --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+      --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+    --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+    --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+    --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--ground); color:var(--ink); font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .page{ max-width:900px; margin:0 auto 0 clamp(32px, 10vw, 160px); padding:56px 24px 90px; }
+  h1,h2,h3{ font-family:'Fraunces', Georgia, 'Times New Roman', serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink); }
+  .eyebrow{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; color:var(--accent-strong); font-weight:500; display:flex; align-items:center; gap:10px; }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); letter-spacing:.02em; }
+  .masthead{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:28px; border-bottom:1px solid var(--line); margin-bottom:44px; flex-wrap:wrap; }
+  .masthead h1{ font-size:clamp(2rem, 5vw, 2.7rem); line-height:1.08; margin-top:8px; }
+  .masthead .sub{ color:var(--ink-soft); font-size:1.02rem; margin-top:10px; max-width:50ch; }
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{ font-size:1.62rem; margin-bottom:18px; }
+  .sec p{ font-size:1.02rem; line-height:1.68; color:var(--ink-soft); max-width:64ch; margin:0 0 16px; }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+  .flag{ display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:.64rem; letter-spacing:.04em; padding:2px 8px; border-radius:20px; margin-left:8px; position:relative; top:-2px; }
+  .flag.unverified{ background:var(--warn-soft); color:var(--warn); }
+  .callout{ border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:24px 0 8px; font-size:.98rem; line-height:1.62; color:var(--ink-soft); }
+  .callout strong{ color:var(--ink); }
+  .callout.warn{ border-left-color:var(--warn); background:var(--warn-soft); }
+  .divider{ display:flex; align-items:center; gap:16px; margin:52px 0; color:var(--accent); }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+  .site-nav{ display:flex; align-items:center; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:22px; flex-wrap:wrap; }
+  .site-nav a{ color:var(--muted); text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{ color:var(--accent-strong); border-bottom-color:var(--accent); }
+  .site-nav .sep{ color:var(--line); }
+
+  .note-list{ display:flex; flex-direction:column; gap:0; margin:22px 0 8px; }
+  .note-row{ padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:150px 1fr 110px; gap:20px; align-items:center; }
+  .note-row:last-child{ border-bottom:1px solid var(--line); }
+  .note-row .term{ font-family:'Fraunces', serif; font-weight:600; font-size:1.02rem; color:var(--ink); padding-top:1px; }
+  .note-row .term .cite{ display:block; font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:.66rem; letter-spacing:.03em; color:var(--muted); margin-top:6px; }
+  .note-row p{ margin:0 0 8px; font-size:.96rem; }
+  .note-row p:last-child{ margin-bottom:0; }
+
+  .shot{ border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface); }
+  .shot img{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+  .note-row.img-right{ grid-template-columns:190px 1fr 210px; }
+  .shot-row{ display:flex; gap:10px; align-items:flex-start; }
+  .shot-row .shot{ width:100px; flex-shrink:0; }
+  .shot-row .shot.lg{ width:210px; }
+  .shot-row .shot img{ aspect-ratio:3/4; }
+
+  .fx-list{ display:flex; flex-direction:column; gap:14px; margin:22px 0 8px; }
+  .fx-row{ background:var(--surface); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:18px 26px; display:grid; grid-template-columns:140px 1fr 110px; gap:20px; align-items:center; }
+  .fx-icons{ display:flex; align-items:center; justify-content:center; gap:8px; }
+  .fx-icons img{ width:56px; height:56px; object-fit:contain; border-radius:9px; border:1px solid var(--line); }
+  .fx-plus{ font-family:'Fraunces', serif; font-weight:600; font-size:1.2rem; color:var(--accent); }
+  .fx-text .name{ font-family:'Fraunces', serif; font-weight:600; font-size:1.05rem; color:var(--ink); margin-bottom:4px; }
+  .fx-text p{ font-size:.93rem; line-height:1.58; color:var(--ink-soft); margin:0; max-width:56ch; }
+  .fx-text .cite{ display:block; font-family:'IBM Plex Mono', monospace; font-size:.64rem; letter-spacing:.03em; color:var(--muted); margin-top:6px; }
+
+  .sound-list{ display:flex; flex-direction:column; margin:18px 0 8px; }
+  .sound-row{ padding:14px 0; border-top:1px solid var(--line); font-size:.94rem; color:var(--ink-soft); }
+  .sound-row:last-child{ border-bottom:1px solid var(--line); }
+  .sound-row strong{ color:var(--ink); }
+
+  .game-header{ margin:0 0 40px; padding-bottom:20px; border-bottom:3px solid var(--accent); }
+  .game-header .eyebrow{ margin-bottom:8px; }
+  .game-header h2{ font-size:2.1rem; }
+
+  footer{ margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); line-height:1.7; }
+  @media (max-width:760px){
+    .note-row{ grid-template-columns:1fr; gap:10px; text-align:center; }
+    .note-row.img-right{ grid-template-columns:1fr; }
+    .note-row.img-right .shot-row{ margin-top:10px; justify-content:center; }
+    .fx-row{ grid-template-columns:1fr; text-align:center; }
+    .fx-icons{ margin:0 auto; }
+    .shot{ max-width:160px; margin:0 auto; }
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a><span class="sep">·</span>
+    <a href="level-design.html">Level Design</a><span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a><span class="sep">·</span>
+    <a href="graphics.html">Grafik</a><span class="sep">·</span>
+    <a href="animation.html">Animasyon</a><span class="sep">·</span>
+    <a href="particles-fx.html" class="active">Özel Efektler</a><span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> PARTİKÜL &amp; ÖZEL EFEKT ANALİZİ</div>
+      <h1>Patlama Dili</h1>
+      <div class="sub">Game Mechanics sayfası her power-up kombosunun <strong>hangi alanı</strong> temizlediğini tanımlıyor; burada odak bunun <strong>nasıl göründüğü</strong>: her oyunun kendi power-up'larının kombinasyonlarını kapsayan bir görsel envanter.</div>
+    </div>
+    <div class="progress">§ 1-9 / 9</div>
+  </header>
+
+  <div class="game-header">
+    <div class="eyebrow">OYUN 1</div>
+    <h2>Royal Match</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Temel Katman: Eşleşme Parçacıkları</h2>
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">Basit eşleşme parıltısı</div>
+        <div><p>Normal taş eşleşmesinde, tahtada 1-2 kare (~0.1-0.2sn) süren <strong>beyaz yıldız şeklinde kısa bir parıltı</strong> ve hafif bir sis izlenimi. Buna ek olarak eşleşen taşın kendi rengiyle örtüşen küçük parçacıklar da dökülüyor.</p></div>
+        <div class="shot"><img src="assets/fx_match_sparkle.jpg" alt="Basit eşleşme parıltısı"></div>
+      </div>
+      <div class="note-row">
+        <div class="term">Engel kırılma döküntüsü</div>
+        <div><p>Kutu kırılınca <strong>ahşap renginde parçacıklar</strong> merkezden dışa doğru patlayarak fırlıyor, sonra yerçekimiyle düşüp tahta sınırının dışına, arka plan zeminine kadar taşıyor. Rengi ve fiziğiyle basit eşleşme parıltısından belirgin biçimde farklı.</p></div>
+        <div class="shot"><img src="assets/fx_obstacle_debris.jpg" alt="Engel kırılma döküntüsü"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Tekli Patlamalar</h2>
+    <div class="fx-list">
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_roket.jpg" alt="Roket"></div>
+        <div class="fx-text"><div class="name">Roket</div><p><strong>En sade efekt:</strong> tek bir ince ışın bir sütunu süpürüyor, yuvarlak patlama ya da döküntü yok, çok kısa ve keskin.</p></div>
+        <div class="shot"><img src="assets/fx_solo_rocket.jpg" alt="Tekli roket"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_tnt.jpg" alt="TNT"></div>
+        <div class="fx-text"><div class="name">TNT</div><p><strong>Yuvarlak, lokalize bir patlama:</strong> beyaz flaş, içinde yeşil/altın spiral bir döngü görünen dolgun bir küre, sonra dağılma. Roket ya da Lightball'a göre daha "kompakt".</p></div>
+        <div class="shot"><img src="assets/fx_solo_tnt.jpg" alt="Tekli TNT"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_lightball.jpg" alt="Işık Topu"></div>
+        <div class="fx-text"><div class="name">Işık Topu</div><p>Patlama noktasından dışa doğru birkaç ince beyaz ışın ve renkli "konfeti yaprağı" parçacıkları saçılıyor, <strong>lokalize kalıyor</strong>, tahta okunabilirliği bozulmuyor.</p></div>
+        <div class="shot"><img src="assets/fx_solo_lb.jpg" alt="Tekli ışık topu aktivasyonu"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_pervane.jpg" alt="Pervane"></div>
+        <div class="fx-text"><div class="name">Pervane</div><p>Diğer üçünden <strong>temelde farklı bir imza:</strong> ince bir çizgi halinde uçan bir mermi ekranı geçiyor, indiği karede küçük ve lokalize bir vuruş bırakıyor.</p></div>
+        <div class="shot"><img src="assets/fx_solo_pervane.jpg" alt="Tekli pervane inişi"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Kombolar</h2>
+    <p>Dört power-up'ın on kombosu da bulundu. <strong>Her biri kendine özgü bir görsel imza taşıyor</strong>, tek istisna Pervane: kombosu olsun tekli olsun hep aynı "uçan mermi, lokalize vuruş" desenini tekrarlıyor, diğer üçü gibi tek ve ani bir patlama üretmiyor.</p>
+    <div class="fx-list">
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_lightball.jpg" alt="Işık Topu"><span class="fx-plus">+</span><img src="assets/pu_lightball.jpg" alt="Işık Topu"></div>
+        <div class="fx-text"><div class="name">Lightball + Lightball</div><p>Dönen disko topu ikonu ile ~1sn'lik bir "şarj" fazı, sonra <strong>ekranın neredeyse tamamını kaplayan tam beyaz bir patlama</strong>, içinde çok renkli konfeti radyal fışkırıyor, ardından satır/sütun süpüren ışın demetleri. Efektlerin ekran okunabilirliğini kapattığı tek an, ama sorun değil, o anda zaten etkileşim yok.</p></div>
+        <div class="shot"><img src="assets/fx_lb_lb.jpg" alt="Lightball + Lightball patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_lightball.jpg" alt="Işık Topu"><span class="fx-plus">+</span><img src="assets/pu_roket.jpg" alt="Roket"></div>
+        <div class="fx-text"><div class="name">Lightball + Roket</div><p>Önce diyagonal bir "X" ışın taraması, sonra yatay ve dikey ışın demetleri aynı anda satır ve sütunu süpürerek <strong>dolgun bir "artı"</strong> oluşturuyor.</p></div>
+        <div class="shot"><img src="assets/fx_lb_rocket.jpg" alt="Lightball + Roket patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_roket.jpg" alt="Roket"><span class="fx-plus">+</span><img src="assets/pu_roket.jpg" alt="Roket"></div>
+        <div class="fx-text"><div class="name">Roket + Roket</div><p>İki ince ışın (biri yatay, biri dikey) kesişip bir "T" oluşturuyor, kesişim noktasında parlak altın bir patlama beliriyor. Lightball+Roket'teki dolgun "artı"dan <strong>daha ince ve daha hafif</strong> kalıyor.</p></div>
+        <div class="shot"><img src="assets/fx_rocket_rocket.jpg" alt="Roket + Roket patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_tnt.jpg" alt="TNT"><span class="fx-plus">+</span><img src="assets/pu_roket.jpg" alt="Roket"></div>
+        <div class="fx-text"><div class="name">TNT + Roket</div><p>TNT'nin yuvarlak patlaması hemen ardından <strong>birden fazla paralel ışın demeti</strong> tetikliyor, sanki patlama noktasından birkaç roket birden fırlıyor.</p></div>
+        <div class="shot"><img src="assets/fx_tnt_rocket.jpg" alt="TNT + Roket patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_tnt.jpg" alt="TNT"><span class="fx-plus">+</span><img src="assets/pu_tnt.jpg" alt="TNT"></div>
+        <div class="fx-text"><div class="name">TNT + TNT</div><p>İki TNT ikonu yan yana belirip birkaç kare duruyor, sonra <strong>tek büyük ve parlak</strong> bir patlama.</p></div>
+        <div class="shot"><img src="assets/fx_tnt_tnt.jpg" alt="TNT + TNT patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_lightball.jpg" alt="Işık Topu"><span class="fx-plus">+</span><img src="assets/pu_tnt.jpg" alt="TNT"></div>
+        <div class="fx-text"><div class="name">Lightball + TNT</div><p>Tek merkezden 5-8 ince ışının yıldız/havai fişek deseninde her yöne saçılması, ardından uçlarında TNT tarzı yuvarlak patlamalar. Diğer kombolardan farklı: <strong>tek çizgi ya da artı değil, çok yönlü bir desen.</strong></p></div>
+        <div class="shot"><img src="assets/fx_lb_tnt.jpg" alt="Lightball + TNT patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_pervane.jpg" alt="Pervane"><span class="fx-plus">+</span><img src="assets/pu_tnt.jpg" alt="TNT"></div>
+        <div class="fx-text"><div class="name">Pervane + TNT</div><p>Lokalize, yeşil/altın/beyaz renkli radyal bir "spray" patlaması. Ne çapraz kombo kadar geniş ne de Lightball kombosu kadar ekranı kaplıyor, üç geniş-alan kombosu arasında <strong>en küçük ve lokalize</strong> olanı.</p></div>
+        <div class="shot"><img src="assets/fx_propeller_tnt.jpg" alt="Pervane + TNT patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_lightball.jpg" alt="Işık Topu"><span class="fx-plus">+</span><img src="assets/pu_pervane.jpg" alt="Pervane"></div>
+        <div class="fx-text"><div class="name">Lightball + Pervane</div><p><strong>Yönlü bir dikey ışın</strong> ve birkaç diyagonal ışın bir arada: lightball bir sütunu temizlerken pervane ayrı noktalara diyagonal atışlar yapıyor. Seviyeden seviyeye tam şekil değişebiliyor.</p></div>
+        <div class="shot"><img src="assets/fx_lb_propeller.jpg" alt="Lightball + Pervane patlaması"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_pervane.jpg" alt="Pervane"><span class="fx-plus">+</span><img src="assets/pu_pervane.jpg" alt="Pervane"></div>
+        <div class="fx-text"><div class="name">Pervane + Pervane</div><p><strong>Tek büyük patlama yok:</strong> ekranda uçan mermi çizgisi ve tahtanın farklı noktalarında art arda küçük vuruşlar. Pervane imzasının en net örneği.</p></div>
+        <div class="shot"><img src="assets/fx_propeller_propeller.jpg" alt="Pervane + Pervane, uçan mermi izi"></div>
+      </div>
+      <div class="fx-row">
+        <div class="fx-icons"><img src="assets/pu_roket.jpg" alt="Roket"><span class="fx-plus">+</span><img src="assets/pu_pervane.jpg" alt="Pervane"></div>
+        <div class="fx-text"><div class="name">Roket + Pervane</div><p>Pervane uçup indiği noktadan <strong>bir roket ışını</strong> fırlıyor, döküntüyle birlikte. Diğer roket kombolarına göre daha dağınık: ışın tahtanın ortasından değil, pervanenin indiği rastgele noktadan başlıyor.</p></div>
+        <div class="shot"><img src="assets/fx_roket_propeller.jpg" alt="Roket + Pervane patlaması"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Ses</h2>
+    <div class="sound-list">
+      <div class="sound-row">Her power-up, engel ve booster'ın kendi sesi var. Bunun dışında her aktivitenin de kendi sesi var.</div>
+    </div>
+  </section>
+
+  <div class="game-header" style="margin-top:64px;">
+    <div class="eyebrow">OYUN 2</div>
+    <h2>Toon Blast</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Temel Katman: Tekli Patlamalar</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Roket izi</div>
+        <div class="txt"><p>Altın/beyaz kıvılcım + mavi taş parçası döküntüsü + pembe yıldız patlaması. Royal Match'in "anlık ışın" diline karşı burada gerçek bir roket sprite'ı sütun/satır boyunca uçuyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_rocket_solo.jpg" alt="Tekli roketin sütunu süpürürken bıraktığı iz"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Tekli Bomba</div>
+        <div class="txt"><p>Bekleyen bir bomba tek başına patlayınca etki <strong>lokalize</strong> kalıyor: küçük, parlak beyaz bir flaş, sadece yakın çevredeki hücreleri temizliyor. Kombinasyonlardaki büyük/board-geniş patlamalarla karıştırılmaması gereken, en sade patlama türü.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_tnt_solo.jpg" alt="Tek bombanın lokalize patlaması"></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Disco Ball (tekli)<span class="cite">YENİ</span></div>
+        <div>
+          <p>Board'da bekleyen bir disco ball tek başına tetiklenince gövdesinden <strong>her yöne onlarca ışın</strong> saçılıyor; ışınlar disco ball'ın rengine gidiyor, ve ardından patlıyorlar.</p>
+          <div class="shot-row" style="margin-top:10px">
+            <div class="shot"><img src="assets/tb_fx_disco_solo_idle.jpg" alt="Disco ball tetiklenmeden önce, altın/çizgili dokusuyla"><div class="cap">Bekleme</div></div>
+            <div class="shot lg"><img src="assets/tb_fx_disco_solo_burst.jpg" alt="Disco ball'ın her yöne ışın saçtığı an"><div class="cap">Işın saçılımı</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Kombinasyon Matrisi</h2>
+    <p>Royal Match'teki gibi burada da oyuncu, efektin <strong>şeklinden</strong> hangi kombinasyonun patladığını anlayabiliyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Roket + Bomba</div>
+        <div class="txt"><p>Birleştiği noktadan <strong>3 roket birden yukarı fırlıyor</strong>, aynı zamanda yatay ışın demetleri de yayılıyor: dikey+yatay bir "çoklu ateşleme" hissi.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_roket_tnt.jpg" alt="Roket + Bomba kombosu, üç roket birden ateşleniyor"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Disco Ball + Disco Ball</div>
+        <div class="txt"><p>Gökkuşağı renkli disco ball mid-board'da parlayıp büyüyor, sonra <strong>tüm board'u kaplayan beyaz bir patlama</strong> halinde açılıyor, renkli parçacıklar her yöne saçılıyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_disco_disco.jpg" alt="Disco Ball + Disco Ball, tüm board'u kaplayan patlama"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Disco Ball + Roket</div>
+        <div class="txt"><p><strong>Sıralı bir dönüşüm:</strong> disco ball renginde hücreler önce sırayla rokete çevriliyor (her biri kısa bir parıltıyla işaretleniyor), sonra yine sırayla ateşleniyor. Eşzamanlı/dağınık değil, gözle takip edilebilen bir sıra var.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_disco_roket.jpg" alt="Disco Ball + Roket, sırayla rokete çevrilen hücreler"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Bomba + Bomba</div>
+        <div class="txt"><p>İki bomba birleşince tek, büyük ve <strong>yuvarlak</strong> bir altın/beyaz patlama oluşuyor: roketlerin doğrusal ışınlarından farklı, merkezden dışa yayılan bir "top" şeklinde. Etki alanı tek bir bombadan belirgin şekilde geniş.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_bomb_bomb.jpg" alt="Bomba + Bomba, tek büyük yuvarlak patlama"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Roket + Roket</div>
+        <div class="txt"><p>İki roket birleşince <strong>çok renkli bir yıldız/konfeti patlaması</strong> + kırılan kutuların arasından <strong>çapraz bir ışın</strong> geçerek diyagonal bir hat temizliyor. Basit bir artı flaşından çok, kısa bir "roket ikilisi" gösterisi.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_roket_roket.jpg" alt="Roket+Roket, çapraz ışın ve yıldız patlaması"></div>
+        </div>
+      </div>
+      <div class="note-row">
+        <div class="term">Disco Ball + Bomba<span class="cite">görsel yok</span></div>
+        <div><p>Game Mechanics notlarından metin olarak biliniyor (disco ball renginde hücrelere sırayla küçük bomba ikonları yerleşip yine sırayla patlıyor) ama henüz temiz bir video karesiyle doğrulanmadı.<span class="flag unverified">doğrulanmadı</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Çoklu Kombinasyon Önceliği</h2>
+    <p>Bir oyuncu hamlesi <strong>ikiden fazla power-up'ı aynı anda</strong> birleştirebiliyor (ör. Disco Ball + Roket + Disco Ball, ya da Roket + Roket + Bomba + Bomba). Bu durumlarda oyun hepsini birden karıştırmıyor: en güçlü ikili grubu seçip sadece onun kombosunu oynatıyor, kalanı sessizce göz ardı ediyor.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Disco Ball + Roket + Disco Ball → Disco Ball + Disco Ball</div>
+        <div class="txt"><p>Üç power-up bir arada patlatıldığında sonuç, üçlü bir karışım değil, tanıdık <strong>Disco Ball + Disco Ball</strong> patlaması oluyor: rokete hiç görsel karşılık verilmiyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_triple_combo.jpg" alt="Üçlü kombinasyon, Disco Ball + Disco Ball patlamasına dönüşüyor"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Roket + Roket + Bomba + Bomba → Bomba + Bomba<span class="cite">YENİ</span></div>
+        <div class="txt"><p>Dört power-up birden birleşince de aynı kural geçerli: sonuç <strong>iki ayrı, eşzamanlı Bomba + Bomba patlaması</strong> (görüntüde board'un iki yarısında birbirinden bağımsız iki yuvarlak patlama var), roketlere hiç görsel karşılık verilmiyor. Bu, kuralın sadece üçlü değil, <strong>dörtlü birleşmelerde de</strong> geçerli olduğunu, ve önceliğin Disco Ball'la sınırlı olmadığını (Bomba da Roket'in önüne geçebiliyor) gösteriyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_combo4_dualburst.jpg" alt="Roket+Roket+Bomba+Bomba, iki ayrı Bomba+Bomba patlamasına dönüşüyor"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Zincirleme Roket Birikmesi ve Otomatik Ateşleme</h2>
+    <p>Board'da biriken 10+ roket, "Geçmek İçin Dokun" mekaniğinin (bkz. Animasyon) neden var olduğunu açıklıyordu; şimdi bu birikimin gerçekte nasıl boşaldığına dair bir kare var.</p>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Tek tek otomatik ateşleme</div>
+        <div class="txt"><p>Hamle bitince biriken roketler <strong>hepsi birden değil, sırayla</strong> ateşleniyor: bir roket bir sütunu süpürüyor, döküntüler küçük ödül parçacıklarına dönüşüyor, sonra sıradaki roket devreye giriyor. Royal Match'in "kalan hamle → altın sağanağı" zincirine (bkz. Animasyon, Royal Match §2) yakın bir mantık: <strong>board'u temizleyen gerçek bir otomatik dizi</strong>, tek bir toplu patlama değil.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/tb_fx_rocket_autofire.jpg" alt="Biriken roketlerden birinin sütunu otomatik süpürmesi"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>Ses</h2>
+    <div class="sound-list">
+      <div class="sound-row">Her power-up, engel ve booster'ın kendi sesi var. Bunun dışında her aktivitenin de kendi sesi var.</div>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

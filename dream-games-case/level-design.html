@@ -1,0 +1,2381 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Level Design Analizi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF;
+    --surface:#FFFFFF;
+    --ink:#241F33;
+    --ink-soft:#4A4358;
+    --muted:#8A7F68;
+    --line:#E3D8BE;
+    --accent:#B07C22;
+    --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2;
+    --crown:#E8A320;
+    --book:#D14B3C;
+    --shield:#3C74C4;
+    --leaf:#4C9A4E;
+    --diamond:#CE4FAE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420;
+      --surface:#221C2E;
+      --ink:#F3EEDD;
+      --ink-soft:#D9D1BC;
+      --muted:#A79C86;
+      --line:#3A3244;
+      --accent:#E0B458;
+      --accent-strong:#F0C878;
+      --accent-soft:#3A3020;
+      --crown:#F0B03A;
+      --book:#E36657;
+      --shield:#6C9BE0;
+      --leaf:#6BB86E;
+      --diamond:#E070C4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420;
+    --surface:#221C2E;
+    --ink:#F3EEDD;
+    --ink-soft:#D9D1BC;
+    --muted:#A79C86;
+    --line:#3A3244;
+    --accent:#E0B458;
+    --accent-strong:#F0C878;
+    --accent-soft:#3A3020;
+    --crown:#F0B03A;
+    --book:#E36657;
+    --shield:#6C9BE0;
+    --leaf:#6BB86E;
+    --diamond:#E070C4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto 0 clamp(32px, 10vw, 160px);
+    padding:56px 24px 90px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    padding-bottom:28px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:44px;
+    flex-wrap:wrap;
+  }
+  .masthead h1{
+    font-size:clamp(2rem, 5vw, 2.7rem);
+    line-height:1.08;
+    margin-top:8px;
+  }
+  .masthead .sub{
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin-top:10px;
+    max-width:46ch;
+  }
+
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{
+    font-size:1.62rem;
+    margin-bottom:18px;
+  }
+  .sec p{
+    font-size:1.02rem;
+    line-height:1.68;
+    color:var(--ink-soft);
+    max-width:64ch;
+    margin:0 0 16px;
+  }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+
+  .sec-row{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:36px;
+    align-items:start;
+  }
+  .sec-text p{ margin-bottom:16px; }
+  .sec-text p:last-child{ margin-bottom:0; }
+  .sec-art img{
+    width:100%;
+    display:block;
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .sec-art .cap{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.05em;
+    color:var(--muted);
+    text-align:center;
+    margin-top:8px;
+  }
+
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin:22px 0 26px;
+  }
+  .fact{
+    background:var(--surface);
+    padding:16px 18px;
+  }
+  .fact .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .fact .v{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.06rem;
+    color:var(--ink);
+  }
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:16px 20px;
+    margin:24px 0 8px;
+    font-size:.98rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+  }
+  .callout strong{ color:var(--ink); }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:52px 0;
+    color:var(--accent);
+  }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+
+  .site-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .site-nav a{
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+  }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{
+    color:var(--accent-strong);
+    border-bottom-color:var(--accent);
+  }
+  .site-nav .sep{ color:var(--line); }
+
+  .part-break{
+    margin:72px 0 44px;
+    padding:30px 0;
+    border-top:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    text-align:center;
+  }
+  .part-break .eyebrow{
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .part-break h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .part-break p{
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:10px auto 0;
+    font-size:1rem;
+    line-height:1.6;
+  }
+
+  .compare-table-wrap{
+    overflow-x:auto;
+    margin:22px 0;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .compare-table{
+    width:100%;
+    min-width:520px;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  .compare-table th,
+  .compare-table td{
+    padding:12px 18px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .compare-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+  }
+  .compare-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .compare-table td{
+    color:var(--ink-soft);
+  }
+  .compare-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+
+  /* ---- scene timeline ---- */
+  .scene-map{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:26px 28px 22px;
+    margin:22px 0 20px;
+  }
+  .scene-track{
+    display:grid;
+    grid-template-columns:repeat(20, 1fr);
+    gap:4px;
+  }
+  .scene-track + .scene-track{ margin-top:6px; }
+  .scene-row-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .scene-chip{
+    height:34px;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.62rem;
+    color:#fff;
+    opacity:.92;
+  }
+  .scene-chip.bahce{ background:var(--leaf); }
+  .scene-chip.kale{ background:var(--shield); }
+  .scene-chip.taht{ background:var(--book); }
+  .scene-chip.unknown{
+    background:var(--surface);
+    border:1.5px dashed var(--line);
+    color:var(--muted);
+  }
+  .scene-rows{ margin-bottom:16px; }
+  .scene-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+  }
+  .scene-legend .item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:.82rem;
+    color:var(--ink-soft);
+  }
+  .scene-legend .dot{
+    width:11px;height:11px;border-radius:3px;flex-shrink:0;
+  }
+  .scene-legend .dot.bahce{ background:var(--leaf); }
+  .scene-legend .dot.kale{ background:var(--shield); }
+  .scene-legend .dot.taht{ background:var(--book); }
+  .scene-legend .dot.unknown{ background:var(--surface); border:1.5px dashed var(--line); }
+
+  .scene-shots{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:22px 0 8px;
+  }
+  .scene-shots figure{ margin:0; }
+  .scene-shots img{
+    width:100%;
+    display:block;
+    border-radius:14px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .scene-shots figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+    margin-top:8px;
+  }
+
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:4px 10px;
+  }
+
+  /* ---- board archetypes ---- */
+  .table-wrap{
+    overflow-x:auto;
+    margin:22px 0 28px;
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .arch-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.9rem;
+    background:var(--surface);
+  }
+  .arch-table th, .arch-table td{
+    text-align:left;
+    padding:13px 16px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .arch-table tr:last-child td{ border-bottom:none; }
+  .arch-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .arch-table td.pattern{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    min-width:150px;
+  }
+  .arch-table td.levels{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.78rem;
+    color:var(--accent-strong);
+    white-space:nowrap;
+  }
+  .arch-table td.note{
+    color:var(--ink-soft);
+    line-height:1.55;
+    min-width:200px;
+  }
+  .arch-table td.shape{
+    text-align:center;
+  }
+  .arch-table .arch-diagram{ gap:6px; }
+
+  .impact-grid.dense{ gap:2px; }
+  .impact-grid.dense .impact-cell{
+    width:9px;
+    height:9px;
+    border-radius:2px;
+  }
+
+  .arch-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .arch-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    display:grid;
+    grid-template-columns:150px 1fr 120px;
+    grid-template-areas:
+      "head head head"
+      "media note diagram";
+    column-gap:26px;
+    row-gap:14px;
+    align-items:start;
+  }
+  .arch-head{
+    grid-area:head;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    border-bottom:1px solid var(--line);
+    padding-bottom:12px;
+  }
+  .arch-head .name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.12rem;
+    color:var(--ink);
+  }
+  .arch-media{ grid-area:media; }
+  .arch-media img + img{ margin-top:10px; }
+  .arch-media img{
+    width:100%;
+    display:block;
+    border-radius:10px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .arch-note{ grid-area:note; }
+  .arch-note p{
+    font-size:.94rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:52ch;
+  }
+  .arch-note p strong{ color:var(--ink); font-weight:600; }
+  .arch-diagram{
+    grid-area:diagram;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  .impact-grid{ display:inline-grid; gap:3px; }
+  .impact-cell{
+    width:14px;
+    height:14px;
+    border-radius:3px;
+    background:var(--line);
+  }
+  .impact-cell.on{ background:var(--shield); }
+  .impact-cell.frame{ background:var(--book); }
+  .shape-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+  }
+
+  @media (max-width:640px){
+    .arch-row{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "head"
+        "media"
+        "diagram"
+        "note";
+      justify-items:center;
+      text-align:center;
+    }
+    .arch-media{ max-width:220px; }
+    .arch-note p{ max-width:none; }
+  }
+
+  /* ---- target design ---- */
+  .shot-grid{
+    display:grid;
+    gap:18px;
+    margin:22px 0 8px;
+  }
+  .shot-grid figure{ margin:0; }
+  .shot-grid img{
+    width:100%;
+    display:block;
+    border-radius:14px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+  .shot-grid figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+    margin-top:8px;
+  }
+  .target-timeline{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:8px 0 22px;
+    flex-wrap:wrap;
+  }
+  .target-timeline .step{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:6px 14px;
+  }
+  .target-timeline .arrow{
+    color:var(--accent);
+    font-family:'Fraunces', serif;
+    font-weight:600;
+  }
+
+  /* ---- introduction rhythm ---- */
+  .intro-track{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:26px 0 8px;
+  }
+  .intro-item{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    box-shadow:var(--shadow);
+    padding:22px 20px 18px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    width:164px;
+  }
+  .intro-item img{
+    width:104px;
+    height:104px;
+    object-fit:contain;
+    border-radius:12px;
+  }
+  .intro-item .lvl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--accent-strong);
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+  .intro-item .nm{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--ink);
+    text-align:center;
+    line-height:1.25;
+  }
+  .intro-gap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+  .intro-gap .arrow{
+    color:var(--accent);
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.6rem;
+    line-height:1;
+  }
+  .intro-gap .diff{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    color:var(--muted);
+    white-space:nowrap;
+  }
+
+  /* ---- case studies ---- */
+  .case-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .case-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    display:grid;
+    grid-template-columns:150px 1fr;
+    grid-template-areas:
+      "head head"
+      "media note";
+    column-gap:26px;
+    row-gap:14px;
+    align-items:start;
+  }
+  .case-row .arch-head{ grid-area:head; }
+  .case-row .arch-media{ grid-area:media; }
+  .case-row .arch-note{ grid-area:note; }
+  .case-row .arch-note p{ max-width:none; }
+
+  @media (max-width:640px){
+    .case-row{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "head"
+        "media"
+        "note";
+      justify-items:center;
+      text-align:center;
+    }
+    .case-row .arch-media{ max-width:220px; }
+  }
+
+  footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    line-height:1.7;
+  }
+
+  @media (max-width:760px){
+    .sec-row{ grid-template-columns:1fr; }
+    .sec-art{ max-width:220px; margin:0 auto; }
+    .scene-shots{ grid-template-columns:1fr; }
+    .scene-track{ grid-template-columns:repeat(10, 1fr); }
+    .scene-track.l11-20{ grid-template-columns:repeat(10,1fr); }
+    .arch-card-imgs{ justify-content:center; }
+    .arch-card-imgs figure{ max-width:220px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a>
+    <span class="sep">·</span>
+    <a href="level-design.html" class="active">Level Design</a>
+    <span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a>
+    <span class="sep">·</span>
+    <a href="graphics.html">Grafik</a>
+    <span class="sep">·</span>
+    <a href="animation.html">Animasyon</a>
+    <span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a>
+    <span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> LEVEL DESIGN ANALİZİ</div>
+      <h1>Royal Match & Toon Blast</h1>
+      <div class="sub">Board, hedef ve engel dizilimi; sahne ve ilerleme yapısı üzerine, doğrudan oynanış gözlemine dayanan karşılaştırmalı bir analiz.</div>
+    </div>
+    <div class="progress">§ 1-8 / 8</div>
+  </header>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Açılış</h2>
+
+    <p>Bu bölüm, Royal Match'in ilk seviyelerinde board, hedef ve engel dizilimini nasıl kurduğuna bakıyor: sahne/bölüm yapısına, seviye tiplerine ve yeni eleman tanıtım ritmine. Odak <strong>"bu seviye nasıl kurulmuş"</strong> sorusunda. Sayısal zorluk değerlendirmesini (hedef sayısı, hamle marjı, vuruş/hamle oranı dahil) ayrı bir başlıkta, <strong>Level Difficulty</strong>'de ele alıyoruz.</p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Sahne & İlerleme Haritası</h2>
+
+    <p>İlk 20 seviye üç farklı sahnede geçiyor: <strong>Bahçe</strong> (kalenin dışı), <strong>Kale içi</strong> (bahçedeki kalenin içi, taht odasından farklı bir iç mekan) ve <strong>Taht Odası</strong> (kırmızı-mor iç mekan, L10'dan itibaren kalıcılaşıyor).</p>
+
+    <div class="scene-map">
+      <div class="scene-rows">
+        <div class="scene-row-label">Sahne (L1-19)</div>
+        <div class="scene-track">
+          <div class="scene-chip bahce">1</div>
+          <div class="scene-chip bahce">2</div>
+          <div class="scene-chip bahce">3</div>
+          <div class="scene-chip kale">4</div>
+          <div class="scene-chip kale">5</div>
+          <div class="scene-chip kale">6</div>
+          <div class="scene-chip kale">7</div>
+          <div class="scene-chip kale">8</div>
+          <div class="scene-chip bahce">9</div>
+          <div class="scene-chip taht">10</div>
+          <div class="scene-chip taht">11</div>
+          <div class="scene-chip taht">12</div>
+          <div class="scene-chip taht">13</div>
+          <div class="scene-chip taht">14</div>
+          <div class="scene-chip taht">15</div>
+          <div class="scene-chip taht">16</div>
+          <div class="scene-chip taht">17</div>
+          <div class="scene-chip taht">18</div>
+          <div class="scene-chip taht">19</div>
+        </div>
+      </div>
+
+      <div class="scene-legend">
+        <div class="item"><span class="dot bahce"></span>Bahçe (dış)</div>
+        <div class="item"><span class="dot kale"></span>Kale içi (iç, geçiş)</div>
+        <div class="item"><span class="dot taht"></span>Taht Odası (iç, kalıcı)</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Sahnenin görünüşü ile oyuncunun yıldızlarla inşa ettiği oda her zaman aynı yer değil.</strong> L4-8'de ekranda kalenin içindeyiz, ama o seviyelerden kazanılan yıldızlar hâlâ <strong>Bahçe'yi</strong> dekore etmek için harcanıyor, yeni bir "kale içi" oda hiç açılmıyor.
+    </div>
+
+    <div class="scene-shots">
+      <figure>
+        <img src="assets/sahne_bahce.png" alt="Bahçe sahnesi, kale dıştan">
+        <figcaption>Bahçe (L1-3, L9)</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/sahne_taht_odasi.jpeg" alt="Taht Odası sahnesi">
+        <figcaption>Taht Odası (L10-19)</figcaption>
+      </figure>
+    </div>
+
+    <p style="margin-top:22px;">Sahne neden tam bu noktalarda değişiyor? İlk izlenim "her 10 seviyede bir" gibiydi, ama ana ekranı (hub) izleyince mekanizma farklı çıktı: sahne, seviye sayısına değil, <strong>Alan'ın tüm görevlerinin fiilen inşa edilmiş olmasına</strong> bağlı.</p>
+
+    <div class="shot-grid" style="grid-template-columns:1fr 1fr;">
+      <figure>
+        <img src="assets/meta_yeni_alan.png" alt="Ana ekran, Yeni Alan butonu">
+        <figcaption>Bölüm 11 öncesi, "Yeni Alan" bekliyor</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/meta_alan2_taht.png" alt="Ana ekran, Alan 2 sayacı, Taht Odası'na geçmiş">
+        <figcaption>"Yeni Alan"a basınca: Alan 2, 0/7</figcaption>
+      </figure>
+    </div>
+
+    <p>Mekanik şöyle işliyor: seviye bitince yıldız kazanılıyor, ama yıldız <strong>otomatik harcanmıyor</strong>, oyuncu isterse biriktirebiliyor. Alan'ın ilerlemesi (sahne değişimi dahil) sadece oyuncu elindeki yıldızı seçip <strong>"Yap"</strong> tuşuna bastığında gerçekleşiyor, o ana kadar sahne sabit kalıyor. Görevler de sırayla açılıyor, oyuncu istediğini seçip yapamıyor.</p>
+
+    <div class="callout">
+      <strong>Alan'ların görev sayısı sabit değil:</strong> Alan 1 altı görev tutuyor, Alan 2 yedi. Bir görevin kaç yıldız tuttuğu ve oyuncunun ne hızda inşa ettiği, Alan'ın kaç seviyeye yayılacağını belirliyor. Yani "her N seviyede bir sahne değişiyor" gibi sabit bir kural yok, oyuncu davranışına bağlı esnek bir süre.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Seviye Tipleri</h2>
+
+    <p>İlk 21 seviyede üç ayrı seviye tipi var: <strong>Mini Oyun</strong>, <strong>Bonus Bölüm</strong>, <strong>Klasik Oyun</strong>. Klasik Oyun seviyeler bu sayfanın geri kalanının konusu (hedef, board, engel). Geri kalan iki tip yapısal olarak tamamen farklı.</p>
+
+    <div class="case-list">
+
+      <div class="case-row">
+        <div class="arch-head">
+          <span class="name">Mini Oyun · Yanan Ocak</span>
+          <span class="badge">L8 sonrası</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/rm_minigame_fire.jpg" alt="Yanan Ocak mini oyunu, yangın büyürken">
+          <img src="assets/rm_minigame_water.jpg" alt="Yanan Ocak mini oyunu, boru suyu boşaltmış">
+        </div>
+        <div class="arch-note">
+          <p>Opsiyonel bir davet ekranından açılıyor, "Kralın Kâbusu" markasıyla sunuluyor. Board "H" şeklinde, hamle sınırlı (18). Sol üstte çekirdek oyunda hiç görülmeyen özel bir eleman var: eşleşmeler onu doldurdukça bir boru suyu boşaltıp mutfaktaki yangını söndürüyor. Sabit <strong>+50 coin</strong> ödülü var, hedef sayacı yok.</p>
+        </div>
+      </div>
+
+      <div class="case-row">
+        <div class="arch-head">
+          <span class="name">Mini Oyun · Ejderha / Zindan</span>
+          <span class="badge">L16 sonrası</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/rm_dragon_scene.jpg" alt="Ejderha zindanı mini oyunu">
+        </div>
+        <div class="arch-note">
+          <p>Aynı "Kralın Kâbusu" davetiyle açılan ikinci bir tema: zindan arka planı, kral parmaklıklar ardında, ejderha sahnede. Hedef sayacı yok, bunun yerine <strong>60 saniyelik süre</strong> ve bir kutu kırma sayacı ("N/65") var. Bu da sabit <strong>+50 coin</strong> veriyor. İki farklı tema, aynı ödül ve aynı yapısal iskelet (süre/hamle sınırı + hedefsiz sayaç) üzerine kurulu.</p>
+        </div>
+      </div>
+
+      <div class="case-row">
+        <div class="arch-head">
+          <span class="name">Bonus Bölüm</span>
+          <span class="badge">L20</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/rm_bonus_bolum.png" alt="Bonus Bölüm, L20">
+        </div>
+        <div class="arch-note">
+          <p>Mini Oyun'dan tamamen ayrı, üçüncü bir tip: davetle değil, doğrudan sırasıyla numaralı bir seviye (L20). Üstte "Hedef" yerine bir <strong>"Ödül"</strong> (coin) sayacı var, hamle sayısı normal seviyeler gibi sınırlı. Board'un büyük kısmı coin/taç ikonlu dekoratif karolarla çevrili, ortada küçük bir oynanabilir alan kalıyor. Klasik hedef/engel yapısı yok, oyuncu sadece coin topluyor.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Board Arketipleri</h2>
+
+    <p>İlk 34 seviyede board'lar birkaç tekrar eden kalıba oturuyor. Bazıları tek bir açık dikdörtgen, bazıları board'u fiilen ikiye bölüyor ya da tek bir dar şeride sıkıştırıyor. Şu ana kadar gördüğümüz <strong>12 kalıp</strong> aşağıdaki tabloda, her biri kendi ekran görüntüsü ve şemasıyla listede devam ediyor. Şemalarda <strong>mavi</strong> oynanabilir hücreyi, <strong>kırmızı</strong> hiç açılmayan kalıcı bir engelle kaplı hücreyi gösteriyor.</p>
+
+    <div class="table-wrap">
+      <table class="arch-table">
+        <thead>
+          <tr>
+            <th>Kalıp</th>
+            <th>Örnek</th>
+            <th>Not</th>
+            <th>Şekil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pattern">Tek dikdörtgen, tam dolu</td>
+            <td class="levels">L1, L2</td>
+            <td class="note">En basit form, tutorial seviyeleri.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">tam dolu</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">İki ayrık tahta</td>
+            <td class="levels">L6</td>
+            <td class="note">Kalıcı bir boşlukla ikiye bölünüyor. Asimetrik maliyet, power-up boşluğu aşıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">4 · boşluk · 4</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Gonca</td>
+            <td class="levels">L5</td>
+            <td class="note">İlk düzensiz board. Hedef sayacı oynanabilir hücre sayısına eşit.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">gonca</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Piramit / basamaklı</td>
+            <td class="levels">L8, L16</td>
+            <td class="note">Merkeze doğru daralan engel bloğu, L8'de kutu, L16'da tabak dolabıyla tekrarlanıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                </div>
+                <div class="shape-label">piramit</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Dikey sütun</td>
+            <td class="levels">L10</td>
+            <td class="note">Tam dolu, tek genişlik. Dar yan bölgeler yatay roketi neredeyse zorunlu kılıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(6,14px);">
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                </div>
+                <div class="shape-label">dar, dikey</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Kenarda dar şerit</td>
+            <td class="levels">L13, L17, L18</td>
+            <td class="note">Board'un çoğu kapalı, power-up üretimini baskılıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(6,14px);">
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">tek şerit</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Şerit + sabit boşluk</td>
+            <td class="levels">L18</td>
+            <td class="note">Bölge bölünmüyor ama board'da sabit bir delik var.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">delikli</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Üstten bağlı, alttan çatallı</td>
+            <td class="levels">L19</td>
+            <td class="note">L6'daki tam ayrık yapıdan farklı, kısmen ayrık yeni bir tip ("π" şekli).</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">pi şekli</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Üç kenarı saran statik üretici</td>
+            <td class="levels">L21</td>
+            <td class="note">Sol, sağ ve alt kenar Posta Kutusu ile çevrili, üst kenar açık.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid" style="grid-template-columns:repeat(8,14px);">
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">3 kenar kapalı</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Kum saati, engel köprüsü</td>
+            <td class="levels">L32</td>
+            <td class="note">İki ayrı oda, aralarında sadece engelden oluşan dar bir koridor var.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">kum saati</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">İkiz ada blokları</td>
+            <td class="levels">L33</td>
+            <td class="note">İki ayrı 4×4 blok, ana board'un dışında/üstünde duruyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">iki ada</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Tam dolu + kısmi çerçeve</td>
+            <td class="levels">L34</td>
+            <td class="note">Board'un çoğu tek katman, alt kısmın kenarları Posta Kutusu ile çevrili.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">kısmi çerçeve</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="arch-list">
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Tek dikdörtgen, tam dolu</span>
+          <span class="badge">L1 · L2</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l1.png" alt="Level 1 board, tam dolu dikdörtgen">
+        </div>
+        <div class="arch-note">
+          <p>En basit form. İki tutorial seviyesi de bunu kullanıyor, board'un tamamı oynanabilir.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">tam dolu</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">İki ayrık tahta</span>
+          <span class="badge">L6</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l6.png" alt="Level 6 board, iki ayrık tahta">
+        </div>
+        <div class="arch-note">
+          <p>Kalıcı bir boşluk board'u ikiye bölüyor. İki yarı arasında asimetrik bir maliyet var, power-up boşluğu aşarak diğer tarafa geçebiliyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">4 · boşluk · 4</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Gonca</span>
+          <span class="badge">L5</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l5.png" alt="Level 5 board, Gonca">
+        </div>
+        <div class="arch-note">
+          <p>İlk düzensiz board. Hedef sayacı burada oynanabilir hücre sayısına eşit, ayrıca saymaya gerek kalmıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">gonca</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Piramit / basamaklı</span>
+          <span class="badge">L8 · L16</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l8.png" alt="Level 8 board, kutu piramidi">
+        </div>
+        <div class="arch-note">
+          <p>Engeller merkeze doğru daralan bir blok oluşturuyor: L8'de kutuyla, L16'da tabak dolabıyla. Aynı geometri iki farklı engelle tekrarlanıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">piramit</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Dikey sütun</span>
+          <span class="badge">L10</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l10.png" alt="Level 10 board, dikey sütun">
+        </div>
+        <div class="arch-note">
+          <p>Tam dolu, tek genişlikte dikey bir sütun. Dar yan bölgeler yatay roketi neredeyse zorunlu kılıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(6,14px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">dar, dikey</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Kenarda dar şerit</span>
+          <span class="badge">L13 · L17 · L18</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l13.png" alt="Level 13 board, kenarda dar şerit">
+        </div>
+        <div class="arch-note">
+          <p>Board'un çoğu kapalı, sadece tek bir dar şerit serbest kalıyor. Bu, oyuncunun eline geçen power-up türünü de dolaylı olarak belirliyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(6,14px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">tek şerit</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Şerit + sabit boşluk</span>
+          <span class="badge">L18</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l18.png" alt="Level 18 board, sabit boşluklu şerit">
+        </div>
+        <div class="arch-note">
+          <p>Bölge ikiye bölünmüyor ama board'da sabit bir delik var. L13/L17'deki dar şerit fikrine bir varyasyon.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">delikli</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Üstten bağlı, alttan çatallı</span>
+          <span class="badge">L19</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l19.png" alt="Level 19 board, pi şekli">
+        </div>
+        <div class="arch-note">
+          <p>L6'daki tam ayrık yapıdan farklı: üstte bağlı, alttan iki bacağa ayrılıyor ("π" şekli). Kısmen ayrık yeni bir tip.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,14px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">pi şekli</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Üç kenarı saran statik üretici</span>
+          <span class="badge">L21</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l21.png" alt="Level 21 board, üç kenarı saran Posta Kutusu">
+        </div>
+        <div class="arch-note">
+          <p>Sol, sağ ve alt kenar <strong>Posta Kutusu</strong> ile çevrili, üst kenar açık. Posta Kutusu hiç temizlenmediği için bu üç kenar oyun boyunca kapalı kalıyor, oyuncu ortadaki alanla sınırlı kalıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(8,14px);">
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">3 kenar kapalı</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Kum saati, engel köprüsü</span>
+          <span class="badge">L32</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l32.png" alt="Level 32 board, kum saati şekli">
+        </div>
+        <div class="arch-note">
+          <p>İki ayrı geniş oda (üstte normal taşlar, altta tamamen Yumurta) ortada sadece Kutu sütunundan oluşan dar, tamamen kapalı bir koridorla birbirine bağlanıyor. L6'daki ayrık board fikrinin daha karmaşık bir versiyonu.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">kum saati</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">İkiz ada blokları</span>
+          <span class="badge">L33</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l33.png" alt="Level 33 board, iki ayrı ada blok">
+        </div>
+        <div class="arch-note">
+          <p>İki ayrı 4×4 blok, tamamen Yumurta ile dolu, ana board'un üstünde, aynı satırlarda ama aralarında bir sütun boşlukla ayrı duruyor; altlarında da bir sıra boşlukla asıl oynanabilir board'dan kopuk kalıyor. L6'nın ayrık board kalıbının en uç örneği.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">iki ada</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Tam dolu + kısmi çerçeve</span>
+          <span class="badge">L34</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/board_l34.png" alt="Level 34 board, çoğu Yumurta dolu, alt kenarları Posta Kutusu">
+        </div>
+        <div class="arch-note">
+          <p>Board'un büyük kısmı Yumurta ile kaplı, ortada dikey bir engel/power-up sütunu var. Alt üç sırada sol ve sağ kenar Posta Kutusu ile çevrili, en altta küçük bir çentik/boşluk var.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">kısmi çerçeve</div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Hedef Tasarımı İlkeleri</h2>
+
+    <p>Hedef sayısı ilk 20 seviyede kademeli açılıyor: tek hedefle başlıyor, <strong>L7'de ilk çift hedef</strong>, <strong>L13'te ilk üç hedef</strong> geliyor.</p>
+
+    <div class="target-timeline">
+      <span class="step">L1 · tek hedef</span>
+      <span class="arrow">→</span>
+      <span class="step">L7 · çift hedef</span>
+      <span class="arrow">→</span>
+      <span class="step">L13 · üç hedef</span>
+    </div>
+
+    <div class="shot-grid" style="grid-template-columns:repeat(3,1fr);">
+      <figure>
+        <img src="assets/board_l1.png" alt="Level 1, tek hedef">
+        <figcaption>Level 1</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/board_l7.png" alt="Level 7, çift hedef">
+        <figcaption>Level 7</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/board_l13.png" alt="Level 13, üç hedef">
+        <figcaption>Level 13</figcaption>
+      </figure>
+    </div>
+
+    <p>Hedef sayısı arttıkça oyuncu aynı anda birden fazla hedefi dengelemek zorunda kalıyor. Ama hedef sayısı tek başına zorluğu göstermiyor: aşağıdaki iki seviye bunun en net kanıtı.</p>
+
+    <div class="shot-grid" style="grid-template-columns:1fr 1fr;">
+      <figure>
+        <img src="assets/board_l1.png" alt="Level 1 board">
+        <figcaption>Level 1 · 36 kutu hedefi</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/board_l2.png" alt="Level 2 board">
+        <figcaption>Level 2 · 36 kutu hedefi</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout">
+      <strong>Aynı hedef sayısı, farklı seviye.</strong> L1 ve L2'nin ikisi de 36 kutu hedefliyor, hedef adedi birebir aynı. Zorluk farkı hedef sayısından değil, board dizilimi ve hamle sayısından geliyor.
+    </div>
+
+    <p>Bir de tersi var: hedef sayacı bazen board'un tamamıyla örtüşüyor. Bölüm 4'teki Gonca örneğinde (L5), hedef adedi oynanabilir hücre sayısına eşit, ayrıca saymaya gerek kalmıyor. <strong>Board'un kendisi hedefi gösteriyor.</strong></p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Engel Yerleştirme & Katmanlama</h2>
+
+    <p><strong>Aynı hücrede iki farklı engel üst üste bulunabiliyor.</strong> Alttaki engel temizlenmeden üsttekine ulaşılamıyor, bu da tek bir hücreyi normalde olduğundan daha maliyetli hale getiriyor.</p>
+
+    <div class="shot-grid" style="grid-template-columns:1fr 1fr;">
+      <figure>
+        <img src="assets/board_l10.png" alt="Level 10 board, katmanlı engel">
+        <figcaption>Level 10 · sandık (2) üstünde koyu çimen (2)</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/board_l15.png" alt="Level 15 board, katmanlı engel">
+        <figcaption>Level 15 · kutu (1) üstünde koyu çimen (2)</figcaption>
+      </figure>
+    </div>
+
+    <p>İki örnekte de farklı bir engel çifti katmanlanmış: <strong>L10'da sandık ile koyu çimen</strong>, <strong>L15'te kutu ile koyu çimen</strong>. Engelin yerleşimi board'un hangi bölgesinde power-up üretilebileceğini de etkiliyor, bunu Bölüm 4'teki Kenarda Dar Şerit ve Dikey Sütun örneklerinde görmüştük.</p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Yeni Eleman Tanıtım Ritmi</h2>
+
+    <p>Board'a yeni bir engel türü her seferinde belirli bir seviyede giriyor. L41'e kadar <strong>altı engel</strong> görüldü.</p>
+
+    <div class="intro-track">
+      <div class="intro-item">
+        <img src="assets/obs_kutu.jpg" alt="Kutu">
+        <div class="nm">Kutu</div>
+        <div class="lvl">L1</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+3</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/obs_cim.jpg" alt="Çimen">
+        <div class="nm">Çimen</div>
+        <div class="lvl">L4</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+7</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/obs_dolap_1.jpg" alt="Tabak Dolabı">
+        <div class="nm">Tabak Dolabı</div>
+        <div class="lvl">L11</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+10</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/obs_posta.jpg" alt="Posta Kutusu">
+        <div class="nm">Posta Kutusu</div>
+        <div class="lvl">L21</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+10</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/obs_yumurta.jpg" alt="Yumurta">
+        <div class="nm">Yumurta</div>
+        <div class="lvl">L31</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+10</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/obs_iksir.jpg" alt="İksir Şişesi">
+        <div class="nm">İksir Şişesi</div>
+        <div class="lvl">L41</div>
+      </div>
+    </div>
+
+    <p style="margin-top:22px;"><strong>Ortalama her 10 seviyede 1 yeni engel</strong> tanıtılıyor diyebiliriz.</p>
+
+    <p style="margin-top:22px;">Booster tanıtımı da kendi ritminde ilerliyor: Çekiç (L8) → Ok (L13) → Top (L16) → Soytarı Şapkası (L18).</p>
+
+    <div class="intro-track">
+      <div class="intro-item">
+        <img src="assets/bs_cekic.jpg" alt="Çekiç">
+        <div class="nm">Çekiç</div>
+        <div class="lvl">L8</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+5</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/bs_ok.jpg" alt="Ok">
+        <div class="nm">Ok</div>
+        <div class="lvl">L13</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+3</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/bs_top.jpg" alt="Top">
+        <div class="nm">Top</div>
+        <div class="lvl">L16</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+2</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/bs_soytari.jpg" alt="Soytarı Şapkası">
+        <div class="nm">Soytarı Şapkası</div>
+        <div class="lvl">L18</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Kapanış</h2>
+
+    <p>İlk seviyelerde Royal Match'in Level Design yaklaşımı, <strong>tek bir değişkene değil birkaç sistemin birlikte çalışmasına</strong> dayanıyor: sahne ve oda ilerlemesi (Bölüm 2), seviye tipleri (Bölüm 3), board geometrisi (Bölüm 4), hedef dizilimi (Bölüm 5), engel katmanlaması (Bölüm 6) ve yeni eleman tanıtım ritmi (Bölüm 7). Aynı hedef sayısı farklı seviyeler üretebiliyor, aynı board arketipi farklı engellerle tekrarlanabiliyor, görünen sahne ile meta ilerleme her zaman örtüşmüyor.</p>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">İKİNCİ OYUN <span class="sep">·</span> LEVEL DESIGN ANALİZİ</div>
+    <h2>Toon Blast</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Açılış</h2>
+
+    <p>Bu bölüm, Toon Blast'ın ilk seviyelerinde board, hedef ve engel dizilimini nasıl kurduğuna bakıyor: sahne/bölüm yapısına, seviye tiplerine ve yeni eleman tanıtım ritmine. Odak yine <strong>"bu seviye nasıl kurulmuş"</strong> sorusunda.</p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Sahne & Bölüm Haritası</h2>
+
+    <p>Royal Match'in aksine Toon Blast, L1-20 arası <strong>tek bir sahnede</strong> kalıyor: çöl yolu, kaya oluşumları, kaktüs. <strong>Sahne L21'de değişiyor</strong>, tiyatro perdesine dönüşüyor, tam aynı anda "Çılgın Orkestra" adlı bir Bölüm'ün (chapter) kilidi açılıyor.</p>
+
+    <div class="shot-grid" style="grid-template-columns:1fr 1fr;">
+      <figure>
+        <img src="assets/tb_scene.png" alt="Toon Blast, çöl yolu sahnesi">
+        <figcaption>Yol (L1-20)</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_board_l21.png" alt="Toon Blast, tiyatro sahnesi, L21">
+        <figcaption>Tiyatro (L21'den itibaren)</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout">
+      Sahne/Bölüm senkronizasyonu Royal Match'te de var, ama tetikleyici farklı görünüyor. Royal Match'te sahne değişimi oyuncunun aktif eylemine (yıldızları "Yap" tuşuyla harcamasına) bağlı, biriktirip geciktirilebiliyor. Toon Blast'ta ise doğrudan seviye ilerlemesine bağlı görünüyor, oyuncunun geciktirebileceği bir ara adım yok.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Seviye Tipleri</h2>
+
+    <p>Toon Blast'ta da Royal Match'in "Kralın Kâbusu"na birebir paralel bir Mini Oyun tipi var: <strong>Kurtarma Görevi</strong> ("Bruno'yu Kurtar").</p>
+
+    <div class="case-list">
+
+      <div class="case-row">
+        <div class="arch-head">
+          <span class="name">Kurtarma Görevi · Üşüyen Bruno</span>
+          <span class="badge">davet + kalıcı buton</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_minigame_frost_early.jpg" alt="Kurtarma Görevi davet ekranı, Üşüyen Bruno">
+        </div>
+        <div class="arch-note">
+          <p>Match-3/blast değil, tamamen ayrı bir <strong>fizik/pull-pin bulmaca</strong> motoru: pimleri çekip kor ateşi bir sobaya yönlendirerek donan Bruno'yu ısıtıyorsun. En az iki tema doğrulandı, ikinci tema "Acı Bruno" bir su bulmacası. İkisi de sabit <strong>+5 coin</strong> veriyor. Royal Match kendi mini oyununda özel şekilli bir board kullanarak aynı match-3 motorunu ucuza yeniden çalıştırıyor; Toon Blast burada tamamen ayrı bir motor kurmuş.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <p>Royal Match'teki gibi ayrı bir "Bonus Bölüm" (salt coin-toplama, hedef/hamle yapısı olmayan normal bir level) tipi Toon Blast'ta henüz görülmedi.</p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Board Arketipleri</h2>
+
+    <p>İlk 26 seviyede gördüğümüz <strong>9 kalıp</strong> aşağıda. Royal Match'le üç ortak eksen paylaşıyorlar: tanınabilir piksel-art şekiller, kenarı çerçeveleyen statik üretici engeller, ve merkeze daralan piramit/diyamant kalıpları.</p>
+
+    <div class="table-wrap">
+      <table class="arch-table">
+        <thead>
+          <tr>
+            <th>Kalıp</th>
+            <th>Örnek</th>
+            <th>Not</th>
+            <th>Şekil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pattern">Tek dikdörtgen, ağır engel-kaplı</td>
+            <td class="levels">L1</td>
+            <td class="note">81 hücrenin 72'si Balon. Royal Match'in "önce temiz mekanik" ilkesinin tersi: Toon Blast oyuncuyu daha ilk seviyede yoğun engelle karşılıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">%89 balon</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Tek engel ailesi board'u dolduruyor</td>
+            <td class="levels">L5</td>
+            <td class="note">54/81 hücre Kutu. L1'in balon deseniyle yapısal olarak aynı, tekrarlayan bir erken-oyun kalıbı.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">2 açık şerit</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Köşeleri kesik dikdörtgen</td>
+            <td class="levels">L4, L11</td>
+            <td class="note">4 köşe (L11) ya da 4 köşe + 4 kenar-ortası (L4) eksik. Oynanabilir alanı bilinçli düşürüyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(7,9px);">
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                </div>
+                <div class="shape-label">4 köşe (L11)</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Bilinçli piksel-art şekil</td>
+            <td class="levels">L10, L13</td>
+            <td class="note">L10 gülen yüz, L13 kalp. Royal Match'in "tanınabilir şekil" ilkesiyle aynı.</td>
+            <td class="shape"></td>
+          </tr>
+          <tr>
+            <td class="pattern">Ortadan bölünmüş, iki ayrı bölge</td>
+            <td class="levels">L18</td>
+            <td class="note">Royal Match'in ayrık board kalıbının (L6) karşılığı, ama çok daha geç tanıtılıyor.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">ayrık</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Piramit/diyamant, merkeze daralan</td>
+            <td class="levels">L23</td>
+            <td class="note">9 sütundan 1 sütuna daralan üçgen, Şapka kenar çerçevesiyle. Royal Match'in piramit kalıbıyla (L8, L16) aynı aile.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                  <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+                </div>
+                <div class="shape-label">üçgen</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Tam dolu, tek engel ailesi çoğunlukta</td>
+            <td class="levels">L24-25</td>
+            <td class="note">Şapka board'un yarısından fazlasını kaplıyor. Zorluk eğrisinin bir parçası olarak kademeli yoğunlaştırma.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">diyagonal artış</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">İki temalı yarıya bölünmüş</td>
+            <td class="levels">L26</td>
+            <td class="note">Sol sarı, sağ mor tema + tanımlanamayan "bulut" küpleri. Yeni ve doğrulanmamış bir kalıp, açık soru.</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(9,9px);">
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                  <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+                </div>
+                <div class="shape-label">iki renk, ayrık</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="pattern">Kenarı çerçeveleyen statik üretici</td>
+            <td class="levels">L21</td>
+            <td class="note">Şapka, 3 kenarı sarıyor (sol, sağ, alt), üst kenar açık. Royal Match'in Posta Kutusu kalıbıyla birebir aynı ilke, hatta aynı seviye numarasında (21).</td>
+            <td class="shape">
+              <div class="arch-diagram">
+                <div class="impact-grid dense" style="grid-template-columns:repeat(8,9px);">
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+                  <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+                </div>
+                <div class="shape-label">3 kenar kapalı</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="arch-list">
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Tek dikdörtgen, ağır engel-kaplı</span>
+          <span class="badge">L1</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l1.png" alt="Toon Blast Level 1 board, balonla kaplı">
+        </div>
+        <div class="arch-note">
+          <p><strong>81 hücrenin 72'si Balon</strong>, sadece küçük bir blok açık. Royal Match'in "önce temiz mekanik öğret" felsefesinin tersi: "baştan engelle iç içe öğret" yaklaşımına somut bir örnek.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">%89 balon</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Tek engel ailesi board'u dolduruyor</span>
+          <span class="badge">L5</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l5.png" alt="Toon Blast Level 5 board, Kutu ile dolu">
+        </div>
+        <div class="arch-note">
+          <p><strong>72 hücrenin 54'ü Kutu</strong>, sadece iki yatay şerit (1. ve 5. satır) açık. L1'in balon deseniyle yapısal olarak aynı, tekrarlayan bir erken-oyun kalıbı.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">2 açık şerit</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Ortadan bölünmüş, iki ayrı bölge</span>
+          <span class="badge">L18</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l18.png" alt="Toon Blast Level 18 board, ikiye bölünmüş">
+        </div>
+        <div class="arch-note">
+          <p>Board ortadan iki ayrı 4 sütunluk bloğa ayrılıyor. Royal Match'in L6'daki ayrık board kalıbının Toon Blast'taki karşılığı, ama <strong>çok daha geç (L18 vs L6)</strong> tanıtılıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">ayrık</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Piramit/diyamant, merkeze daralan</span>
+          <span class="badge">L23</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l23.png" alt="Toon Blast Level 23 board, piramit şekli">
+        </div>
+        <div class="arch-note">
+          <p>9 sütundan başlayıp 1 sütuna daralan bir üçgen, kenarları Şapka çerçeviyor. Royal Match'in piramit kalıbıyla (L8, L16, düzeltilmiş yönüyle) aynı aile: geniş üst, dar alt.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">üçgen</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Tam dolu, tek engel ailesi çoğunlukta</span>
+          <span class="badge">L24-25</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l24.png" alt="Toon Blast Level 24 board, diyagonal Şapka artışı">
+        </div>
+        <div class="arch-note">
+          <p>Şapka, sol üst köşeden başlayıp satır satır bir hücre daha genişleyen bir merdiven gibi board'un yarısından fazlasını kaplıyor. Zorluk eğrisinin bir parçası olarak kademeli yoğunlaştırma.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell on"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">diyagonal artış</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Kenarı çerçeveleyen statik üretici</span>
+          <span class="badge">L21</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l21.png" alt="Toon Blast Level 21 board, üç kenarı saran Şapka">
+        </div>
+        <div class="arch-note">
+          <p>Sol, sağ ve alt kenar Şapka ile çevrili, üst kenar açık. Royal Match'in Posta Kutusu kalıbıyla (Bölüm 4) birebir aynı ilke, <strong>hatta aynı seviye numarasında (21)</strong> tanıtılıyor.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(8,10px);">
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell frame"></div>
+            <div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div><div class="impact-cell frame"></div>
+          </div>
+          <div class="shape-label">3 kenar kapalı</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Köşeleri kesik dikdörtgen</span>
+          <span class="badge">L4 · L11</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l4.png" alt="Toon Blast Level 4 board, köşeleri kesik">
+          <img src="assets/tb_board_l11.png" alt="Toon Blast Level 11 board, köşeleri kesik">
+        </div>
+        <div class="arch-note">
+          <p>L11'de 4 köşe, L4'te 4 köşe + 4 kenar-ortası eksik. Oynanabilir alanı bilinçli düşürüyor, Royal Match'te de var olan bir eksen.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid dense" style="grid-template-columns:repeat(7,8px);">
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">4 köşe (L11)</div>
+          <div class="impact-grid dense" style="grid-template-columns:repeat(9,8px); margin-top:8px;">
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">+4 kenar-ortası (L4)</div>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">Bilinçli piksel-art şekil</span>
+          <span class="badge">L10 · L13</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l10.png" alt="Toon Blast Level 10 board, gülen yüz şekli">
+          <img src="assets/tb_board_l13.png" alt="Toon Blast Level 13 board, kalp şekli">
+        </div>
+        <div class="arch-note">
+          <p>L10 gülen yüz, L13 kalp. Royal Match'in "tanınabilir şekil" ilkesiyle aynı, iki oyunun paylaştığı bir Level Design prensibi.</p>
+        </div>
+      </div>
+
+      <div class="arch-row">
+        <div class="arch-head">
+          <span class="name">İki temalı yarıya bölünmüş</span>
+          <span class="badge">L26</span>
+        </div>
+        <div class="arch-media">
+          <img src="assets/tb_board_l26.png" alt="Toon Blast Level 26 board, iki renkli yarı">
+        </div>
+        <div class="arch-note">
+          <p>Sol yarı sarı temalı, sağ yarı mor temalı, ayrıca tanımlanamayan "bulut" desenli küpler var. Yeni ve doğrulanmamış bir kalıp.</p>
+        </div>
+        <div class="arch-diagram">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px);">
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+            <div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div><div class="impact-cell on"></div>
+          </div>
+          <div class="shape-label">iki renk, ayrık</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Hedef Tasarımı İlkeleri</h2>
+
+    <p>Hedef sayısı ilk 20 seviyede kademeli açılıyor: tek hedefle başlıyor, <strong>L7'de ilk çift hedef</strong>, <strong>L14'te ilk üç hedef</strong> geliyor. Royal Match'in "L7'de ilk çift hedef, L13'te ilk üçlü hedef" kademesiyle <strong>neredeyse birebir aynı ritim</strong>.</p>
+
+    <div class="target-timeline">
+      <span class="step">L1 · tek hedef</span>
+      <span class="arrow">→</span>
+      <span class="step">L7 · çift hedef</span>
+      <span class="arrow">→</span>
+      <span class="step">L14 · üç hedef</span>
+    </div>
+
+    <div class="shot-grid" style="grid-template-columns:repeat(3,1fr);">
+      <figure>
+        <img src="assets/tb_l1.png" alt="Toon Blast Level 1, tek hedef">
+        <figcaption>Level 1</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_l7.png" alt="Toon Blast Level 7, çift hedef">
+        <figcaption>Level 7</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_l14.png" alt="Toon Blast Level 14, üç hedef">
+        <figcaption>Level 14</figcaption>
+      </figure>
+    </div>
+
+    <p>Sayı kademesinin yanında bir de hedef ailesi genişlemesi var: L18'de ilk çift-Balon, L21'de Havuç hedefi tek başına tanıtılıyor, L23'te Havuç + Kutu karışık hedef geliyor.</p>
+
+    <div class="shot-grid" style="grid-template-columns:repeat(3,1fr);">
+      <figure>
+        <img src="assets/tb_l18.png" alt="Toon Blast Level 18, çift Balon hedefi">
+        <figcaption>L18 · çift Balon</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_l21.png" alt="Toon Blast Level 21, tek Havuç hedefi">
+        <figcaption>L21 · tek Havuç</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_l23.png" alt="Toon Blast Level 23, Havuç ve Kutu karışık hedef">
+        <figcaption>L23 · Havuç + Kutu</figcaption>
+      </figure>
+    </div>
+
+    <div class="callout">
+      <strong>Şapka'nın hedef/engel ayrımı, Royal Match'in Posta Kutusu'yla birebir aynı ilkeyi paylaşıyor:</strong> hedef sayacı üreticinin kendisini değil, ürettiği öğeyi (Havuç) sayıyor. Üretici kırılmaz, sınırsız üretmeye devam ediyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Engel Yerleştirme & Yoğunluk Artışı</h2>
+
+    <p><strong>Üst üste engel katmanlaması ilk kez L14'te görülüyor:</strong> Kutu, altındaki koyu ikinci bir katmanla birlikte geliyor, alttaki temizlenmeden Kutu'ya ulaşılamıyor. L15'te aynı katmanlama devam ediyor.</p>
+
+    <div class="shot-grid" style="grid-template-columns:1fr 1fr;">
+      <figure>
+        <img src="assets/tb_l14.png" alt="Toon Blast Level 14 board, katmanlı engel">
+        <figcaption>Level 14 · Kutu + koyu alt katman</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_l15.png" alt="Toon Blast Level 15 board, katmanlı engel">
+        <figcaption>Level 15 · aynı katmanlama devam ediyor</figcaption>
+      </figure>
+    </div>
+
+    <p>Engel = power-up baskılayıcı ilkesi burada da geçerli: board'un büyük kısmını kaplayan Şapka/Kutu/Balon blokları oyuncunun elindeki serbest alanı, dolayısıyla hangi power-up'ı üretebileceğini doğrudan kısıtlıyor.</p>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Yeni Eleman Tanıtım Ritmi</h2>
+
+    <p>Yeni engel tanıtım ritmi <strong>~7 seviyede bir</strong> gibi duruyor, Royal Match'in ~10 seviyelik ritminden biraz daha sık.</p>
+
+    <div class="intro-track">
+      <div class="intro-item">
+        <img src="assets/tb_obs_balon.jpg" alt="Balon">
+        <div class="nm">Balon</div>
+        <div class="lvl">L1</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+4</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_obs_kutu.jpg" alt="Kutu">
+        <div class="nm">Kutu</div>
+        <div class="lvl">L5</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+6</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_obs_baloncuk.jpg" alt="Baloncuk">
+        <div class="nm">Baloncuk</div>
+        <div class="lvl">L11</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+10</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_obs_sapka.jpg" alt="Şapka">
+        <div class="nm">Şapka</div>
+        <div class="lvl">L21</div>
+      </div>
+    </div>
+
+    <p style="margin-top:22px;">Booster tanıtımı kendi ritminde ilerliyor: Çekiç (L9) → Boks Eldiveni (L12) → Örs (L16) → Zar (L18).</p>
+
+    <div class="intro-track">
+      <div class="intro-item">
+        <img src="assets/tb_bs_cekic.jpg" alt="Çekiç">
+        <div class="nm">Çekiç</div>
+        <div class="lvl">L9</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+3</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_bs_boks.jpg" alt="Boks Eldiveni">
+        <div class="nm">Boks Eldiveni</div>
+        <div class="lvl">L12</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+4</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_bs_ors.jpg" alt="Örs">
+        <div class="nm">Örs</div>
+        <div class="lvl">L16</div>
+      </div>
+      <div class="intro-gap">
+        <span class="arrow">→</span>
+        <span class="diff">+2</span>
+      </div>
+      <div class="intro-item">
+        <img src="assets/tb_bs_zar.jpg" alt="Zar">
+        <div class="nm">Zar</div>
+        <div class="lvl">L18</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Kapanış</h2>
+
+    <p><strong>Royal Match ve Toon Blast'ın Level Design yaklaşımı ilk bakışta göründüğünden çok daha benzer.</strong> İkisi de tutorial'ı en baştan devreye sokuyor, sadece farklı bir yoldan: Royal Match önce temiz bir board'la başlayıp engeli kademeli tanıtırken, Toon Blast L1'den itibaren yoğun engelle iç içe bir öğretim tercih ediyor. Bunun dışında hedef sayısı kademesi (L1 tek, L7 çift, L13-14 üç), booster tanıtım ritmi ve aynı seviye numarasında (21) tekrarlanan kenar-çerçeve statik üretici kalıbı <strong>neredeyse birebir örtüşüyor</strong>. İki oyun da tanınabilir piksel-art şekiller ve merkeze daralan piramit kalıpları kullanıyor.</p>
+
+    <p>Bir fark da elle tasarlanmış "niş" seviyelerde öne çıkıyor: Toon Blast, açılış hamlelerinin neredeyse tamamen board dizilimi tarafından belirlendiği, daha sıkı kurgulanmış seviyeler kullanıyor. <strong>L25'in şerit gibi dizilmiş Şapka sütunları</strong> buna iyi bir örnek, oyuncunun ilk 2-3 hamlesini ciddi şekilde daraltıyor.</p>
+
+    <div class="shot-grid" style="grid-template-columns:minmax(0,280px); justify-content:center;">
+      <figure>
+        <img src="assets/tb_l25.png" alt="Toon Blast Level 25 board, şerit halinde Şapka sütunları">
+        <figcaption>Level 25 · şerit Şapka sütunları</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">SENTEZ <span class="sep">·</span> İKİ OYUN YAN YANA</div>
+    <h2>Çapraz Analiz</h2>
+    <p>Level Design bölümlerini aynı sırayla yazmamızın sebebi buydu: yan yana koyunca nerede aynı dili konuştukları, nerede bilinçli olarak ayrıştıkları netleşiyor.</p>
+  </div>
+
+  <section class="sec">
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Boyut</th><th>Royal Match</th><th>Toon Blast</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sahne değişim tetikleyicisi</td><td>Oyuncu eylemi ("Yap" tuşu), biriktirilebilir</td><td>Doğrudan seviye ilerlemesi, ara adım yok</td></tr>
+          <tr><td>Hedef sayısı kademesi</td><td>L1 tek, L7 çift, L13 üç</td><td>L1 tek, L7 çift, L14 üç (neredeyse aynı)</td></tr>
+          <tr><td>Kenar-çerçeve statik üretici</td><td>Posta Kutusu, L21</td><td>Şapka, L21 (aynı seviye numarası)</td></tr>
+          <tr><td>Yeni engel tanıtım sıklığı</td><td>~10 seviyede bir</td><td>~10 seviyede bir</td></tr>
+          <tr><td>Booster tanıtım ritmi</td><td>Çekiç L8 → Ok L13 → Top L16 → Soytarı Şapkası L18</td><td>Çekiç L9 → Boks Eldiveni L12 → Örs L16 → Zar L18</td></tr>
+          <tr><td>Mini oyun motoru</td><td>Aynı match-3 motoru, özel şekilli board</td><td>Ayrı bir fizik/pull-pin motoru</td></tr>
+          <tr><td>Bonus Bölüm (coin-toplama)</td><td>Var, L20</td><td>Henüz görülmedi</td></tr>
+          <tr><td>Ayrık board kalıbı</td><td>L6</td><td>L18 (çok daha geç)</td></tr>
+          <tr><td>Elle tasarlanmış "niş" seviyeler</td><td>Daha az belirgin</td><td>Daha belirgin (örn. L25)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Çıkarım:</strong> hedef sayısı kademesi, yeni engel tanıtım sıklığı, kenar-çerçeve statik üretici kalıbı (hatta aynı seviye numarasında) ve booster tanıtım ritmi neredeyse birebir örtüşüyor; bunlar muhtemelen türün oturmuş standartları. Asıl ayrışma iki noktada: Toon Blast'ın tutorial'ı temiz bir board yerine baştan yoğun engelle iç içe vermesi, ve daha sık başvurduğu elle tasarlanmış "niş" seviyeler.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

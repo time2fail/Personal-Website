@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arayüz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --ink:#241F33; --ink-soft:#4A4358;
+    --muted:#8A7F68; --line:#E3D8BE; --accent:#B07C22; --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2; --crown:#E8A320; --book:#D14B3C; --shield:#3C74C4;
+    --leaf:#4C9A4E; --diamond:#CE4FAE; --warn:#B24444; --warn-soft:#F6E2DE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+      --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+      --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+      --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+    --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+    --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+    --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--ground); color:var(--ink); font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .page{ max-width:900px; margin:0 auto 0 clamp(32px, 10vw, 160px); padding:56px 24px 90px; }
+  h1,h2,h3{ font-family:'Fraunces', Georgia, 'Times New Roman', serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink); }
+  .eyebrow{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; color:var(--accent-strong); font-weight:500; display:flex; align-items:center; gap:10px; }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); letter-spacing:.02em; }
+  .masthead{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:28px; border-bottom:1px solid var(--line); margin-bottom:44px; flex-wrap:wrap; }
+  .masthead h1{ font-size:clamp(2rem, 5vw, 2.7rem); line-height:1.08; margin-top:8px; }
+  .masthead .sub{ color:var(--ink-soft); font-size:1.02rem; margin-top:10px; max-width:52ch; }
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{ font-size:1.62rem; margin-bottom:18px; }
+  .sec p{ font-size:1.02rem; line-height:1.68; color:var(--ink-soft); max-width:64ch; margin:0 0 16px; }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+  .sec p:last-child{ margin-bottom:0; }
+  .callout{ border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:24px 0 8px; font-size:.98rem; line-height:1.62; color:var(--ink-soft); }
+  .callout strong{ color:var(--ink); }
+  .divider{ display:flex; align-items:center; gap:16px; margin:52px 0; color:var(--accent); }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+  .site-nav{ display:flex; align-items:center; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:22px; flex-wrap:wrap; }
+  .site-nav a{ color:var(--muted); text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{ color:var(--accent-strong); border-bottom-color:var(--accent); }
+  .site-nav .sep{ color:var(--line); }
+
+  .scene-row{ display:grid; grid-template-columns:1fr 240px; gap:32px; align-items:start; margin:22px 0 8px; }
+  .scene-row h3{ font-family:'Fraunces', serif; font-weight:600; font-size:1.08rem; margin-bottom:8px; color:var(--ink); }
+  .scene-row p{ margin:0 0 14px; }
+  .scene-row p:last-child{ margin-bottom:0; }
+  .scene-art img{ width:100%; display:block; border-radius:14px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .scene-art .cap{ padding:8px 2px 0; font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); text-align:center; }
+
+  .timeline{ display:flex; flex-direction:column; margin:10px 0 8px; border-left:2px solid var(--line); padding-left:26px; }
+  .tl-step{ position:relative; padding-bottom:22px; }
+  .tl-step:last-child{ padding-bottom:0; }
+  .tl-step::before{ content:""; position:absolute; left:-31px; top:4px; width:9px; height:9px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px var(--surface); }
+  .tl-step .t{ font-family:'IBM Plex Mono', monospace; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; color:var(--accent-strong); margin-bottom:4px; }
+  .tl-step p{ margin:0; font-size:.96rem; color:var(--ink-soft); max-width:58ch; }
+  .tl-step p strong{ color:var(--ink); }
+
+  .note-list{ display:flex; flex-direction:column; gap:0; margin:22px 0 8px; }
+  .note-row{ padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:190px 1fr; gap:24px; }
+  .note-row:last-child{ border-bottom:1px solid var(--line); }
+  .note-row .term{ font-family:'Fraunces', serif; font-weight:600; font-size:1.02rem; color:var(--ink); padding-top:1px; }
+  .note-row .term .cite{ display:block; font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:.66rem; letter-spacing:.03em; color:var(--muted); margin-top:6px; }
+  .note-row p{ margin:0 0 8px; font-size:.96rem; }
+  .note-row p:last-child{ margin-bottom:0; }
+  .note-row.img-right{ grid-template-columns:190px 1fr 210px; }
+
+  .shot-row{ display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap; }
+  .shot{ width:100px; flex-shrink:0; border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface); }
+  .shot.lg{ width:210px; }
+  .shot img{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+  .shot .cap{ padding:5px 7px 6px; font-family:'IBM Plex Mono', monospace; font-size:.6rem; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
+
+  .game-header{ margin:0 0 40px; padding-bottom:20px; border-bottom:3px solid var(--accent); }
+  .game-header .eyebrow{ margin-bottom:8px; }
+  .game-header h2{ font-size:2.1rem; }
+
+  .compare-table-wrap{ overflow-x:auto; margin:22px 0; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); }
+  .compare-table{ width:100%; min-width:480px; border-collapse:collapse; font-size:.92rem; }
+  .compare-table th, .compare-table td{ padding:12px 18px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+  .compare-table th{ font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-strong); background:var(--accent-soft); }
+  .compare-table td:first-child{ font-family:'Fraunces', serif; font-weight:600; color:var(--ink); white-space:nowrap; }
+  .compare-table td{ color:var(--ink-soft); }
+  .compare-table tbody tr:last-child td{ border-bottom:none; }
+
+  .soon{ margin-top:64px; padding:26px 28px; border:1px dashed var(--line); border-radius:16px; color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:.76rem; letter-spacing:.03em; line-height:1.7; }
+
+  footer{ margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); line-height:1.7; }
+  @media (max-width:760px){
+    .note-row{ grid-template-columns:1fr; gap:6px; }
+    .note-row.img-right{ grid-template-columns:1fr; }
+    .note-row.img-right .shot-row{ margin-top:10px; }
+    .scene-row{ grid-template-columns:1fr; }
+    .scene-art{ max-width:260px; margin:14px auto 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a><span class="sep">·</span>
+    <a href="level-design.html">Level Design</a><span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a><span class="sep">·</span>
+    <a href="graphics.html">Grafik</a><span class="sep">·</span>
+    <a href="animation.html">Animasyon</a><span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a><span class="sep">·</span>
+    <a href="user-interface.html" class="active">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> ARAYÜZ ANALİZİ</div>
+      <h1>Buraya Dokun</h1>
+      <div class="sub">Tutorial kartları, dikkat yönlendirme okları, kayıp/tekrar-deneme akışı ve diyalog çerçeveleri üzerine bir inceleme: arayüz oyuncuya neyi, ne zaman ve nasıl öğretiyor sorusuna odaklanıyor.</div>
+    </div>
+    <div class="progress">§ 1-10 / 10</div>
+  </header>
+
+  <div class="game-header">
+    <div class="eyebrow">OYUN 1</div>
+    <h2>Royal Match</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Tahtayı Karart, Eli Göster</h2>
+    <p>Royal Match'in ilk tutorial kartı videonun daha 3. saniyesinde ekranda. Burada yakalanan kart <strong>Kutu engelinin kuralını</strong> öğretiyor ve board-içi tutorial'ların tam formülünü tek karede ortaya koyuyor.</p>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Tahtanın büyük kısmı koyu bir overlay ile karartılıyor; sadece <strong>5 hücrelik bir "L" şeklindeki alan</strong> (2 Kutu + 1 Yaprak) aydınlık ve tıklanabilir kalıyor, gerisi tamamen etkileşimsiz. Altta krem zeminli, mavi kalın çerçeveli bir kart: <strong>"KUTU'yu kırmak için yanında eşleştirme yap!"</strong></p>
+        <div class="timeline">
+          <div class="tl-step"><div class="t">Kare 1</div><p>Animasyonlu parmak ikonu <strong>Kutu hücresinin üstünde</strong> beliriyor.</p></div>
+          <div class="tl-step"><div class="t">Kare 2</div><p>Parmak <strong>yarı yolda</strong>, iki hücre arasında kayıyor.</p></div>
+          <div class="tl-step"><div class="t">Kare 3</div><p>Parmak <strong>Yaprak hücresinin üstünde</strong> duruyor.</p></div>
+        </div>
+        <p>Bu statik bir "buraya dokun" oku değil, <strong>gerçek swap hareketini canlandıran bir demo animasyonu</strong>. Üstteki HUD (Hedef=36, Hamle=30, Kral portresi) tutorial sırasında da <strong>tam görünür kalıyor</strong>: sadece board karartılıyor, ilerleme durmuyor, yalnızca etkileşim kısıtlanıyor.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/board_l1.png" alt="Royal Match ilk tutorial kartı: karartılmış board, L şeklinde spotlight, animasyonlu el ve metin kartı">
+        <div class="cap">Level 1</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Mekanik, tutorial dilini belirliyor:</strong> Royal Match'in çekirdek mekaniği swap (taş değiştirme) olduğu için tutorial bunu metinle değil hareketle gösteriyor. Oyuncuya önce "bu hareketi yap" diye bir örnek izletiliyor, sonra kontrol veriliyor. Toon Blast'ın L1 kartları aynı "karart + odakla + metin kartı" formülünü kullanıyor, ama bir animasyonlu el demosu yok; sadece durağan bir parmak-dokunma ikonu duruyor. Tap-to-blast tek noktaya dokunmayı gerektirdiği için gösterilecek bir "hareket yolu" yok. İki oyun da kendi çekirdek dokunuş biçimine uygun bir tutorial görseli seçmiş.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Önce Aşağı, Sonra Yukarı</h2>
+    <p>Board-dışı (meta-ekran) tutoriallerde Royal Match tamamen farklı bir dil kullanıyor: karartma ve metin kartı yerine, <strong>parlak sarı, hafif sallanan bir ok</strong>. "Alan"ı geliştirip Kale'yi inşa etme döngüsü, bu okun iki aşamalı halde nasıl çalıştığını gösteren ilk örnek.</p>
+
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">Ana ekran<span class="cite">ok aşağı bakıyor</span></div>
+        <div><p>"Alan 1" butonu (mor hazine sandığı ikonu, "0/6") turuncu bir parıltıyla vurgulanmış, üstünde krem-mavi bir tooltip: <strong>"Görev listeni buradan açabilirsin."</strong> Tooltip'ten butona doğru animasyonlu, aşağı işaret eden sarı bir ok sallanarak dikkat çekiyor. Diğer buton ("Bölüm 2") gri/soluk renkte, vurgulanmamış: dikkat kasıtlı olarak <strong>tek bir butona</strong> kanalize ediliyor.</p></div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Kale diyaloğu<span class="cite">ok yukarı bakıyor</span></div>
+        <div class="txt"><p>Butona basılınca açılan modal: üstte "Alan Gelişimi 0/6" ilerleme çubuğu ve kilitli mor sandık ikonu, altında tek bir görev satırı ("Kaleyi inşa et" yazısı ve yanında "Yap ⭐1" yeşil buton). Aynı ok bileşeni burada da var, bu kez <strong>yukarı işaret ediyor</strong> ve butonun hemen altında duruyor. "Kaleyi inşa et", Alan 1'in sırasındaki <strong>ilk görev</strong>: görevlerin gerçekten sırayla sunulduğunu doğrudan doğruluyor (bkz. Level Design §1).</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_star_spend.jpg" alt="Kale paneli, altın ok Yap butonunun altında yukarı işaret ediyor"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Yön değişen ama üslubu sabit kalan bir ok dili:</strong> her iki adımda da aynı "parlak sarı, sallanan ok" bileşeni kullanılıyor, sadece yönü değişiyor: önce "nereye git" (aşağı), sonra "neye bas" (yukarı) diye iki aşamalı bir yönlendirme. Bu, board-içi tutorial'ın "karart + metin kartı" formülünden (bkz. Bölüm 1) tamamen ayrı, meta-ekranlara özgü ikinci bir dikkat yönlendirme dili.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Kaybedince Ne Oluyor</h2>
+    <p>Kayıp akışı ve mini-oyun modları, üçüncü bir ilkeyi ortaya koyuyor: standart HUD (Hedef/Hamle) sabit bir çerçeve değil, <strong>bağlama göre yeniden yazılan bir sözlük.</strong></p>
+
+    <div class="timeline">
+      <div class="tl-step"><div class="t">Hamle 0</div><p>"Hamlen Kalmadı!" yazılı bir şerit ~0.5-1sn ekranı yatay geçiyor, otomatik ve butonsuz.</p></div>
+      <div class="tl-step"><div class="t">Ücretli teklif</div><p><strong>"Devam Et?"</strong> modalı: "+5 hamle" rozeti, tek yeşil buton (<strong>💎900</strong>) ve kapatma X'i; opsiyonel bir çıkışı olan tek bir aksiyon.</p></div>
+      <div class="tl-step"><div class="t">Reddedilirse</div><p>Statik <strong>"Bölüm Başarısız!"</strong> ekranı: kırık kalp, hedeflerin tek tek yeşil tik/kırmızı çarpı durumu, "Güçlendirici Seç:" ile bir sonraki denemeye taşınacak booster, tek buton: <strong>"Tekrar Dene."</strong></p></div>
+    </div>
+
+    <div class="shot-row" style="margin:18px 0 8px;">
+      <div class="shot lg"><img src="assets/lose_continue.jpg" alt="Devam Et? modalı, tek buton ve kapatma X'i"><div class="cap">Devam Et?</div></div>
+      <div class="shot lg"><img src="assets/rm_lose_failed.jpg" alt="Bölüm Başarısız! ekranı, booster seçimi ve Tekrar Dene"><div class="cap">Bölüm Başarısız!</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>İki buton = opsiyonel, tek buton = zorunlu.</strong> "Devam Et?" teklifi tek buton+X ile hâlâ "atlanabilir" kalıyor (X'e basıp reddedilebiliyor), ama "Bölüm Başarısız!" ekranının tek çıkışı var: Tekrar Dene. Ekstra hamle burada <strong>gem/elmas (💎900)</strong> karşılığında satılıyor. Toon Blast aynı akışta coin istiyor (bkz. Toon Blast bölümü); hangi para biriminin "acil durum parası" olacağı bilinçli bir ekonomi kararı.
+    </div>
+
+    <div class="note-list" style="margin-top:26px;">
+      <div class="note-row img-right">
+        <div class="term">Mutfak modu<span class="cite">Kralın Kâbusu</span></div>
+        <div class="txt"><p>"Hedef" kutusu tamamen kayboluyor, HUD sadece <strong>"Hamle" ve çıkış (X) butonu</strong>na indiriliyor. Standart seviyelerin üç-parçalı HUD'u burada iki parçaya iniyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_minigame_fire.jpg" alt="Mutfak mini oyunu, Hedef kutusu yok, sadece Hamle ve çıkış butonu"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Ejderha/Zindan modu<span class="cite">bkz. Animasyon §10</span></div>
+        <div class="txt"><p>"Hamle" yerine geri sayan bir <strong>süre</strong>, "Hedef" yerine anahtar ikonlu bir <strong>ilerleme çubuğu</strong> ("N/65"). Aynı oyun, aynı üç-kutulu HUD çerçevesi, tamamen farklı bir sözlükle dolduruluyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_dragon_scene.jpg" alt="Ejderha mini oyunu, Hamle yerine süre, Hedef yerine anahtar ilerleme çubuğu"></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Bonus Bölüm<span class="cite">L20</span></div>
+        <div class="txt"><p>"Hedef" burada da yok, yerine bir <strong>"Ödül"</strong> (coin) sayacı geçiyor: üç mod, üç farklı HUD sözlüğü.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_bonus_bolum.png" alt="Bonus Bölüm, Hedef yerine Ödül sayacı"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Ana Ekranın Kontrol Paneli</h2>
+    <p>Meta Game klasöründeki ekran görüntüleri, dosyanın önceki "navigasyon hiç açılmadı" notunu kapatıyor. Ana ekranın en altında, dış bahçe, Taht Odası içi, kilitli önizleme ekranları, Liderlik Panosu ve Profil dahil her görünümde <strong>sabit kalan bir 5 ikonlu bar</strong> var.</p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead><tr><th>İkon</th><th>Etiket</th><th>Açılan ekran</th></tr></thead>
+        <tbody>
+          <tr><td>Mor kitap + altın yıldız</td><td>Hazine Kitabı</td><td>Yeni bulunan bir event, bkz. aşağı</td></tr>
+          <tr><td>Altın kupa</td><td>Liderlik Panosu</td><td>3 sekme: Arkadaşlar / Oyuncular / Takımlar, Dünya/Türkiye filtresi</td></tr>
+          <tr><td>Mor-altın kale (ortada)</td><td>Ana Ekran</td><td>Ana ekranın kendisi, her zaman aktif/vurgulu</td></tr>
+          <tr><td>Mor kalkan + 3 kişi</td><td>Takımlar</td><td>Bölüm 21'e kadar kilitli önizleme</td></tr>
+          <tr><td>Mor kartlar + taç</td><td>Koleksiyon</td><td>Bölüm 41'e kadar kilitli önizleme</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Aktif olmayan 4 ikon sade ve soluk kalırken, ortadaki "Ana Ekran" ikonu <strong>sürekli mavi bir vurgu kutusu içinde</strong> duruyor: oyuncunun her zaman "eve dönüş" noktasını en belirgin tutan bir tasarım kararı. Bar, kilitli ekranlarda bile (Koleksiyon/Takımlar önizlemesi) aynen görünüyor, <strong>kilit durumu barın kendisini gizlemiyor</strong>, sadece ilgili ekranın içeriği kilitli kart olarak gösteriliyor.</p>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Nav bar'ın 1. ikonu, hiçbir çalışma dosyasında (Meta Game dahil) daha önce belgelenmemiş bir sistemi ortaya çıkardı: <strong>Hazine Kitabı</strong>. Üstte bir kitap ikonuyla "0/50" ilerleme çubuğu ve sağda küçük bir ara ödül rozeti ("TNT x1"), altında Kral'ın okuma koltuğunda oturduğu bir illüstrasyon ve "Büyük Ödül! 10.000" (coin) etiketi, altyazı: <strong>"Ödülü kazanmak için 50 Kitap topla! Büyük Ödülü kazanmak için tüm adımları tamamla!"</strong>, tek yeşil "Oyna" butonu.</p>
+        <p>Event ikonları ana ekranda <strong>iki farklı şekilde dock ediliyor</strong>. Biri üst bara bitişik, tam genişlik bir ilerleme çubuğu (Hazine Kitabı'nın "0/50" barı), kalıcı bir geri sayımla birlikte. Diğeri yüzen rozet ikonları (Kraliyet Kupası'nın kupa ikonu + oyuncunun sırası "30"; Takım Hazinesi'nin dümen ikonu + bildirim rozeti "2"), sahnenin kenarlarına, ana "Alan/Bölüm" butonlarının üstüne yerleştiriliyor. Tek bir "event tepsisi" yerine <strong>ana ekranın kendisi bir kontrol paneline dönüşüyor</strong>: her aktif event kendi küçük arayüzünü sahneye ekliyor, sahne temizlenmiyor.</p>
+      </div>
+      <div>
+        <div class="scene-art" style="margin-bottom:14px">
+          <img src="assets/rm_navbar_events.png" alt="Ana ekran, alt navigasyon barı ve üst bara bitişik Hazine Kitabı ilerleme çubuğu">
+          <div class="cap">Ana ekran + event docking</div>
+        </div>
+        <div class="scene-art">
+          <img src="assets/rm_hazine_kitabi.png" alt="Hazine Kitabı modalı, 0/50 ilerleme ve Oyna butonu">
+          <div class="cap">Hazine Kitabı</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Geçici durum için ikon-swap konvansiyonu:</strong> Şimşek Turnuvası'nın verdiği sınırsız can süresi boyunca, üst bardaki normal kalp+sayı ("5 Dolu") yerine bir ∞ sembollü kalp ve geri sayım ("42:20") gösteriliyor. HUD, geçici bir buff'ı yeni bir ikon icat etmeden, var olan can göstergesinin içeriğini değiştirerek anlatıyor. Toon Blast'ın da kendi 5 ikonlu alt barı var (Mağaza, Kartlar/Koleksiyon, Ana Ekran, Takım/Arkadaşlar, Kupa/Sıralama), iki oyun da "ortada sabit Ana Ekran, çevresinde sosyal/rekabet/koleksiyon sekmesi" iskeletini paylaşıyor. Fark: Royal Match'in barında bir Mağaza sekmesi yok, Toon Blast'ta Takım ile Kupa ayrı iki sekmeyken Royal Match'te bunlar Liderlik Panosu içinde birleşmiş.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Vitrine Konan Kilit</h2>
+    <p>Koleksiyon ve Takımlar'ın kilitli halleri (sırasıyla Bölüm 41 ve Bölüm 21 eşikleri) <strong>birebir aynı şablonu</strong> kullanıyor: üstte mavi banner-başlık, ortada krem zeminli ve radyal ışın arka planlı bir illüstrasyon kartı, kartın içinde kalın renkli bir kilit-açma koşulu cümlesi (eşik sayısı kırmızı veya farklı bir renkle vurgulanıyor), ve sadece Takımlar'da altında ikon+bold-metin satırlarıyla bir fayda listesi.</p>
+
+    <div class="shot-row" style="margin:18px 0 8px;">
+      <div class="shot lg"><img src="assets/rm_locked_koleksiyon.png" alt="Koleksiyon'u açmak için 41. bölüme ulaş, kilitli önizleme kartı"><div class="cap">Koleksiyon</div></div>
+      <div class="shot lg"><img src="assets/rm_locked_takimlar.png" alt="Takıma katılmak için 21. Bölüm'e gelin, kilitli önizleme ve fayda listesi"><div class="cap">Takımlar</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Karartıp gizlemek yerine önceden tanıtmak.</strong> Bu şablon, oyunun kilitli içeriğini görünmez tutmak yerine önceden sergileyip merak uyandırma stratejisi izlediğini gösteriyor: oyuncu henüz erişemediği bir özelliği görüyor, ne zaman ve nasıl açılacağını biliyor. Kendi oyun tasarımında da gelecekteki kilitli meta-sistemleri bu şablonla (illüstrasyon + net eşik metni + fayda listesi) önceden vitrine koymak, oyuncunun ilerleme motivasyonuna somut bir hedef ekler.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Ortak Modal Şablonu</h2>
+    <p>Önceki iki bölümdeki üç farklı diyalog, "Devam Et?", "Bölüm Başarısız!" ve "Kale", aslında <strong>tek bir çerçeve şablonu</strong> üzerine kurulu: üstte banner-başlık, sağ üst köşede kırmızı X kapatma düğmesi, altında krem/mavi gövde. Yan yana bakınca örüntü netleşiyor.</p>
+
+    <div class="shot-row" style="margin:18px 0 8px;">
+      <div class="shot"><img src="assets/lose_continue.jpg" alt="Devam Et? modalı çerçevesi"><div class="cap">Devam Et?</div></div>
+      <div class="shot"><img src="assets/rm_lose_failed.jpg" alt="Bölüm Başarısız! modalı çerçevesi"><div class="cap">Bölüm 19</div></div>
+      <div class="shot"><img src="assets/rm_star_spend.jpg" alt="Kale modalı çerçevesi"><div class="cap">Kale</div></div>
+    </div>
+
+    <p>Üçü de aynı banner-başlık, kırmızı X ve krem/mavi gövde iskeletini paylaşıyor. Biri opsiyonel bir teklif, biri zorunlu bir başarısızlık ekranı, biri bir meta-ilerleme paneli olsa da, <strong>oyuncu her diyaloğu aynı çerçeveden tanıyor</strong>.</p>
+
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">CTA fiili sabit değil<span class="cite">Yap / Oyna / AL</span></div>
+        <div><p>Tek, parlak yeşil, geniş bir CTA butonu her diyalogda tekrarlanıyor (Kale: "Yap ⭐1", Hazine Kitabı: "Oyna", Kraliyet Desteği: "AL"). "Tek buton = zorunlu/pozitif eylem" ilkesi burada da geçerli, ama fiil sabit değil: buton metni o anki eylemin türüne göre seçiliyor, jenerik bir "Tamam" veya "Devam Et" kullanılmıyor.</p></div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Çapraz referans rozetleri<span class="cite">Kraliyet Desteği</span></div>
+        <div class="txt"><p>Bu modal, şablona yeni bir katman ekliyor: kartın 4 köşesinde küçük, yarı saydam baloncuklar içinde 4 ayrı ikon (gemi dümeni, şimşek, kalkan, iksir şişesi) yüzüyor. Bunlar modalın etkilediği farklı event'leri temsil ediyor: bir modalın "beni etkileyen sistemler" ilişkisini metinle açıklamak yerine küçük ikon rozetleriyle gösteriyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/rm_kraliyet_destegi.png" alt="Kraliyet Desteği modalı, köşelerde 4 ayrı event'i temsil eden ikon rozetleri"></div>
+        </div>
+      </div>
+    </div>
+
+    <p>Bu tutarlılık okunabilirlikle de örtüşüyor: <strong>Hedef/Hamle gibi başlıklar hep kendi opak, krem renkli paneli içinde</strong> duruyor, hiçbir zaman doğrudan sahne arka planına bindirilmiyor (bkz. Bölüm 1'deki board_l1.png). Aynı ilke Profil ekranındaki istatistik ızgarasında da görülüyor: 2 satır x 3 sütunluk bir ikon+etiket+değer ızgarası, her hücre kendi dedike alanında duruyor. Bu ızgara, kendi oyun tasarımında "profil", "istatistik" veya "başarımlar" gibi herhangi bir bilgi ekranı için doğrudan devralınabilir bir wireframe parçası.</p>
+
+    <div class="shot-row" style="margin:8px 0 0;">
+      <div class="shot lg"><img src="assets/rm_profil.png" alt="Profil ekranı, 2x3 ikon+etiket+değer istatistik ızgarası"><div class="cap">Profil</div></div>
+    </div>
+  </section>
+
+  <div class="game-header" style="margin-top:64px;">
+    <div class="eyebrow">OYUN 2</div>
+    <h2>Toon Blast</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Dört Kart, Tek Dil</h2>
+    <p>Royal Match'in tek tutorial kartına karşılık, Toon Blast L1'de <strong>4 ayrı tutorial kartı</strong> kullanıyor, her biri farklı bir yerleşimde beliriyor.</p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead><tr><th>#</th><th>Zaman</th><th>Kart</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>~0:11</td><td>Soldan kayan, tahtayı tam kapatmayan dock kart: "BALONLARI patlatmak için etraflarındaki küplere dokun!"</td></tr>
+          <tr><td>2</td><td>~0:16</td><td>Tam ekran karartma, ortalanmış kart: "Hamlelerin bitmeden tüm balonları ortadan kaldır!" Yeşil bir "Devam Et" butonuyla kapanıyor.</td></tr>
+          <tr><td>3</td><td>~1:55</td><td>Karartılmış ekran, kart: "Harika! Şimdi ROKETE dokun ve neler olacağını gör!" Rokete dokunmak kartı kapatıyor.</td></tr>
+          <tr><td>4</td><td>~2:05-2:06</td><td>Tahtanın solunu kaplayan kart: "Bağlı öğelere dokunup güçlü bir patlama yarat!"</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Kazanma koşulu bilinçli olarak geciktiriliyor:</strong> 2. kart oyuncunun ilk hareketinden sonra gösteriliyor, önce değil. Sıra "önce nasıl dokunacağını öğret, sonra neden dokunduğunu açıkla" şeklinde. Royal Match'in tek kartı hem mekaniği hem amacı aynı cümlede veriyor ("KUTU'yu kırmak için yanında eşleştirme yap"), bu sıralama farkı onun tek kartlı akışında hiç gözlenmiyor. Dört kart da aynı görsel dili paylaşıyor: krem/parşömen zemin, kırmızı yuvarlatılmış çerçeve, koyu kalın yazı; tek bir "tutorial kart" bileşeni, konuma göre farklı davranıyor.</p>
+
+    <div class="callout">
+      <strong>Animasyon değil, statik ikon.</strong> Toon Blast'ın kartlarında Royal Match'teki gibi hareket eden bir el/parmak demosu yok, sadece durağan bir parmak-dokunma ikonu belirli bir küme üzerinde duruyor. Tap-to-blast tek noktaya dokunmayı gerektiriyor, gösterilecek bir "hareket yolu" yok; Royal Match'in swap mekaniği ise iki nokta arasında bir hareket gerektirdiği için animasyonlu bir demo şart oluyor (bkz. Royal Match Bölüm 1). Mekanik farkının tutorial diline çift yönlü yansıdığı somut bir örnek.
+    </div>
+
+    <div class="scene-row" style="margin-top:30px;">
+      <div class="scene-text">
+        <p>L1'in 4 kartı tek seferlik bir açılış dizisiyken, Toon Blast <strong>aynı "kart + ok" dilini yeni araçlar ilk açıldığında da tekrar kullanıyor</strong>. Boks Eldiveni ilk kez kullanılabilir olduğunda bir tanıtım kartı düşüyor ("BOKS ELDİVENİ, bir sıradaki her şeyi ortadan kaldırır!"), altında araç çubuğundaki ilgili slotu işaret eden bir ok beliriyor. <strong>Onboarding L1'de bitmiyor</strong>, oyunun kendi mekaniği zaman içinde büyüdükçe aynı tutorial bileşeni yeniden devreye giriyor.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/tb_glove_tutorial.jpg" alt="Boks Eldiveni ilk açılış tanıtım kartı, araç çubuğunu işaret eden ok">
+        <div class="cap">Yeni araç tanıtımı</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      Royal Match'in ok dili (bkz. Royal Match Bölüm 2) sadece meta-ekran yönlendirmesi için (Alan/Kale) kullanılıyor. Toon Blast aynı bileşeni yeni mekanik tanıtımı için de kullanıyor: iki oyun "ok" bileşenini paylaşıyor, ama bağlamı farklı genişletmiş.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Üç Aşamalı İkna Zinciri</h2>
+    <p>Royal Match'in ok ile yönlendirme diline karşılık, Toon Blast'ın meta ekranları farklı bir örüntü kullanıyor: <strong>davet ekranı, opsiyonel eylem (Atla/Oyna), sonuç ekranı</strong> üçlüsü, en az altı ayrı bağlamda tekrarlanıyor.</p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead><tr><th>Bağlam</th><th>Davet</th><th>Seçenekler</th><th>Sonuç</th></tr></thead>
+        <tbody>
+          <tr><td>Kurtarma Görevi</td><td>Temalı illüstrasyon, "+5" coin rozeti</td><td>Atla / Oyna</td><td>"Bravo! İşte ödülün: +5"</td></tr>
+          <tr><td>Hamle Kalmadı</td><td>"+5 hamle ekle" teklifi</td><td>Devam Et 💰100 / IAP alternatifi</td><td>"Oyun Ekranını Görmek İçin Buraya Dokun" önizlemesi</td></tr>
+          <tr><td>Taç/seri kaybı</td><td>Taç ikonu, günlük seri sayacı</td><td>"Başlangıç Paketi" teklifi</td><td>Reddedilince sonraki aşamaya geçiliyor</td></tr>
+          <tr><td>Seviye başarısız</td><td>Kırık kalp ikonu, booster seçimi</td><td>Tekrar Dene</td><td>Booster sonraki denemeye taşınıyor</td></tr>
+          <tr><td>Şanslı Takviye</td><td>Ateş parçacıklı rozet, 15dk geri sayım</td><td>Otomatik açılan açıklayıcı modal</td><td>Süre dolmadan tamamlama çağrısı</td></tr>
+          <tr><td>Günlük Bonus</td><td>Kartlar alttan kayarak 3x3 diziliyor</td><td>Kartını seç</td><td>Seçilen kartın ödülü</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="shot-row" style="margin:18px 0 8px;">
+      <div class="shot lg"><img src="assets/tb_kurtarma_davet.png" alt="Bruno'yu Kurtar daveti, temalı illüstrasyon ve Bruno'yu Kurtar butonu"><div class="cap">Kurtarma Görevi</div></div>
+    </div>
+
+    <p><strong>Kayıp akışı iki değil üç aşamalı, Royal Match'ten burada ayrışıyor.</strong> Royal Match'in kendi kayıp akışı hep 3 adımlı, ama ortadaki adım farklı: Royal Match'te 2. adım doğrudan ücretli "Devam Et 💎900" teklifiyken, Toon Blast'ta 2. adım kayıp korkusuna (taç+seri) dayanan ayrı bir ikna zinciri. İki oyun da tek reddetmeyle bitmeyen, katmanlı bir ikna stratejisi kullanıyor, ama duygusal tetikleyici farklı: Royal Match doğrudan fiyatı gösteriyor, Toon Blast kaybetme korkusunu işletiyor.</p>
+
+    <div class="shot-row" style="margin:8px 0;">
+      <div class="shot"><img src="assets/tb_lose_nomoves.jpg" alt="Hamle Kalmadı! modalı, +5 devam teklifi"><div class="cap">1. Hamle Kalmadı</div></div>
+      <div class="shot"><img src="assets/tb_lose_crownwarning.jpg" alt="Tacını ve topladıklarını kaybedeceksin uyarısı"><div class="cap">2. Taç/seri uyarısı</div></div>
+      <div class="shot"><img src="assets/tb_lose_failed.jpg" alt="Seviye başarısız oldu ekranı, takviye seçimi ve Tekrar Dene"><div class="cap">3. Seviye başarısız</div></div>
+    </div>
+
+    <div class="shot-row" style="margin:8px 0;">
+      <div class="shot lg"><img src="assets/tb_luckyboost_modal.jpg" alt="Şanslı Takviye açıklayıcı modalı, oka işaret ediyor"><div class="cap">Şanslı Takviye</div></div>
+      <div class="shot lg"><img src="assets/tb_dailybonus_full.jpg" alt="Günlük Bonus, 3x3 tam düzen ve seçim çağrısı"><div class="cap">Günlük Bonus</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Ortak ilke burada da geçerli.</strong> Toon Blast'ın davet ekranları her zaman bir "Atla/Geç" çıkışı sunuyor, ama "Seviye başarısız" ekranı sunmuyor, orada tek çıkış "Tekrar Dene". Şanslı Takviye ve Günlük Bonus da bu ailenin bir parçası, ikisi de zorlamadan "davet + açıklayıcı modal" ikilisiyle açılıyor. Royal Match'in "Kralın Kâbusu" daveti de aynı iki butonlu (Oyna/Geç) kalıbı kullanıyor: iki oyun da opsiyonel mini oyun davetlerini aynı UI diliyle çözmüş.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>Önce Göster, Sonra Sor</h2>
+    <p>Board içindeki iki davranış, Toon Blast'ın <strong>oyuncuya "ne olacağını" önceden söyleme alışkanlığını</strong> gösteriyor: biri Royal Match'te hiç karşılığı olmayan gerçek bir özellik, diğeri aynı davranışı sadece daha açık bir dille anlatmak.</p>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Bir grup power-up eşiğine (5-6+ küp) ulaştığında, gruptaki tüm hücreler kendi rengini koruyarak <strong>oluşacak power-up'ın deseninin dokusunu üstlerine alıyor</strong> (Roket için küçük roket ikonu, TNT için patlama/yıldız ikonu, Lightball için küre/ağ deseni). Oyuncu grubu elle saymak zorunda kalmıyor, UI "bu grup ne üretecek" sorusunu oyuncu adına önceden cevaplıyor. <strong>Royal Match'te buna denk bir eşik önizlemesi yok</strong>, sadece oluşum anını bir beyaz glow'la vurguluyor.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/tb_anim_preview_overlay.png" alt="TNT önizleme dokusu almış küpler, eşik öncesi renk korunarak desen değişiyor">
+        <div class="cap">Eşik önizlemesi</div>
+      </div>
+    </div>
+
+    <div class="note-list" style="margin-top:8px;">
+      <div class="note-row">
+        <div class="term">"Geçmek İçin Dokun"<span class="cite">yazılı affordance</span></div>
+        <div><p>Son hamlede büyük bir zincir (10+ roket birikmiş olabiliyor) tetiklenince tahta donup bu yazı beliriyor; oyuncu isterse zinciri atlayıp sonuca geçiyor, isterse izliyor. Royal Match'te de seviye sonu geçiş animasyonu aynı şekilde dokunarak atlanabiliyor, ama ekranda bunu söyleyen bir yazı yok. <strong>Fark davranışta değil:</strong> Toon Blast bu imkânı açık bir yazıyla bildiriyor, Royal Match aynı şeyi yapabilmene rağmen hiçbir metinle söylemiyor, oyuncu bunu kendi kendine keşfetmek zorunda.</p></div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Sessiz izin ile yazılı izin arasındaki fark bir tasarım ekseni.</strong> İki oyun da aynı davranışa sahip, ama sadece biri bunu oyuncuya iletiyor, keşfedilebilirlik farkı, yetenek farkı değil. Kendi oyun tasarımı için asıl çıkarım şekil değiştiriyor: mesele "atlama izni vermek" değil, var olan bir izni oyuncuya açıkça iletmek. Power-up eşiği önizlemesi ise gerçek bir davranış farkı: Toon Blast önceden gösteriyor, Royal Match göstermiyor. Eşleşme boyutuna bağlı üretim mekaniklerinde, oyuncuyu saydırmak yerine grubun üzerine doğrudan "ne olacağını" göstermek düşük maliyetli bir okunabilirlik kazancı.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 10</div>
+    <h2>HUD ve Okunabilirlik</h2>
+    <p>Detaylı analiz zaten Grafik sayfasında yapıldı, burada tekrarlanmıyor. UI açısından öne çıkan üç nokta: sayaçlar (Hedef/Hamle) <strong>her zaman dedike bir krem/kahverengi kutuda duruyor</strong>, board üzerine hiç bindirilmiyor; iki katmanlı bir font hiyerarşisi (marka fontu vs rozet/aciliyet fontu) bilinçli bir ayrım taşıyor; native iOS değerlendirme diyaloğu oyunun kendi fontunu kullanmıyor, platform kısıtından doğan görünür bir dikiş izi bırakıyor.</p>
+    <p>Royal Match tarafında da aynı ilke geçerli (bkz. Royal Match Bölüm 6): <strong>"Hedef"/"Hamle" başlıkları hep opak panel içinde</strong>, arka plana hiç bindirilmiyor.</p>
+  </section>
+
+</div>
+</body>
+</html>

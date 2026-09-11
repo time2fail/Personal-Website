@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF; --surface:#FFFFFF; --ink:#241F33; --ink-soft:#4A4358;
+    --muted:#8A7F68; --line:#E3D8BE; --accent:#B07C22; --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2; --crown:#E8A320; --book:#D14B3C; --shield:#3C74C4;
+    --leaf:#4C9A4E; --diamond:#CE4FAE; --warn:#B24444; --warn-soft:#F6E2DE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+      --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+      --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+      --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420; --surface:#221C2E; --ink:#F3EEDD; --ink-soft:#D9D1BC;
+    --muted:#A79C86; --line:#3A3244; --accent:#E0B458; --accent-strong:#F0C878;
+    --accent-soft:#3A3020; --crown:#F0B03A; --book:#E36657; --shield:#6C9BE0;
+    --leaf:#6BB86E; --diamond:#E070C4; --warn:#E08277; --warn-soft:#3A2420;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--ground); color:var(--ink); font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing:antialiased; }
+  .page{ max-width:900px; margin:0 auto 0 clamp(32px, 10vw, 160px); padding:56px 24px 90px; }
+  h1,h2,h3{ font-family:'Fraunces', Georgia, 'Times New Roman', serif; font-weight:600; text-wrap:balance; margin:0; color:var(--ink); }
+  .eyebrow{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-size:.72rem; letter-spacing:.11em; text-transform:uppercase; color:var(--accent-strong); font-weight:500; display:flex; align-items:center; gap:10px; }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{ font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); letter-spacing:.02em; }
+  .masthead{ display:flex; justify-content:space-between; align-items:flex-end; gap:20px; padding-bottom:28px; border-bottom:1px solid var(--line); margin-bottom:44px; flex-wrap:wrap; }
+  .masthead h1{ font-size:clamp(2rem, 5vw, 2.7rem); line-height:1.08; margin-top:8px; }
+  .masthead .sub{ color:var(--ink-soft); font-size:1.02rem; margin-top:10px; max-width:50ch; }
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{ font-size:1.62rem; margin-bottom:18px; }
+  .sec p{ font-size:1.02rem; line-height:1.68; color:var(--ink-soft); max-width:64ch; margin:0 0 16px; }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+  .sec-row{ display:grid; grid-template-columns:1fr 220px; gap:36px; align-items:start; }
+  .sec-text p{ margin-bottom:16px; }
+  .sec-text p:last-child{ margin-bottom:0; }
+  .sec-art img{ width:100%; display:block; border-radius:16px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .flag{ display:inline-block; font-family:'IBM Plex Mono', monospace; font-size:.64rem; letter-spacing:.04em; padding:2px 8px; border-radius:20px; margin-left:8px; position:relative; top:-2px; }
+  .flag.unverified{ background:var(--warn-soft); color:var(--warn); }
+  .callout{ border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0; padding:16px 20px; margin:24px 0 8px; font-size:.98rem; line-height:1.62; color:var(--ink-soft); }
+  .callout strong{ color:var(--ink); }
+  .divider{ display:flex; align-items:center; gap:16px; margin:52px 0; color:var(--accent); }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+  .site-nav{ display:flex; align-items:center; gap:12px; font-family:'IBM Plex Mono', monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:22px; flex-wrap:wrap; }
+  .site-nav a{ color:var(--muted); text-decoration:none; padding-bottom:2px; border-bottom:1px solid transparent; }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{ color:var(--accent-strong); border-bottom-color:var(--accent); }
+  .site-nav .sep{ color:var(--line); }
+  .scene-row{ display:grid; grid-template-columns:1fr 240px; gap:32px; align-items:start; margin:26px 0; }
+  .scene-row h3{ font-family:'Fraunces', serif; font-weight:600; font-size:1.08rem; margin-bottom:8px; color:var(--ink); }
+  .scene-row p{ margin:0; }
+  .scene-art img{ width:100%; display:block; border-radius:14px; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .scene-art .cap{ padding:8px 2px 0; font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); text-align:center; }
+
+  .palette-row{ display:flex; gap:18px; margin:22px 0 8px; flex-wrap:wrap; }
+  .swatch-lg{ text-align:center; width:84px; }
+  .swatch-lg .chip{ width:64px; height:64px; border-radius:14px; margin:0 auto 9px; box-shadow:var(--shadow); border:1px solid var(--line); }
+  .swatch-lg .name{ font-family:'Fraunces', serif; font-weight:600; font-size:.88rem; color:var(--ink); }
+  .swatch-lg .hex{ font-family:'IBM Plex Mono', monospace; font-size:.62rem; color:var(--muted); margin-top:2px; }
+
+  .room-palette-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:22px 0 8px; }
+  .room-palette{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px 14px; box-shadow:var(--shadow); }
+  .room-palette .room-name{ font-family:'Fraunces', serif; font-weight:600; font-size:.94rem; color:var(--ink); margin-bottom:10px; }
+  .room-palette .chips{ display:flex; gap:7px; margin-bottom:8px; }
+  .room-palette .chip{ flex:1; height:34px; border-radius:7px; }
+  .room-palette .hexes{ font-family:'IBM Plex Mono', monospace; font-size:.6rem; color:var(--muted); letter-spacing:.01em; }
+  .evidence-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:22px 0 8px; }
+  .evidence{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px 16px 18px; text-align:center; box-shadow:var(--shadow); }
+  .evidence img{ width:100px; height:100px; object-fit:contain; margin-bottom:12px; }
+  .evidence .note{ font-size:.82rem; line-height:1.45; color:var(--ink-soft); }
+  .evidence .note strong{ display:block; color:var(--ink); font-family:'Fraunces', serif; font-size:.92rem; margin-bottom:3px; }
+
+  .char-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin:24px 0 8px; }
+  .char-card{ background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); }
+  .char-card img{ width:100%; aspect-ratio:1/1; object-fit:cover; display:block; }
+  .char-card .body{ padding:16px 18px 20px; }
+  .char-card .name{ font-family:'Fraunces', serif; font-weight:600; font-size:1.1rem; color:var(--ink); }
+  .char-card .role{ font-family:'IBM Plex Mono', monospace; font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color:var(--accent-strong); margin:3px 0 10px; }
+  .char-card p{ font-size:.88rem; line-height:1.58; color:var(--ink-soft); margin:0; }
+  .note-list{ display:flex; flex-direction:column; gap:0; margin:22px 0 8px; }
+  .note-row{ padding:18px 0; border-top:1px solid var(--line); display:grid; grid-template-columns:190px 1fr; gap:24px; }
+  .note-row:last-child{ border-bottom:1px solid var(--line); }
+  .note-row .term{ font-family:'Fraunces', serif; font-weight:600; font-size:1.02rem; color:var(--ink); padding-top:1px; }
+  .note-row .term .cite{ display:block; font-family:'IBM Plex Mono', monospace; font-weight:400; font-size:.66rem; letter-spacing:.03em; color:var(--muted); margin-top:6px; }
+  .note-row p{ margin:0 0 8px; font-size:.96rem; }
+  .note-row p:last-child{ margin-bottom:0; }
+  .note-row.img-right{ grid-template-columns:190px 1fr 210px; }
+  .shot-row{ display:flex; gap:10px; align-items:flex-start; }
+  .shot{ width:100px; flex-shrink:0; border-radius:10px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); background:var(--surface); }
+  .shot.lg{ width:210px; }
+  .shot img{ width:100%; aspect-ratio:3/4; object-fit:cover; display:block; }
+  .shot .cap{ padding:5px 7px 6px; font-family:'IBM Plex Mono', monospace; font-size:.6rem; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
+
+  .game-header{ margin:0 0 40px; padding-bottom:20px; border-bottom:3px solid var(--accent); }
+  .game-header .eyebrow{ margin-bottom:8px; }
+  .game-header h2{ font-size:2.1rem; }
+  footer{ margin-top:60px; padding-top:20px; border-top:1px solid var(--line); font-family:'IBM Plex Mono', monospace; font-size:.72rem; color:var(--muted); line-height:1.7; }
+  @media (max-width:760px){
+    .sec-row{ grid-template-columns:1fr; } .sec-art{ max-width:220px; margin:0 auto; }
+    .note-row{ grid-template-columns:1fr; gap:6px; }
+    .note-row.img-right{ grid-template-columns:1fr; }
+    .note-row.img-right .shot-row{ margin-top:10px; }
+    .scene-row{ grid-template-columns:1fr; }
+    .scene-art{ max-width:260px; margin:14px auto 0; }
+    .room-palette-grid{ grid-template-columns:1fr; }
+    .evidence-grid{ grid-template-columns:1fr 1fr; }
+    .char-grid{ grid-template-columns:1fr; }
+  }
+
+  .part-break{
+    margin:72px 0 44px;
+    padding:30px 0;
+    border-top:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    text-align:center;
+  }
+  .part-break .eyebrow{
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .part-break h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .part-break p{
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:10px auto 0;
+    font-size:1rem;
+    line-height:1.6;
+  }
+
+  .compare-table-wrap{
+    overflow-x:auto;
+    margin:22px 0;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .compare-table{
+    width:100%;
+    min-width:520px;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  .compare-table th,
+  .compare-table td{
+    padding:12px 18px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .compare-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+  }
+  .compare-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .compare-table td{
+    color:var(--ink-soft);
+  }
+  .compare-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a><span class="sep">·</span>
+    <a href="level-design.html">Level Design</a><span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a><span class="sep">·</span>
+    <a href="graphics.html" class="active">Grafik</a><span class="sep">·</span>
+    <a href="animation.html">Animasyon</a><span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a><span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> GRAFİK ANALİZİ</div>
+      <h1>Görsel Dil</h1>
+      <div class="sub">Karakterler, sanat yönü, sahne çeşitliliği ve okunabilirlik üzerine bir inceleme: her oyun kendi resmi kaynağına ve oyuncu gözlemlerine dayanıyor.</div>
+    </div>
+    <div class="progress">§ 1-10 / 10</div>
+  </header>
+
+  <div class="game-header">
+    <div class="eyebrow">OYUN 1</div>
+    <h2>Royal Match</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Kral, Uşak, Köpek</h2>
+    <p>Üç karakter, üç ayrı renk kodu taşıyor. Kadrajdaki malzeme ve duruş farkları, kral ile hizmetkâr ile evcil hayvan arasındaki hiyerarşiyi daha ilk bakışta okutuyor.</p>
+
+    <div class="char-grid">
+      <div class="char-card">
+        <img src="assets/char_kral.webp" alt="King Robert">
+        <div class="body">
+          <div class="name">King Robert</div>
+          <div class="role">Kral</div>
+          <p><strong>Mor bir pelerin</strong>, altın şerit işlemeler, fuşya bir yaka astarı; taçta tek bir yakut, göğüste yarasa kanadı biçiminde altın bir broş. Gür, beyaza dönmüş bir sakal ve iri yuvarlak gözler, sert bir hükümdar yerine sıcak ve yaklaşılabilir bir yüz kuruyor. <strong>Mor ve altın</strong>, klasik bir asalet kodlaması; kırmızı taş vurguları da güç ve otorite hissi katıyor.</p>
+        </div>
+      </div>
+      <div class="char-card">
+        <img src="assets/char_usak.webp" alt="Winston">
+        <div class="body">
+          <div class="name">Winston</div>
+          <div class="role">Uşak</div>
+          <p><strong>Kırmızı ve beyaz</strong> bir garson üniforması, beyaz eldivenler, özenle taranmış gri saç ve gri bir bıyık. Bu kırmızı, onu Robert'ın mor-altın otorite paletinden bilinçli olarak ayırıyor: renk burada kral ile hizmetkâr arasındaki farkı tek bakışta kuruyor. Dik ve resmi duruşu, elindeki hediye kutusuyla birlikte bakım rolünü jestle de pekiştiriyor. Taht Odası'ndaki bir vitray pencerede de karşımıza çıkıyor (bkz. Bölüm 4).</p>
+        </div>
+      </div>
+      <div class="char-card">
+        <img src="assets/char_kopek.webp" alt="Duke">
+        <div class="body">
+          <div class="name">Duke</div>
+          <div class="role">Köpek</div>
+          <p><strong>Altın sarısı</strong> tüyleri ve sarkık kulaklarıyla, kırmızı bandanası ve mor güneş gözlüğüyle tam bir tatilci havası taşıyor. İnsan karakterlerden farklı olarak tüy dokusuna belirgin ölçüde daha fazla render detayı verilmiş, bu da onu daha çok bir <strong>peluş oyuncağa</strong> benzetiyor. Bandanadaki kırmızı, Winston'ınkiyle aynı aile ama burada bir otorite işareti değil, sadece eğlenceli bir aksesuar. Taht Odası'nda Robert'la aynı vitray pencerede, ayaklarının dibinde resmedilmiş (bkz. Bölüm 4).</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Ortak payda:</strong> üçünde de yuvarlak, dolgun formlar ve yumuşak bir malzeme render'ı var; keskin parlama sadece metal ya da taç gibi objelerde beliriyor. Sonraki bölümdeki keskin köşe yok kuralının karakterler için de geçerli olduğunu gösteriyor.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Sanat Yönü: Tek Bir Kural, Her Yerde</h2>
+    <p>Dream Games kendi sanat yönünü şöyle özetliyor: <strong>canlı ve davetkâr bir dünya</strong>, çağdaş teknolojiyle nostaljik bir tasarım dilinin arasında duran ve gerçeklikten tamamen kopmadan kendi yorumunu katan bir stil. Abartıya kaçmıyor, fazla karikatürize de olmuyor.</p>
+    <p>Bu ilke, oyunun tamamında tek ve tutarlı bir kurala dönüşüyor: <strong>hiçbir elementte keskin köşe yok.</strong> Dört farklı kategoriden dört görsel bunu ayrı ayrı doğruluyor:</p>
+
+    <div class="evidence-grid">
+      <div class="evidence"><img src="assets/pu_tnt.jpg" alt="TNT power-up"><div class="note"><strong>Power-up</strong>TNT varili bile köşeli bir kutu değil, gövdesi yuvarlak ve fitili yumuşak bir kıvrımla çiziliyor.</div></div>
+      <div class="evidence"><img src="assets/obs_kutu.jpg" alt="Kutu engeli"><div class="note"><strong>Engel</strong>Sandığın kapağı dört köşeden pahlanmış, perçinleri bile disk biçiminde.</div></div>
+      <div class="evidence"><img src="assets/kalkan.jpg" alt="Kalkan"><div class="note"><strong>Eşleşme item'ı</strong>Kalkan keskin bir üçgen değil, oval ve dolgun bir gövdeye yayılmış.</div></div>
+      <div class="evidence"><img src="assets/char_kral.webp" alt="King Robert"><div class="note"><strong>Karakter</strong>Robert'ın yüzünde tek keskin çizgi yok: burun, çene, kaş, hepsi yuvarlatılmış.</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Renk Paleti</h2>
+    <p>Önceki bölümlerde renk hep dolaylı olarak geçti: karakterlerin hiyerarşisinde, sahnelerin tonunda. Burada bir araya topluyoruz.</p>
+
+    <h3 style="font-family:'Fraunces',serif; font-weight:600; font-size:1.02rem; margin:22px 0 4px;">Beş item, beş renk</h3>
+    <p>Eşleşme item'larının kendi paleti <strong>sabit ve doygun</strong>; her renk tek bir item'a bağlı, karışıklık riski yok.</p>
+    <div class="palette-row">
+      <div class="swatch-lg"><div class="chip" style="background:#E8A320"></div><div class="name">Taç</div><div class="hex">#E8A320</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#3C74C4"></div><div class="name">Kalkan</div><div class="hex">#3C74C4</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#D14B3C"></div><div class="name">Kitap</div><div class="hex">#D14B3C</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#4C9A4E"></div><div class="name">Yaprak</div><div class="hex">#4C9A4E</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#CE4FAE"></div><div class="name">Mücevher</div><div class="hex">#CE4FAE</div></div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif; font-weight:600; font-size:1.02rem; margin:30px 0 4px;">Sahneye göre değişen palet</h3>
+    <p>Her oda kendi baskın renklerini taşıyor. Aşağıdaki tonlar <strong>bu sayfadaki gerçek sahne görsellerinden örneklendi</strong>, uydurma değil.</p>
+    <div class="room-palette-grid">
+      <div class="room-palette">
+        <div class="room-name">Taht Odası</div>
+        <div class="chips"><div class="chip" style="background:#7A120B"></div><div class="chip" style="background:#644864"></div><div class="chip" style="background:#E9D0B6"></div><div class="chip" style="background:#F2E6B1"></div></div>
+        <div class="hexes">#7A120B · #644864 · #E9D0B6 · #F2E6B1</div>
+      </div>
+      <div class="room-palette">
+        <div class="room-name">Kale &amp; Bahçe</div>
+        <div class="chips"><div class="chip" style="background:#56A0EE"></div><div class="chip" style="background:#88912D"></div><div class="chip" style="background:#B69E8D"></div><div class="chip" style="background:#7C5B69"></div></div>
+        <div class="hexes">#56A0EE · #88912D · #B69E8D · #7C5B69</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:'Fraunces',serif; font-weight:600; font-size:1.02rem; margin:30px 0 4px;">Değişmeyen katman: UI chrome</h3>
+    <p>Odalar farklı palet taşısa da, <strong>HUD'un kendisi hiç değişmiyor</strong>. Hedef ve Hamle panelleri her zaman aynı krem tonunda, arkalarındaki çubuk her zaman aynı mavide, çerçeveleri her zaman aynı altında duruyor. Oyuncunun gözü hangi odada olursa olsun aynı yere bakıyor.</p>
+    <div class="palette-row">
+      <div class="swatch-lg"><div class="chip" style="background:#254785"></div><div class="name">HUD çubuğu</div><div class="hex">#254785</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#F3E9C2"></div><div class="name">Panel</div><div class="hex">#F3E9C2</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#EBA93D"></div><div class="name">Çerçeve</div><div class="hex">#EBA93D</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Fonksiyonel kodlama:</strong> renk sadece dekoratif değil, <strong>hiyerarşi</strong> de kuruyor. Robert'ın moru ve altını otoriteyi işaret ediyor, Winston'ın kırmızısı hizmet rolünü ayırıyor, engel döküntüsünün sabit ahşap tonu ise item renginden bağımsız kalarak "bu bir eşleşme değil, bir engel" farkını renkle anlatıyor.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Tek Kale Değil, Birkaç Oda</h2>
+    <p>Kale tek bir dekor kullanmıyor. <strong>Her mekân kendi renk paletini ve kendi mimari dilini kuruyor</strong>; bu çeşitlilik Dream Games'in kendi oda listesiyle (Throne Room, Dining Room, Garden, Library, Music Room, Aquarium...) örtüşüyor. Bunlara ek olarak kırmızı-altın bir salon ile turkuaz duvarlı, dama tahtası zeminli ayrı bir iç mekân daha var.</p>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <h3>Taht Odası</h3>
+        <p><strong>Tören ağırlıklı</strong> bir kompozisyon kuruyor: koyu kırmızı duvarlar altın fleur-de-lis deseniyle işlenmiş, mor kadife perdeler ve üç taçlı bir sancak tavandan sarkıyor. Boş, yakut taşlı altın bir tahtın iki yanında zırhlı birer heykel nöbet tutuyor: biri mavi bir kalkan, diğeri kırmızı bir kitap taşıyor. Arkadaki iki vitray pencerede sol tarafta King Robert ve köpeği Duke, sağ tarafta Winston resmedilmiş; oyunun üç karakterinin bir arada göründüğü ilk yer burası. Kırmızı halı, dama desenli mermer zemin ve tam simetrik yerleşim, mekâna <strong>resmi ve ağırbaşlı</strong> bir hava veriyor.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/sahne_taht_odasi.jpeg" alt="Taht Odası sahnesi">
+        <div class="cap">Taht Odası</div>
+      </div>
+    </div>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <h3>Kale ve Bahçesi</h3>
+        <p><strong>Tam tersi</strong> bir ton kuruyor. Lavanta ve altın tonlarında, sivri mor kulelerine kırmızı flamaların iliştirildiği masalsı bir siluet var; önünde Fransız bahçesi tarzında simetrik budanmış çalılar, mor çiçek bordürleri, ortada parıldayan bir fıskiye ve onu koruyan iki kuğu heykeli yer alıyor. Arkada göl ve yeşil tepeler, üstünde açık mavi bir gökyüzü uzanıyor: <strong>davetkâr ve ferah</strong>, taht odasının ağır tören havasının tam karşıtı.</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/sahne_bahce.png" alt="Kale ve bahçesi">
+        <div class="cap">Kale &amp; Bahçe</div>
+      </div>
+    </div>
+
+    <div class="scene-row">
+      <div class="scene-text">
+        <h3>Mutfak (Mini Oyun)</h3>
+        <p>Standart odalardan tamamen kopuk, ayrı bir mod: kralın <strong>alev almış bir mutfağı</strong>, tuğla duvarlar, ocakta yükselen gerçek ateş, devrilmiş bir sepet ve yerde bir hindi. Board da bu sahneye kilitli: H harfi şeklinde, iki üst köşesine yerleşmiş birer vana/boru ile çerçeveleniyor. Diğer üç odanın "resmi kale" diline karşı buradaki ton <strong>acil ve gündelik</strong>, dekor bir mini oyunun arka planı olarak tasarlanmış (detaylar için bkz. Animasyon, Bölüm 8).</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/rm_minigame_fire.jpg" alt="Mutfak mini oyunu sahnesi">
+        <div class="cap">Mutfak</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Okunabilirlik</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Tahta zemini</div>
+        <div class="txt"><p>Oyun tahtası her sahnede arka plandan <strong>daha açık ve soluk bir panel</strong> üzerinde oturuyor. Bu, yoğun duvar dokusunun ya da dama tahtası zemininin okunabilirliği bozmasını önleyen bilinçli bir katman ayrımı.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/board_l21.png" alt="Level 21 tahta kontrastı"><div class="cap">Level 21</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">UI tipografisi</div>
+        <div class="txt"><p>Hedef ve Hamle gibi başlıklar hep <strong>kendi opak, krem renkli paneli</strong> içinde duruyor, hiçbir zaman doğrudan sahne arka planına bindirilmiyor. Arka plan ne kadar karmaşık olursa olsun, UI metni bundan etkilenmiyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/board_l27.png" alt="Level 27 UI panelleri"><div class="cap">Level 27</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Diğer Gözlemler</h2>
+    <div class="note-list">
+      <div class="note-row img-right">
+        <div class="term">Tutorial metinleri</div>
+        <div class="txt"><p>Engel kuralları <strong>doğrudan ekran içi metinle</strong> öğretiliyor: <i>"KUTUyu kırmak için yanında eşleştir!"</i>, <i>"ÇİMENİ temizlemek için üstünde eşleştirme yap!"</i></p></div>
+        <div class="shot-row">
+          <div class="shot"><img src="assets/board_l1.png" alt="Level 1, kutu tutorial'ı"><div class="cap">Level 1</div></div>
+          <div class="shot"><img src="assets/board_l4.png" alt="Level 4, çimen tutorial'ı"><div class="cap">Level 4</div></div>
+        </div>
+      </div>
+      <div class="note-row img-right">
+        <div class="term">Çoklu hedef</div>
+        <div class="txt"><p>Tek hedefli seviyelerin yanında, <strong>üç farklı hedefin aynı anda</strong> istendiği seviyeler de norm: örneğin mücevher 40, taçlı kutu 16 ve çimen 16 birlikte isteniyor.</p></div>
+        <div class="shot-row">
+          <div class="shot lg"><img src="assets/board_l27.png" alt="Level 27, üç hedef birden"><div class="cap">Level 27</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="game-header" style="margin-top:64px;">
+    <div class="eyebrow">OYUN 2</div>
+    <h2>Toon Blast</h2>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Üç Maskot</h2>
+    <p>Royal Match'in tek merkezi figürünün (Robert) aksine Toon Blast <strong>üç eşit ağırlıklı karakterle</strong> açılıyor, üçü de kendi adına ayrılmış bir yükleme ekranına sahip.</p>
+
+    <div class="char-grid">
+      <div class="char-card">
+        <img src="assets/tb_bruno.png" alt="Bruno Bear">
+        <div class="body">
+          <div class="name">Bruno Bear</div>
+          <div class="role">Ayı</div>
+          <p><strong>Turuncu bir ayı</strong>, elinde dondurma, kot pantolon ve kemer. Seri boyunca kostüm değiştiriyor (Bölüm 10'da L3'te safari şapkası takıyor); bu değişim sahne değişimine bağlı olabilir ama henüz doğrulanmadı.</p>
+        </div>
+      </div>
+      <div class="char-card">
+        <img src="assets/tb_cooper.png" alt="Cooper Cat">
+        <div class="body">
+          <div class="name">Cooper Cat</div>
+          <div class="role">Kedi</div>
+          <p><strong>Gri, kaykaylı</strong> bir kedi, kırmızı tulum giyiyor. Açılış sahnesinde karavanı o kullanıyor; enerjik ve genç bir karakter olarak konumlanmış.</p>
+        </div>
+      </div>
+      <div class="char-card">
+        <img src="assets/tb_wally.png" alt="Wally Wolf">
+        <div class="body">
+          <div class="name">Wally Wolf</div>
+          <div class="role">Kurt</div>
+          <p><strong>Koyu gri bir kurt</strong>, elinde fitili yanan bir bomba, mavi tulumuyla "yaramaz" bir hava taşıyor. Açılış sahnesinde karavanın çatısında.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Sabit kompozisyon:</strong> seviye başı araç sahnesinde üçü hep aynı yerleşimde: Wally çatıda, Bruno pencereden bakıyor, Cooper direksiyonda. Seviye sonu kutlamasına da her zaman üçü birden katılıyor, sayı hiç değişmiyor.
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Renk ve Erişilebilirlik, Baştan İtibaren</h2>
+    <p>Royal Match'te "renk körü biri item'ları ayırt edebilir mi" hâlâ açık bir soruyken, Toon Blast bu soruyu <strong>daha ilk küpten itibaren</strong> kapatmış: dört rengin dördünde de küpün üstünde sabit bir ikon var, sadece renge güvenmiyor.</p>
+
+    <div class="palette-row">
+      <div class="swatch-lg"><div class="chip" style="background:#DA3227"></div><div class="name">Kalp</div><div class="hex">#DA3227</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#3372C6"></div><div class="name">Su damlası</div><div class="hex">#3372C6</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#DFB13C"></div><div class="name">Hilal</div><div class="hex">#DFB13C</div></div>
+      <div class="swatch-lg"><div class="chip" style="background:#4A982C"></div><div class="name">Yaprak</div><div class="hex">#4A982C</div></div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>Sahne Değişiyor, Bölümle Senkron</h2>
+    <div class="scene-row">
+      <div class="scene-text">
+        <p>Royal Match'in oda-oda değişen sahnelerinin aksine, L1-20 aralığında <strong>tek bir sahne</strong> gözlendi: çöl yolu, kaya oluşumları, kaktüsler, uzayan bir asfalt. Bu aralıkta bir sahne değişimi yok.</p>
+        <p>Sahne sabit kalsa da <strong>board'un kendisi bilinçli şekiller çiziyor:</strong> belirli seviyelerde küpler bir araya gelip tanınabilir bir siluet oluşturuyor (ör. L10 ve L13).</p>
+      </div>
+      <div class="scene-art">
+        <img src="assets/tb_scene.png" alt="Toon Blast çöl yolu sahnesi">
+        <div class="cap">Level 2</div>
+      </div>
+    </div>
+    <div class="scene-row" style="margin-top:28px;">
+      <div class="scene-text">
+        <p><strong>L21'de sahne değişiyor:</strong> arka plan kırmızı kadife perdeli, ahşap zeminli bir tiyatro sahnesine dönüyor. Bu değişim rastgele değil, aynı anda açılan <strong>"Çılgın Orkestra" bölüm kilidiyle senkron:</strong> bölüm açılış ekranı üç maskotu aynı sahnede enstrümanlarla gösteriyor (Bruno Bear gitar, Cooper Cat trompet, Wally Wolf çello). Royal Match'in adlandırılmamış bölge-bazlı sahne ritmine benzer bir yapı.</p>
+        <p>Bir karşı-bulgu da var: sahne değişmesine rağmen <strong>Bruno Bear'ın kostümü aynı kalıyor</strong> (safari şapkası + Hawaii gömleği, L3'ten beri).</p>
+      </div>
+      <div>
+        <div class="scene-art" style="margin-bottom:14px">
+          <img src="assets/tb_scene_theatre.jpg" alt="Toon Blast tiyatro sahnesi, L21">
+          <div class="cap">Level 21</div>
+        </div>
+        <div class="scene-art">
+          <img src="assets/tb_scene_orchestra.jpg" alt="Çılgın Orkestra bölüm açılış ekranı">
+          <div class="cap">Bölüm açılışı</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="rule"></div><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg><div class="rule"></div></div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 10</div>
+    <h2>Tipografi: İki Katman</h2>
+    <div class="note-list">
+      <div class="note-row">
+        <div class="term">Sayaç okunabilirliği</div>
+        <div><p>Royal Match'teki gibi Hedef/Hamle rakamları <strong>her zaman dedike, sade bir zeminde</strong> duruyor, en yoğun kombinasyon efektlerinde bile doğrudan board'a bindirilmiyor.</p></div>
+      </div>
+      <div class="note-row">
+        <div class="term">İki katmanlı font hiyerarşisi</div>
+        <div><p>Marka fontu (yuvarlak, kalın, krem dolgu + kahverengi kontur) başlıklarda ve kutlama metinlerinde; <strong>ayrı, daha keskin bir "rozet fontu"</strong> (beyaz + kırmızı kontur) sadece indirim/aciliyet etiketlerinde kullanılıyor. "Oyunun sesi" ile "satış anonsu" bilinçli olarak görsel olarak ayrılmış.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">SENTEZ <span class="sep">·</span> İKİ OYUN YAN YANA</div>
+    <h2>Çapraz Analiz</h2>
+    <p>Grafik bölümlerini aynı sırayla yazmamızın sebebi buydu: yan yana koyunca nerede aynı dili konuştukları, nerede bilinçli olarak ayrıştıkları netleşiyor.</p>
+  </div>
+
+  <section class="sec">
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Boyut</th><th>Royal Match</th><th>Toon Blast</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Renk körü erişilebilirliği</td><td>Şekil bazlı ayrışma var</td><td>Baştan itibaren sabit ikon</td></tr>
+          <tr><td>Sahne değişim mantığı</td><td>Oda-oda, oyuncunun yıldız biriktirip "Yap" tuşuna basmasına bağlı</td><td>L1-20 sabit tek sahne, L21'de bölüm kilidiyle senkron sabit eşik</td></tr>
+          <tr><td>Karakter kompozisyonu</td><td>Hiyerarşik üçlü: kral + uşak + köpek, renkle kodlanmış otorite/hizmet ayrımı</td><td>Eşit statülü üçlü: üç maskot, kutlamada hep birlikte</td></tr>
+          <tr><td>Sayaç okunabilirliği</td><td>Her zaman dedike, sade zemin</td><td>Her zaman dedike, sade zemin (aynı ilke)</td></tr>
+          <tr><td>Font hiyerarşisi</td><td>İki katman: marka fontu + rozet fontu</td><td>İki katman: marka fontu + rozet fontu (aynı ilke)</td></tr>
+          <tr><td>Mini oyun sahne çeşitliliği</td><td>3 ayrı mini oyun, 3 ayrı özel sahne</td><td>En az 2 temalı varyant, tek bir ödül dili</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

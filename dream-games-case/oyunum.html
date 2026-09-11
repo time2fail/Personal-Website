@@ -1,0 +1,2021 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws &amp; Petals Pet Café</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF;
+    --surface:#FFFFFF;
+    --ink:#241F33;
+    --ink-soft:#4A4358;
+    --muted:#8A7F68;
+    --line:#E3D8BE;
+    --accent:#B07C22;
+    --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2;
+    --crown:#E8A320;
+    --book:#D14B3C;
+    --shield:#3C74C4;
+    --leaf:#4C9A4E;
+    --diamond:#CE4FAE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420;
+      --surface:#221C2E;
+      --ink:#F3EEDD;
+      --ink-soft:#D9D1BC;
+      --muted:#A79C86;
+      --line:#3A3244;
+      --accent:#E0B458;
+      --accent-strong:#F0C878;
+      --accent-soft:#3A3020;
+      --crown:#F0B03A;
+      --book:#E36657;
+      --shield:#6C9BE0;
+      --leaf:#6BB86E;
+      --diamond:#E070C4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420;
+    --surface:#221C2E;
+    --ink:#F3EEDD;
+    --ink-soft:#D9D1BC;
+    --muted:#A79C86;
+    --line:#3A3244;
+    --accent:#E0B458;
+    --accent-strong:#F0C878;
+    --accent-soft:#3A3020;
+    --crown:#F0B03A;
+    --book:#E36657;
+    --shield:#6C9BE0;
+    --leaf:#6BB86E;
+    --diamond:#E070C4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto 0 clamp(32px, 10vw, 160px);
+    padding:56px 24px 90px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    padding-bottom:28px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:44px;
+    flex-wrap:wrap;
+  }
+  .masthead h1{
+    font-size:clamp(2rem, 5vw, 2.7rem);
+    line-height:1.08;
+    margin-top:8px;
+  }
+  .masthead .sub{
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin-top:10px;
+    max-width:46ch;
+  }
+
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{
+    font-size:1.62rem;
+    margin-bottom:18px;
+  }
+  .sec p{
+    font-size:1.02rem;
+    line-height:1.68;
+    color:var(--ink-soft);
+    max-width:64ch;
+    margin:0 0 16px;
+  }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+
+  .sec-row{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:36px;
+    align-items:start;
+  }
+  .sec-text p{ margin-bottom:16px; }
+  .sec-text p:last-child{ margin-bottom:0; }
+  .sec-art img{
+    width:100%;
+    display:block;
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin:22px 0 26px;
+  }
+  .fact{
+    background:var(--surface);
+    padding:16px 18px;
+  }
+  .fact .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .fact .v{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.06rem;
+    color:var(--ink);
+  }
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:16px 20px;
+    margin:24px 0 8px;
+    font-size:.98rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+  }
+  .callout strong{ color:var(--ink); }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:52px 0;
+    color:var(--accent);
+  }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+
+  .site-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .site-nav a{
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+  }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{
+    color:var(--accent-strong);
+    border-bottom-color:var(--accent);
+  }
+  .site-nav .sep{ color:var(--line); }
+
+  .grid4{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:22px 0 28px;
+  }
+  .elcard{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 18px 20px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:10px;
+  }
+  .elcard img{
+    width:84px;
+    height:84px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .elcard .swatch{
+    width:10px;height:10px;border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .elcard .name-tr{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.08rem;
+    color:var(--ink);
+  }
+  .elcard .name-en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  .secret{
+    background:var(--surface);
+    border:1.5px dashed var(--accent);
+    border-radius:16px;
+    padding:22px 24px 24px;
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:20px;
+    align-items:start;
+    box-shadow:var(--shadow);
+  }
+  .secret img{
+    width:96px;height:96px;object-fit:contain;
+    border-radius:10px;
+  }
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:4px 10px;
+    margin-bottom:8px;
+  }
+  .secret .name-tr{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.2rem;
+    color:var(--ink);
+  }
+  .secret .name-en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .secret p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+  }
+  .secret .note{
+    font-size:.78rem;
+    color:var(--muted);
+    margin-top:10px;
+    font-style:italic;
+    line-height:1.5;
+  }
+
+  /* ---- power-up rows ---- */
+  .pu-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .pu-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:100px 1fr 210px;
+    gap:32px;
+    align-items:center;
+  }
+  .pu-row img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .subhead{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.2rem;
+    color:var(--ink);
+    margin:38px 0 10px;
+  }
+  .pu-pair{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+  .pu-row .pu-pair img{
+    width:56px;
+    height:56px;
+    object-fit:contain;
+    border-radius:8px;
+    border:1px solid var(--line);
+  }
+  .pu-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.14rem;
+    color:var(--ink);
+    margin-bottom:2px;
+  }
+  .pu-name .en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .pu-text{
+    padding-left:6px;
+  }
+  .pu-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    max-width:52ch;
+  }
+  .pu-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+  .pu-shape{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  .shape-grid{
+    display:inline-grid;
+    gap:6px;
+  }
+  .shape-cell{
+    width:32px;
+    height:32px;
+    border-radius:7px;
+    border:1.5px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .shape-cell.filled{
+    border-style:solid;
+    border-color:var(--accent);
+    background:var(--accent-soft);
+  }
+  .shape-cell.filled img{
+    width:23px;
+    height:23px;
+    object-fit:contain;
+  }
+  .shape-cell.marked{
+    border-color:var(--book);
+    box-shadow:0 0 0 2px var(--book);
+  }
+  .shape-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+  }
+  .pu-count{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.7rem;
+    color:var(--accent);
+    text-align:center;
+  }
+  .part-break{
+    margin:72px 0 44px;
+    padding:30px 0;
+    border-top:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    text-align:center;
+  }
+  .part-break .eyebrow{
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .part-break h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .part-break p{
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:10px auto 0;
+    font-size:1rem;
+    line-height:1.6;
+  }
+  .compare-table-wrap{
+    overflow-x:auto;
+    margin:22px 0;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .compare-table{
+    width:100%;
+    min-width:520px;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  .compare-table th,
+  .compare-table td{
+    padding:12px 18px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .compare-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+  }
+  .compare-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .compare-table td{
+    color:var(--ink-soft);
+  }
+  .compare-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+  .creation-preview{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .creation-preview figure{
+    margin:0;
+    text-align:center;
+  }
+  .creation-preview img{
+    width:96px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .creation-preview figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    color:var(--muted);
+    margin-top:6px;
+  }
+  .combo-shot{
+    width:100%;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .combo-shot-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 22px;
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:22px;
+    align-items:center;
+  }
+  .flow-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .flow-row.vertical{
+    flex-direction:column;
+    gap:6px;
+  }
+  .flow-arrow{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.1rem;
+    color:var(--accent);
+    line-height:1;
+    flex-shrink:0;
+  }
+  .shape-cell.sm{
+    width:16px;
+    height:16px;
+    border-radius:4px;
+  }
+  .shape-cell.sm img{
+    width:11px;
+    height:11px;
+  }
+
+  /* ---- power-up combinations ---- */
+  .combo-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .combo-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 26px;
+    display:grid;
+    grid-template-columns:230px 1fr 120px;
+    gap:28px;
+    align-items:center;
+  }
+  .combo-row.wide{
+    grid-template-columns:230px 1fr 220px;
+  }
+  .combo-impact{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .combo-impact img{
+    width:100%;
+    border-radius:8px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .impact-grid{
+    display:inline-grid;
+    gap:3px;
+  }
+  .impact-cell{
+    width:16px;
+    height:16px;
+    border-radius:3px;
+    background:var(--line);
+  }
+  .impact-cell.hit{
+    background:var(--book);
+  }
+  .impact-cell.origin{
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .combo-pair{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
+  .combo-pair img{
+    width:76px;
+    height:76px;
+    object-fit:contain;
+    border-radius:10px;
+    border:1px solid var(--line);
+  }
+  .combo-plus{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.5rem;
+    color:var(--accent);
+    flex-shrink:0;
+  }
+  .combo-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:58ch;
+  }
+  .combo-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  /* ---- boosters ---- */
+  .bs-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .bs-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:100px 1fr 150px;
+    gap:28px;
+    align-items:center;
+  }
+  .bs-row img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .bs-text{ padding-left:6px; }
+  .bs-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.14rem;
+    color:var(--ink);
+  }
+  .bs-name .en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .bs-badge{
+    display:block;
+    margin:6px 0 0;
+  }
+  .bs-badge-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:6px 0 0;
+  }
+  .bs-badge-row .badge{
+    margin-bottom:0;
+  }
+  .bs-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    max-width:50ch;
+  }
+  .bs-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  /* ---- obstacles ---- */
+  .obs-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .obs-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:auto 1fr 140px;
+    gap:28px;
+    align-items:center;
+  }
+  .obs-media img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .obs-media.pair img{
+    width:78px;
+    height:78px;
+  }
+  .stack-callout{
+    display:flex;
+    align-items:center;
+    gap:20px;
+  }
+  .stack-visual{
+    position:relative;
+    width:72px;
+    height:72px;
+    flex-shrink:0;
+  }
+  .stack-visual img{
+    position:absolute;
+    width:54px;
+    height:54px;
+    object-fit:contain;
+    border-radius:8px;
+  }
+  .stack-visual .stack-back{
+    top:0;
+    left:0;
+    opacity:.75;
+  }
+  .stack-visual .stack-front{
+    bottom:0;
+    right:0;
+    border:2px solid var(--surface);
+    box-shadow:var(--shadow);
+  }
+
+  /* ---- level açılış sırası (timeline) ---- */
+  .tl-block{ margin-bottom:34px; }
+  .tl-block:last-child{ margin-bottom:8px; }
+  .tl-block-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    display:inline-block;
+    padding:4px 12px;
+    border-radius:999px;
+    margin-bottom:12px;
+  }
+  .tl-list{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .tl-row{
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:20px;
+    padding:14px 22px;
+    border-bottom:1px solid var(--line);
+    align-items:start;
+  }
+  .tl-row:last-child{ border-bottom:none; }
+  .tl-level{
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:1.3rem;
+    color:var(--accent);
+    text-align:center;
+    padding-top:2px;
+  }
+  .tl-level .lbl{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.58rem;
+    font-weight:500;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-top:1px;
+  }
+  .tl-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1rem;
+    color:var(--ink);
+    margin-bottom:3px;
+  }
+  .tl-content p{
+    font-size:.9rem;
+    line-height:1.55;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:56ch;
+  }
+  .tl-tags{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:7px;
+  }
+  .tl-tags .badge{ margin-bottom:0; }
+  .badge.zirve{ color:var(--book); background:color-mix(in srgb, var(--book) 14%, transparent); }
+  .badge.bonus{ color:var(--leaf); background:color-mix(in srgb, var(--leaf) 14%, transparent); }
+
+  /* ---- level design formülü ---- */
+  .formula-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:32px 28px;
+    margin:24px 0 28px;
+    overflow-x:auto;
+  }
+  .formula-eq{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.12rem;
+    color:var(--ink);
+    white-space:nowrap;
+    min-width:max-content;
+    margin:0 auto;
+  }
+  .formula-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.76rem;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--accent-strong);
+    white-space:nowrap;
+  }
+  .formula-eq-sign{
+    font-size:1.4rem;
+    color:var(--muted);
+  }
+  .formula-frac{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .formula-num{
+    padding:0 8px 8px;
+    border-bottom:2px solid var(--ink);
+  }
+  .formula-den{
+    padding:8px 8px 0;
+  }
+  .term-list{
+    margin:22px 0 28px;
+  }
+  .term-list dt{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    font-size:1rem;
+    margin-top:16px;
+  }
+  .term-list dt:first-child{ margin-top:0; }
+  .term-list dd{
+    margin:4px 0 0;
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    max-width:62ch;
+  }
+  .callout code, .callout .calc{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.86rem;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+  .tier-row{
+    display:grid;
+    grid-template-columns:1fr 280px;
+    gap:36px;
+    align-items:start;
+    margin:22px 0 28px;
+  }
+  .tier-row .term-list{ margin:0; }
+  .tier-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 20px 20px;
+    position:sticky;
+    top:24px;
+  }
+  .tier-card-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    margin-bottom:12px;
+  }
+  .tier-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.82rem;
+  }
+  .tier-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.58rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:left;
+    padding:0 6px 8px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .tier-table th:nth-child(2){ text-align:right; }
+  .tier-table td{
+    padding:7px 6px 7px 0;
+    border-bottom:1px solid var(--line);
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+  .tier-table tr:last-child td{ border-bottom:none; }
+  .tier-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:normal;
+  }
+  .tier-table td:nth-child(2){
+    font-weight:600;
+    color:var(--accent-strong);
+    text-align:right;
+  }
+
+  /* ---- UI wireframe screenshots ---- */
+  .ui-row{
+    display:grid;
+    grid-template-columns:300px 1fr;
+    gap:32px;
+    align-items:start;
+    margin:22px 0 36px;
+  }
+  .ui-row img{
+    width:100%;
+    display:block;
+    border-radius:18px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    position:sticky;
+    top:24px;
+  }
+  .ui-row .term-list{ margin:0; }
+
+  footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    line-height:1.7;
+  }
+
+  @media (max-width:760px){
+    .sec-row{ grid-template-columns:1fr; }
+    .sec-art{ max-width:220px; margin:0 auto; }
+    .pu-row{ grid-template-columns:1fr; text-align:center; }
+    .pu-row img{ margin:0 auto; }
+    .pu-text p{ max-width:none; }
+    .combo-row, .combo-row.wide{ grid-template-columns:1fr; text-align:center; }
+    .combo-text p{ max-width:none; }
+    .combo-impact{ margin:0 auto; }
+    .bs-row{ grid-template-columns:1fr; text-align:center; }
+    .bs-row img{ margin:0 auto; }
+    .bs-text{ padding-left:0; }
+    .bs-text p{ max-width:none; }
+    .obs-row{ grid-template-columns:1fr; text-align:center; }
+    .obs-media{ display:flex; justify-content:center; }
+    .combo-shot-row{ grid-template-columns:1fr; text-align:center; }
+    .combo-shot-row img{ margin:0 auto; }
+    .tl-row{ grid-template-columns:44px 1fr; padding:12px 16px; }
+    .formula-eq{ font-size:.86rem; gap:10px; }
+    .tier-row{ grid-template-columns:1fr; }
+    .tier-card{ position:static; }
+    .ui-row{ grid-template-columns:1fr; }
+    .ui-row img{ position:static; max-width:320px; margin:0 auto; }
+  }
+  @media (max-width:560px){
+    .grid4{ grid-template-columns:1fr 1fr; }
+    .secret{ grid-template-columns:1fr; }
+    .secret img{ margin:0 auto; }
+    .facts{ grid-template-columns:1fr; }
+  }
+  :root{
+    --kurabiye:#E3A857;
+    --kurabiye-dark:#A9723A;
+    --yumak:#E0629B;
+    --yumak-dark:#A83E6E;
+    --kemik:#AECB3B;
+    --kemik-dark:#7C9424;
+    --baloncuk:#5EC3E0;
+    --cingirak:#A47FD1;
+    --cingirak-ring:#C2568A;
+    --pu-surpriz:#D64545;
+    --pu-parti:#E8A33C;
+    --pu-isilti:#3A3255;
+    --pu-kanat:#C79754;
+  }
+  .elcard svg, .pu-row > svg, .pu-pair svg, .combo-pair svg{
+    width:84px;
+    height:84px;
+    display:block;
+  }
+  .pu-row > svg{ width:100px; height:100px; }
+  .pu-pair svg{ width:56px; height:56px; border-radius:8px; border:1px solid var(--line); }
+  .combo-pair svg{ width:76px; height:76px; border-radius:10px; border:1px solid var(--line); }
+  .thresh-blob{
+    display:inline-grid;
+    grid-template-columns:repeat(3,14px);
+    gap:4px;
+  }
+  .thresh-cell{
+    width:14px;height:14px;border-radius:4px;
+    background:var(--line);
+  }
+  .thresh-cell.on{ background:var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a>
+    <span class="sep">·</span>
+    <a href="level-design.html">Level Design</a>
+    <span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a>
+    <span class="sep">·</span>
+    <a href="graphics.html">Grafik</a>
+    <span class="sep">·</span>
+    <a href="animation.html">Animasyon</a>
+    <span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a>
+    <span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html" class="active">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> KENDİ OYUNUMUZ</div>
+      <h1>Paws &amp; Petals Pet Café</h1>
+      <div class="sub">Tap-to-blast bir pet-café oyunu: kurtarılmış hayvanları evlat edinip bakımsız bir café'yi restore ediyorsun. Çekirdek mekanikler: 5 element, 4 power-up, kombinasyonları.</div>
+    </div>
+    <div class="progress">§ 1-9</div>
+  </header>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Oyun Konsepti</h2>
+
+    <p>Bir zamanlar mahallenin gözdesi olan ama yıllardır kapalı duran bir pet café var. Oyuncu bu mekânı devralıyor, kapıları yeniden açıyor ve çevrede kimsesiz kalmış hayvanları teker teker kurtarıp <strong>evlat ediniyor</strong>. Her geçilen seviye café'ye ya yeni bir dekor parçası ya da yeni bir sakin kazandırıyor: oyuncu hem bir mekânı hem de küçük bir aileyi birlikte büyütüyor.</p>
+
+    <h3 class="subhead">Neden Bu Konsept?</h3>
+    <p>Royal Match ve Toon Blast'ın gerçek oyuncu kitlesi <strong>ağırlıklı olarak kadın</strong>, bu iki oyunun analizinde tekrar tekrar karşımıza çıkan bir bulgu. Pet café ve hayvan kurtarma teması bu kitleye doğal olarak oturuyor: bakım, şefkat ve düzenleme dürtüsüne hitap ediyor, uzay ya da savaş gibi soğuk ve mesafeli temaların tam tersi bir duygu taşıyor.</p>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Ton</div><div class="v">Tatlı, sıcak</div></div>
+      <div class="fact"><div class="k">Duygu</div><div class="v">İnsancıl, şefkatli</div></div>
+      <div class="fact"><div class="k">Hedef kitle</div><div class="v">RM/TB ile aynı, ağırlıklı kadın</div></div>
+      <div class="fact"><div class="k">Bilinçli kaçınılan</div><div class="v">Uzay, soğuk/mesafeli temalar</div></div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Beş Eşleşme Elementi</h2>
+
+    <p>Board'daki eşleşme elemanları beş sabit renkten oluşur. RM'nin aksine hepsi yuvarlak değil, sadece <strong>Sabun Baloncuğu</strong> fiziksel olarak gerçek bir küre; diğer dördü kendi nesnesinin doğal, yuvarlak olmayan siluetini taşıyor.</p>
+
+    <div class="grid4">
+      <div class="elcard">
+        <img src="assets/el_pati.jpg" alt="Patili Kurabiye">
+        <div class="name-tr"><span class="swatch" style="background:var(--kurabiye)"></span>Patili Kurabiye</div>
+        <div class="name-en">Paw Cookie</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/el_yumak.jpg" alt="Yün Yumağı">
+        <div class="name-tr"><span class="swatch" style="background:var(--yumak)"></span>Yün Yumağı</div>
+        <div class="name-en">Yarn Ball</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/el_kemik.jpg" alt="Kemik">
+        <div class="name-tr"><span class="swatch" style="background:var(--kemik)"></span>Kemik</div>
+        <div class="name-en">Bone</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/el_baloncuk.jpg" alt="Sabun Baloncuğu">
+        <div class="name-tr"><span class="swatch" style="background:var(--baloncuk)"></span>Sabun Baloncuğu</div>
+        <div class="name-en">Bath Bubble</div>
+      </div>
+    </div>
+
+    <div class="secret">
+      <img src="assets/el_cingirak.jpg" alt="Fiyonklu Çıngırak" style="width:96px;height:96px;object-fit:contain;border-radius:10px;">
+      <div>
+        <div class="badge">5. Element</div>
+        <div class="name-tr">Fiyonklu Çıngırak</div>
+        <div class="name-en">Bow Rattle</div>
+        <p><strong>Yuvarlak değil</strong>: top-kafa, sap, fiyonk ve halkadan oluşan dikey bir siluet. Ana top ve halka aynı mor-pembe palet ailesinde, kurdele hafif krem tonuyla vurgulanıyor.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Power-Up'lar</h2>
+
+    <p>Tap-to-blast olduğu için gruplar RM'nin swap-tabanlı düz dizilimleri gibi değil, düzensiz "blob" şeklinde oluşuyor. Önemli olan dizilim değil, <strong>grubun büyüklüğü</strong>.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <img src="assets/pu_kanat.jpg" alt="Kanat">
+        <div class="pu-text">
+          <div class="pu-name">Kanat <span class="en">Wing</span></div>
+          <p><strong>Tam 4'lük grup</strong> bir Kanat oluşturur. Aktive olunca önce <strong>bulunduğu hücre ve komşularını</strong> temizler, ardından uçup <strong>1 hedefe</strong> daha gidip vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="thresh-blob">
+            <div class="thresh-cell"></div><div class="thresh-cell on"></div><div class="thresh-cell"></div>
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell"></div><div class="thresh-cell on"></div><div class="thresh-cell"></div>
+          </div>
+          <div class="shape-label">tam 4</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+        <div class="pu-text">
+          <div class="pu-name">Parti Düdüğü <span class="en">Party Horn</span></div>
+          <p><strong>5-6'lık grup</strong> bir Parti Düdüğü oluşturur, board'da <strong>rastgele bir satır/sütun</strong> konumunda beliriyor (tap-to-blast'ta sabit eksen yok, RM'nin "eksenin tersi" kuralı burada işlemiyor).</p>
+        </div>
+        <div class="pu-shape">
+          <div class="thresh-blob">
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell"></div>
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell"></div><div class="thresh-cell on"></div><div class="thresh-cell"></div>
+          </div>
+          <div class="shape-label">5-6</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+        <div class="pu-text">
+          <div class="pu-name">Sürpriz Kapsülü <span class="en">Surprise Capsule</span></div>
+          <p><strong>7-8'lik grup</strong> bir Sürpriz Kapsülü oluşturur. Açıldığında etrafındaki <strong>3×3'lük alanı</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="thresh-blob">
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell"></div><div class="thresh-cell on"></div><div class="thresh-cell"></div>
+          </div>
+          <div class="shape-label">7-8</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+        <div class="pu-text">
+          <div class="pu-name">Işıltı Topu <span class="en">Sparkle Ball</span></div>
+          <p><strong>9+'luk grup</strong> bir Işıltı Topu oluşturur. Aktive olunca board'da <strong>en çok bulunan elementin tamamını</strong> temizler. Bu RM'nin gerçek davranışı: oluştuğu rengi değil, board'un çoğunluk rengini hedefliyor.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="thresh-blob">
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+            <div class="thresh-cell on"></div><div class="thresh-cell on"></div><div class="thresh-cell on"></div>
+          </div>
+          <div class="shape-label">9+</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="subhead">Tek Başına Kullanım</h3>
+    <p>Dokunulduğunda her power-up kendi <strong>solo etkisini</strong> uyguluyor.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <img src="assets/pu_kanat.jpg" alt="Kanat">
+        <div class="pu-text">
+          <div class="pu-name">Kanat</div>
+          <p>Kendi <strong>4 komşusunu</strong> temizler, ardından uçup <strong>1 hedefi</strong> bulup vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+              <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+              <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+              <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="impact-grid" style="grid-template-columns:16px;">
+              <div class="impact-cell hit"></div>
+            </div>
+          </div>
+          <div class="shape-label">yerel + 1 hedef</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+        <div class="pu-text">
+          <div class="pu-name">Parti Düdüğü</div>
+          <p>Bulunduğu <strong>satırın ya da sütunun tamamını</strong> temizler, engellerden <strong>1 katman</strong> indirir.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">satır/sütun</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+        <div class="pu-text">
+          <div class="pu-name">Sürpriz Kapsülü</div>
+          <p>Etrafındaki <strong>3×3'lük alanı</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">3×3</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+        <div class="pu-text">
+          <div class="pu-name">Işıltı Topu</div>
+          <p>Board'daki <strong>en yaygın elementin tamamını</strong> temizler; konumu değil, sayısı önemli.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(3,22px);">
+            <div class="shape-cell filled marked" style="background:var(--kemik)"></div>
+            <div class="shape-cell filled" style="background:var(--yumak)"></div>
+            <div class="shape-cell filled marked" style="background:var(--kemik)"></div>
+            <div class="shape-cell filled" style="background:var(--baloncuk)"></div>
+            <div class="shape-cell filled marked" style="background:var(--kemik)"></div>
+            <div class="shape-cell filled" style="background:var(--cingirak)"></div>
+          </div>
+          <div class="shape-label">en yaygın gider</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Power-Up Kombinasyonları</h2>
+
+    <p>Sürükleyerek manuel birleştirme yok, tap-only: yan yana duran power-up'lardan herhangi birine dokununca hepsi toplanıyor, ama sadece <strong>en yüksek 2 tier</strong> (Işıltı &gt; Sürpriz &gt; Parti &gt; Kanat) gerçek komboyu tetikliyor.</p>
+
+    <div class="combo-list">
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+        </div>
+        <div class="combo-text"><p>O hücreden <strong>hem tam satır hem tam sütun</strong> temizlenir (artı şeklinde).</p></div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">artı</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+        </div>
+        <div class="combo-text"><p>4 yöne <strong>3'er Parti Düdüğü</strong> fırlatılır (toplam 12).</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+        </div>
+        <div class="combo-text"><p>Tek 3×3 yerine <strong>9×9'luk alan</strong> patlar (board sınırına göre kırpılabilir).</p></div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px); gap:2px;">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">9×9</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+        </div>
+        <div class="combo-text"><p>Seçili renkteki <strong>tüm elementler</strong> rastgele yönlü Parti Düdüğü'ne dönüşüp hepsi ateşlenir.</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+        </div>
+        <div class="combo-text"><p>Seçili renkteki <strong>tüm elementler</strong> Sürpriz Kapsülü'ne dönüşüp hepsi patlar.</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+        </div>
+        <div class="combo-text"><p><strong>Tüm board</strong> temizlenir, her engelden yine sadece <strong>1 katman</strong> iner (evrensel kural burada da geçerli).</p></div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">tüm board</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_parti.jpg" alt="Parti Düdüğü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_kanat.jpg" alt="Kanat">
+        </div>
+        <div class="combo-text"><p>Kanat'ın komşuları patlar, Kanat Parti Düdüğü'nü <strong>bir engele taşır</strong>, orada ateşlenir.</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_surpriz.jpg" alt="Sürpriz Kapsülü">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_kanat.jpg" alt="Kanat">
+        </div>
+        <div class="combo-text"><p>Aynı taşıma mantığı, <strong>Sürpriz Kapsülü'nü</strong> engele taşıyıp orada patlatır.</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_isilti.jpg" alt="Işıltı Topu">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_kanat.jpg" alt="Kanat">
+        </div>
+        <div class="combo-text"><p><strong>En çok bulunan renk</strong> Kanat'a dönüşür, her biri kendi komşularını patlatıp birer engele gider (yine sadece 1 katman).</p></div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_kanat.jpg" alt="Kanat">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_kanat.jpg" alt="Kanat">
+        </div>
+        <div class="combo-text"><p>Bastığımız hücrenin etrafındaki komşular patlar, ardından <strong>3 tane Kanat</strong> oluşup her biri ayrı bir engele gider.</p></div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">4 komşu</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Booster'lar</h2>
+    <p>Power-up'lardan <strong>ayrı bir kategori</strong>: kazanılan ya da satın alınan, seviye içinde elle kullanılan araçlar. RM'nin sırasını ve seviyelerini izliyoruz.</p>
+    <div class="bs-list">
+      <div class="bs-row">
+        <svg width="60" height="60"><circle cx="30" cy="30" r="26" fill="#C79754"/></svg>
+        <div class="bs-text"><div class="bs-name">Pati Vuruşu <span class="en">Paw Smack</span></div><p>Tek bir hedefi anında yok eder. <strong>L8</strong>'de açılıyor.</p></div>
+      </div>
+      <div class="bs-row">
+        <svg width="60" height="60"><circle cx="30" cy="30" r="26" fill="#A47FD1"/></svg>
+        <div class="bs-text"><div class="bs-name">Kuyruk Süpürgesi <span class="en">Tail Sweep</span></div><p>Tüm satırı temizler. <strong>L13</strong>'te açılıyor.</p></div>
+      </div>
+      <div class="bs-row">
+        <svg width="60" height="60"><circle cx="30" cy="30" r="26" fill="#E0629B"/></svg>
+        <div class="bs-text"><div class="bs-name">Kedi Sıçrayışı <span class="en">Cat Pounce</span></div><p>Tüm sütunu temizler. <strong>L16</strong>'da açılıyor.</p></div>
+      </div>
+      <div class="bs-row">
+        <svg width="60" height="60"><circle cx="30" cy="30" r="26" fill="#E8A33C"/></svg>
+        <div class="bs-text"><div class="bs-name">Oyuncak Sepeti <span class="en">Toy Basket</span></div><p>Board'daki tüm elementleri karıştırır. <strong>L18</strong>'de açılıyor.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Engeller</h2>
+    <p>4 tekrar eden "kural tipi" + RM'nin 5. kural tipi (Renk kümesi) + geç-seviye bir "istila" objesi, <strong>toplam 6 aile</strong>.</p>
+    <div class="obs-list">
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#8A5A2B"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Kedi Kutusu</div><p>Komşuluk (4-yön). Katman arttıkça çivi eklenir. <strong>L1</strong>.</p></div>
+      </div>
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#4C9A4E"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Halı Lekesi</div><p>Üstünde eşleşme gerekiyor. Koyulaşan yeşil = daha fazla katman. <strong>L4</strong>.</p></div>
+      </div>
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#B08D57"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Oyuncak Dolabı</div><p>Komşuluk (8-yön, çapraz dahil). <strong>L11</strong>.</p></div>
+      </div>
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#C79754"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Kuş Yuvası</div><p>Statik üretici: kırılmaz, komşulukta ürün üretir. <strong>L21</strong>.</p></div>
+      </div>
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#F3B6C8"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Tüy İstilası</div><p>Yerçekimine tabi, sınırlı/sabit oranlı yağıyor, sadece komşu eşleşmeyle temizleniyor. <strong>L31</strong>.</p></div>
+      </div>
+      <div class="obs-row">
+        <div class="obs-media"><svg width="60" height="60"><rect x="8" y="8" width="44" height="44" rx="6" fill="#D64545"/></svg></div>
+        <div class="bs-text"><div class="bs-name">Mama Makinesi</div><p>Renk kümesi: 4-5 rengin hepsinden birer komşu eşleşme alınca kırılıyor. <strong>L41</strong>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Level Açılış Sırası</h2>
+    <p>İlk 50 seviye boyunca yeni engel, booster, mini-oyun ve meta-sistemlerin açıldığı sıralama: <strong>zorluk_dengesi.md</strong> resmi kaynağından, blok blok.</p>
+
+    <div class="tl-block">
+      <div class="tl-block-title">Blok 1 · Café Dışı (L1-10)</div>
+      <div class="tl-list">
+        <div class="tl-row">
+          <div class="tl-level">1</div>
+          <div class="tl-content">
+            <div class="tl-title">Kedi Kutusu</div>
+            <p>İlk engel ailesi: <strong>komşuluk (4-yön)</strong> kuralıyla açılıyor.</p>
+            <div class="tl-tags"><span class="badge">Engel</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">4</div>
+          <div class="tl-content">
+            <div class="tl-title">Halı Lekesi</div>
+            <p>İkinci engel ailesi: <strong>üstünde eşleşme</strong> kuralı.</p>
+            <div class="tl-tags"><span class="badge">Engel</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">6<span class="lbl">sonrası</span></div>
+          <div class="tl-content">
+            <div class="tl-title">Kediyi Kurtar</div>
+            <p>Café'nin dışında sokakta yaşayan bir kedi bulunup kurtarılıyor. Bu, "önce kurtar, sonra fonksiyonel rol" örüntüsünün ilk adımı: kedi sadece bir maskot değil, blok 2 boyunca oyuncuya eşlik edip L16'da <strong>Kedi Sıçrayışı</strong> booster'ı olarak resmi bir mekaniğe dönüşüyor.</p>
+            <div class="tl-tags"><span class="badge">Mini-oyun</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">7</div>
+          <div class="tl-content">
+            <div class="tl-title">Pre-Game Booster'lar</div>
+            <p>3'er Parti Düdüğü, Sürpriz Kapsülü ve Işıltı Topu hediye ediliyor. Seviye başlamadan board'a yerleşen bu araçlar, oyuncuyu ileride Koleksiyon Barı'nın (L27) besleyeceği <strong>kalıcı bir kaynağa</strong> alıştırıyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">8</div>
+          <div class="tl-content">
+            <div class="tl-title">Pati Vuruşu açılıyor</div>
+            <p>İlk in-game booster.</p>
+            <div class="tl-tags"><span class="badge">Booster</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">10</div>
+          <div class="tl-content">
+            <div class="tl-title">Blok 1 biter</div>
+            <p>Dış cephe tamamlanıyor.</p>
+            <div class="tl-tags"><span class="badge">Blok sonu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-block">
+      <div class="tl-block-title">Blok 2 · Café İçi (L11-20)</div>
+      <div class="tl-list">
+        <div class="tl-row">
+          <div class="tl-level">11</div>
+          <div class="tl-content">
+            <div class="tl-title">Oyuncak Dolabı</div>
+            <p>Üçüncü engel ailesi: <strong>komşuluk (8-yön, çapraz dahil)</strong>. Blok 2 başlıyor.</p>
+            <div class="tl-tags"><span class="badge">Engel</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">13</div>
+          <div class="tl-content">
+            <div class="tl-title">Kuyruk Süpürgesi açılıyor</div>
+            <p>Satır temizleyen booster.</p>
+            <div class="tl-tags"><span class="badge">Booster</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">16</div>
+          <div class="tl-content">
+            <div class="tl-title">Kedi Sıçrayışı açılıyor</div>
+            <p>Sütun temizleyen booster. <strong>L6'da kurtarılan kedi</strong> burada resmileşiyor.</p>
+            <div class="tl-tags"><span class="badge">Booster</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">18</div>
+          <div class="tl-content">
+            <div class="tl-title">Oyuncak Sepeti açılıyor → Kuşu Kurtar</div>
+            <p>Karıştırma booster'ı açılıyor, hemen ardından bahçeye açılan kapıda yaralı bir kuş bulunup kurtarılıyor. Kedi ile aynı "önce kurtar, sonra fonksiyonel rol" örüntüsü tekrarlanıyor: bu kuş blok 3 başında (L21) <strong>Kuş Yuvası</strong> engeli olarak geri dönüp hem yeni bölgeye (Bahçe) hem de o seviyenin üçlü büyük anına bağlanıyor.</p>
+            <div class="tl-tags"><span class="badge">Booster</span><span class="badge">Mini-oyun</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">19</div>
+          <div class="tl-content">
+            <div class="tl-title">Bloğun zirvesi</div>
+            <p>RM'nin gerçek L19 zirvesiyle bilinçli bir paralellik: bölge geçişinden hemen önce gelen <strong>en zor seviye</strong>.</p>
+            <div class="tl-tags"><span class="badge zirve">Zirve · Orta Zor</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">20</div>
+          <div class="tl-content">
+            <div class="tl-title">Blok 2 biter</div>
+            <p>Bonus altın toplama bölümü: tek renk, <strong>risksiz bir rahatlama</strong>. Blok 2 burada kapanıyor.</p>
+            <div class="tl-tags"><span class="badge bonus">Bonus</span><span class="badge">Blok sonu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-block">
+      <div class="tl-block-title">Blok 3 · Bahçe (L21-30)</div>
+      <div class="tl-list">
+        <div class="tl-row">
+          <div class="tl-level">21</div>
+          <div class="tl-content">
+            <div class="tl-title">Kuş Yuvası + Takım/Klan</div>
+            <p>Üçlü büyük an: yeni alan (Bahçe), yeni engel ve sosyal özellik aynı seviyede geliyor. Hem RM hem TB takım kilidini <strong>tam L21'de</strong> açıyor. Klan Savaşı (24 saatlik, üyelerin toplam geçtiği seviyeye göre) ve can isteme/verme ile oyuncuyu bir gruba bağlayıp günlük geri dönüşü teşvik ediyor.</p>
+            <div class="tl-tags"><span class="badge">Engel</span><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">25</div>
+          <div class="tl-content">
+            <div class="tl-title">Kraliyet Kupası açılıyor</div>
+            <p><strong>24 saatlik</strong> rekabetçi bir turnuva: geçilen her seviye hem Takım'a hem bu havuza puan olarak gidiyor, ~30 kişilik havuzda ilk 10 ödül kazanıyor. Günde en az 1 seviye oynamak böylece kendi başına ödüllendiriliyor, kısa döngülü bir rekabet hissi doğuyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">27</div>
+          <div class="tl-content">
+            <div class="tl-title">Koleksiyon Barı açılıyor</div>
+            <p>Yün Yumağı biriktirme çubuğu, 24 saatte <strong>25 kademeli ödül</strong> veriyor. Belirli bir elementi bilinçli hedeflemeyi ödüllendiriyor ve Pre-Game Booster'ların (L7) kalıcı, tekrar eden kaynağı oluyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">28<span class="lbl">sonrası</span></div>
+          <div class="tl-content">
+            <div class="tl-title">Mahzende Mahsur Kalma</div>
+            <p>Bahçede oyuncu, zemin altında tozlu bir <strong>mahzen kapısı</strong> keşfediyor ve kapıyı açınca içeride kısa süreliğine mahsur kalıyor. Bloğun ikincil zirvesinden hemen sonra gelen bu sahne, henüz resmen açılmamış Blok 4'ün (Mahzen, L31-35) varlığını önceden haber veren bir narratif önsöz.</p>
+            <div class="tl-tags"><span class="badge zirve">Zirve · Orta Zor Zor</span><span class="badge">Mini-oyun</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">30</div>
+          <div class="tl-content">
+            <div class="tl-title">Işık Yarışması açılıyor</div>
+            <p>Günlük, 30 dakikalık, sınırsız canlı bir turnuva: puan seviye geçmeye değil <strong>Işıltı Topu kullanımına</strong> bağlı, ~10 kişilik havuzda yarışılıyor. Belirli bir power-up'ın kullanımını ödüllendirerek Kraliyet Kupası'ndan farklı bir yarışma dokusu sunuyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span><span class="badge">Blok sonu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-block">
+      <div class="tl-block-title">Blok 4 · Mahzen (L31-35)</div>
+      <div class="tl-list">
+        <div class="tl-row">
+          <div class="tl-level">31</div>
+          <div class="tl-content">
+            <div class="tl-title">Tüy İstilası</div>
+            <p>Geç-seviye "istila" engeli: <strong>Mahzen bloğu</strong> burada başlıyor.</p>
+            <div class="tl-tags"><span class="badge">Engel</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">32</div>
+          <div class="tl-content">
+            <div class="tl-title">2x Joker devreye giriyor</div>
+            <p>Koleksiyon Barı ilerlemesini ve Işıltı Topu miktarını otomatik olarak <strong>2'ye katlıyor</strong>. 10 hakla başlıyor, sadece kayıpta azalıyor; kazanma serisini anlık bir ödülle pekiştiriyor, haklar tükenince de oyuncuyu etkinlik ya da satın alma yoluyla yeniden doldurmaya yönlendiriyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">35</div>
+          <div class="tl-content">
+            <div class="tl-title">Blok 4 biter, 2 makine ortaya çıkıyor</div>
+            <p>Mahzen tamamlanıyor; <strong>her 48 saatte</strong> 1 rastgele Pre-Game power-up ve 1 rastgele booster üreten iki bağımsız makine açılıyor. Ödüller otomatik verilmediği için oyuncuyu "geri gel ve topla" alışkanlığına sokuyor: klasik bir retention kancası.</p>
+            <div class="tl-tags"><span class="badge">Meta</span><span class="badge">Blok sonu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-block">
+      <div class="tl-block-title">Blok 5 · Mutfak (L36-50)</div>
+      <div class="tl-list">
+        <div class="tl-row">
+          <div class="tl-level">36</div>
+          <div class="tl-content">
+            <div class="tl-title">Mahzenin Mahsulü açılıyor</div>
+            <p>Art arda kazanma <strong>ödül merdiveni</strong>, RM'nin Kahyanın Hediyesi'ne birebir paralel: 3. kazançta Roket, TNT ve Işıltı Topu ile başlıyorsun, tek kayıp ilerlemeyi sıfırlıyor. Kazanma serisini korumayı cazip kılıp dikkatli oynamayı ödüllendiriyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">37</div>
+          <div class="tl-content">
+            <div class="tl-title">Kahve Bileti açılıyor</div>
+            <p>Sezonluk, <strong>çift sütunlu</strong> (ücretsiz/Kahve Pass) bir battle-pass: aynı ilerleme (Kahve Çekirdeği) her iki sütunu da besliyor. Sezon boyunca düzenli oynamayı teşvik eden uzun vadeli bir hedef sunuyor, premium tarafta da gelir sağlıyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">38</div>
+          <div class="tl-content">
+            <div class="tl-title">Yorgan Bulmacası açılıyor</div>
+            <p>Block Blast tarzı bir yan oyun: <strong>kalıcı bir ızgaraya</strong> kumaş yamalarıyla yorgan dikiyorsun, puanlar altına çevriliyor. Ana oyundan bağımsız, temaya uygun bir "rahatlama" aktivitesiyle oturum süresini ve altın kaynağını artırıyor.</p>
+            <div class="tl-tags"><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">39</div>
+          <div class="tl-content">
+            <div class="tl-title">İkinci ana zirve</div>
+            <p>L28 ile aynı kategoride: bloğun <strong>en zorlu seviyelerinden</strong> biri.</p>
+            <div class="tl-tags"><span class="badge zirve">Zirve · Orta Zor Zor</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">40</div>
+          <div class="tl-content">
+            <div class="tl-title">Bonus altın toplama bölümü</div>
+            <p>L20'nin ikinci tekrarı: <strong>moral ve kaynak takviyesi</strong>.</p>
+            <div class="tl-tags"><span class="badge bonus">Bonus</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">41</div>
+          <div class="tl-content">
+            <div class="tl-title">Mama Makinesi + Pati Albümü</div>
+            <p>Son engel ailesi (renk kümesi) burada açılıyor. <strong>Pati Albümü</strong> ise sticker-album tarzı bir kart koleksiyonu: kartlar Kraliyet Kupası, Işık Yarışması, Koleksiyon Barı, Kahve Bileti ve Mahzen makineleri gibi hemen hemen tüm diğer sistemlerin ödül havuzundan geliyor. Oyuncuyu tek bir sisteme değil, oyundaki tüm etkinliklere bağlıyor; ay sonundaki büyük ödül rastgele kart sayısıyla değil belirli bir setin tamamlanmasıyla kazanılıyor, bu da klasik "eksik kartı tamamlama" dürtüsünü tetikliyor.</p>
+            <div class="tl-tags"><span class="badge">Engel</span><span class="badge">Meta</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">43</div>
+          <div class="tl-content">
+            <div class="tl-title">Hafıza/Eşleştirme mini-oyunu</div>
+            <p>Önceki "kurtarma" mini-oyunlarından farklı bir format: yeni bir karakter tanıtmıyor, L18'de kurtarılıp L21'de Kuş Yuvası olarak yerleşen kuşla <strong>yeniden buluşma anı</strong> yaşatıyor. 9 kafesten 4 çifti eşleştirince son kafeste aynı kuş karakteri çıkıyor; oyuncuya tanıdık bir dostu ziyaret etme hissi veren, sürekliliği pekiştiren bir an.</p>
+            <div class="tl-tags"><span class="badge">Mini-oyun</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">49</div>
+          <div class="tl-content">
+            <div class="tl-title">Final zirvesi</div>
+            <p>Oyunun en yüksek puanlı ve tek <strong>"Çok Zor"</strong> seviyesi.</p>
+            <div class="tl-tags"><span class="badge zirve">Zirve · Çok Zor</span></div>
+          </div>
+        </div>
+        <div class="tl-row">
+          <div class="tl-level">50</div>
+          <div class="tl-content">
+            <div class="tl-title">Oyun sonu</div>
+            <p>Üçüncü bonus altın bölümü ile <strong>50 seviyelik kapsam</strong> tatmin edici bir finalle kapanıyor.</p>
+            <div class="tl-tags"><span class="badge bonus">Bonus</span><span class="badge">Blok sonu</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Level Design</h2>
+
+    <p>Zorluğu tasarım zamanında hesaplayabilmek için <strong>üç kaldıraca</strong> dayanan bir formül kullanıyoruz: Efektif Vuruş, Board Dizilimi ve Renk Sayısı. Gerçek oynama verisi ("Yaşanan Zorluk") kullanmıyoruz, her şey seviye tasarlanırken önceden hesaplanabiliyor.</p>
+
+    <div class="formula-card">
+      <div class="formula-eq">
+        <span class="formula-label">Ham Zorluk</span>
+        <span class="formula-eq-sign">=</span>
+        <span class="formula-frac">
+          <span class="formula-num">(Efektif Vuruş / Hamle) &times; (Renk Sayısı)<sup>1.5</sup></span>
+          <span class="formula-den">(Oynanabilir Hücre / 81) &times; &radic;Doluluk</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="tier-row">
+      <dl class="term-list">
+        <dt>Efektif Vuruş</dt>
+        <dd>Σ (engel katmanı × adet). HUD'un gösterdiği hedef sayısının gizlediği <strong>gerçek iş yükü</strong>.</dd>
+        <dt>Hamle</dt>
+        <dd>Seviyeye verilen toplam hamle sayısı.</dd>
+        <dt>Renk Sayısı</dt>
+        <dd>O seviyede aktif olan element sayısı, 3 ile 5 arası. <strong>1.5 kuvvetle</strong> büyüyor çünkü renk sayısı arttıkça rastgele bir eşleşme bulma olasılığı orantısız şekilde düşüyor.</dd>
+        <dt>Oynanabilir Hücre</dt>
+        <dd>Board'un ham, mutlak oynanabilir alanı. Payda'da olduğu için büyüdükçe <strong>zorluğu azaltıyor</strong>: daha çok alan, daha çok eşleşme fırsatı demek. 81 sayısı, Royal Match'in klasik 9×9 board'una referans normalize sabiti.</dd>
+        <dt>Doluluk</dt>
+        <dd>O oynanabilir alanın kendi çerçevesine (bounding box) göre oranı: board şekli ne kadar sıkı ve düzenli, ne kadar delikli ve dağınık. <strong>Düştükçe zorluğu artırıyor</strong>, çünkü düzensiz şekiller hareket alanını kısıtlıyor.</dd>
+      </dl>
+
+      <aside class="tier-card">
+        <div class="tier-card-title">Zorluk Kademeleri</div>
+        <table class="tier-table">
+          <thead><tr><th>Kademe</th><th>Hedef</th><th>Aralık</th></tr></thead>
+          <tbody>
+            <tr><td>Çok Kolay</td><td>8.0</td><td>6.0 - 11.4</td></tr>
+            <tr><td>Kolay</td><td>14.7</td><td>11.5 - 18.0</td></tr>
+            <tr><td>Orta Kolay</td><td>21.4</td><td>18.1 - 24.8</td></tr>
+            <tr><td>Orta</td><td>28.1</td><td>24.9 - 31.5</td></tr>
+            <tr><td>Orta Zor</td><td>34.9</td><td>31.6 - 38.2</td></tr>
+            <tr><td>Orta Zor Zor</td><td>41.6</td><td>38.3 - 44.9</td></tr>
+            <tr><td>Zor</td><td>48.3</td><td>45.0 - 51.5</td></tr>
+            <tr><td>Çok Zor</td><td>55.0</td><td>51.6 - 57.0</td></tr>
+          </tbody>
+        </table>
+      </aside>
+    </div>
+
+    <div class="callout">
+      <strong>Örnek: Level 49, oyunun final zirvesi.</strong> Renk 4, Hücre 72, Doluluk %80, Efektif Vuruş 148, Hamle 28.
+      <span class="calc">(148 / 28) × 4<sup>1.5</sup> = 5.29 × 8.00 = 42.32</span>
+      <span class="calc">(72 / 81) × &radic;0.80 = 0.89 × 0.89 = 0.79</span>
+      <span class="calc">Ham Zorluk = 42.32 / 0.79 &asymp; <strong>53.19</strong> &rarr; oyunun tek "Çok Zor" seviyesi</span>
+    </div>
+
+    <p>Bu formül tüm 50 seviye için hesaplanmış durumda, kaynak <strong>zorluk_dengesi.md</strong>. Sonuçlar 7 kademeli bir zorluk skalasına (Çok Kolay'dan Çok Zor'a) dönüşüyor ve blok blok "testere dişi" bir eğri izliyor: yükselme, zirve, rahatlama.</p>
+
+    <h3 class="subhead">Tam 50 Seviye Tablosu</h3>
+    <p>Formülün <strong>tüm seviyelere</strong> uygulanmış hâli, kaynak dosyadaki ham veriyle birebir.</p>
+
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Seviye</th><th>Tema</th><th>Engel</th><th>Meta / Özellik</th><th>Renk</th><th>Hücre</th><th>Doluluk</th><th>Hedef</th><th>Efektif Vuruş</th><th>Hamle</th><th>Oran</th><th>Puan</th><th>Zorluk</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Café Dışı</td><td>Kedi Kutusu</td><td>-</td><td>4</td><td>72</td><td>%100</td><td>36</td><td>36</td><td>30</td><td>1.20</td><td>10.80</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>2</td><td>Café Dışı</td><td>-</td><td>-</td><td>3</td><td>81</td><td>%100</td><td>36</td><td>36</td><td>27</td><td>1.33</td><td>6.93</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>3</td><td>Café Dışı</td><td>-</td><td>-</td><td>3</td><td>81</td><td>%100</td><td>25</td><td>50</td><td>27</td><td>1.85</td><td>9.62</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>4</td><td>Café Dışı</td><td>Halı Lekesi</td><td>-</td><td>3</td><td>81</td><td>%100</td><td>49</td><td>49</td><td>30</td><td>1.63</td><td>8.49</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>5</td><td>Café Dışı</td><td>-</td><td>-</td><td>3</td><td>73</td><td>%90.1</td><td>30</td><td>60</td><td>30</td><td>2.00</td><td>12.15</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>6</td><td>Café Dışı</td><td>-</td><td>Kediyi Kurtar mini-oyunu (ara ekran)</td><td>3</td><td>72</td><td>%88.9</td><td>72</td><td>108</td><td>35</td><td>3.09</td><td>19.13</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>7</td><td>Café Dışı</td><td>-</td><td>Pre-Game Booster'lar açılıyor</td><td>3</td><td>81</td><td>%100</td><td>49</td><td>98</td><td>25</td><td>3.92</td><td>20.37</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>8</td><td>Café Dışı</td><td>-</td><td>Pati Vuruşu booster açılıyor</td><td>3</td><td>81</td><td>%100</td><td>59</td><td>84</td><td>24</td><td>3.50</td><td>18.19</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>9</td><td>Café Dışı</td><td>-</td><td>-</td><td>4</td><td>64</td><td>%80</td><td>42</td><td>62</td><td>28</td><td>2.21</td><td>25.07</td><td><strong>Orta</strong></td></tr>
+          <tr><td>10</td><td>Café Dışı (blok 1 biter)</td><td>-</td><td>Dış cephe tamamlanır</td><td>3</td><td>81</td><td>%100</td><td>54</td><td>72</td><td>36</td><td>2.00</td><td>10.39</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>11</td><td>Café İçi (blok 2 başlar)</td><td>Oyuncak Dolabı</td><td>-</td><td>3</td><td>81</td><td>%100</td><td>40</td><td>64</td><td>27</td><td>2.37</td><td>12.32</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>12</td><td>Café İçi</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%100</td><td>31</td><td>62</td><td>30</td><td>2.06</td><td>12.08</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>13</td><td>Café İçi</td><td>-</td><td>Kuyruk Süpürgesi booster açılıyor</td><td>3</td><td>72</td><td>%100</td><td>47</td><td>94</td><td>30</td><td>3.13</td><td>18.31</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>14</td><td>Café İçi</td><td>-</td><td>-</td><td>3</td><td>64</td><td>%100</td><td>40</td><td>120</td><td>27</td><td>4.44</td><td>29.23</td><td><strong>Orta</strong></td></tr>
+          <tr><td>15</td><td>Café İçi</td><td>-</td><td>-</td><td>3</td><td>81</td><td>%100</td><td>72</td><td>108</td><td>20</td><td>5.40</td><td>28.06</td><td><strong>Orta</strong></td></tr>
+          <tr><td>16</td><td>Café İçi</td><td>-</td><td>Kedi Sıçrayışı booster açılıyor</td><td>3</td><td>72</td><td>%100</td><td>36</td><td>108</td><td>35</td><td>3.09</td><td>18.04</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>17</td><td>Café İçi</td><td>-</td><td>-</td><td>3</td><td>81</td><td>%85</td><td>40</td><td>80</td><td>18</td><td>4.44</td><td>25.05</td><td><strong>Orta</strong></td></tr>
+          <tr><td>18</td><td>Café İçi</td><td>-</td><td>Oyuncak Sepeti açılıyor, ardından Kuşu Kurtar mini-oyunu</td><td>4</td><td>70</td><td>%97.2</td><td>38</td><td>92</td><td>34</td><td>2.71</td><td>25.41</td><td><strong>Orta</strong></td></tr>
+          <tr><td>19</td><td>Café İçi</td><td>-</td><td>-</td><td>4</td><td>84</td><td>%93.3</td><td>32</td><td>128</td><td>27</td><td>4.74</td><td>37.86</td><td><strong>Orta Zor</strong></td></tr>
+          <tr><td>20</td><td>Café İçi (blok 2 biter)</td><td>-</td><td>Bonus altın toplama bölümü</td><td>1</td><td>81</td><td>%100</td><td>0</td><td>0</td><td>20</td><td>0.00</td><td>0.00</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>21</td><td>Bahçe (blok 3 başlar)</td><td>Kuş Yuvası</td><td>Takım/Klan açılıyor (üçlü büyük an)</td><td>3</td><td>72</td><td>%100</td><td>20</td><td>40</td><td>28</td><td>1.43</td><td>8.35</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>22</td><td>Bahçe</td><td>-</td><td>-</td><td>3</td><td>42</td><td>%39.5</td><td>22</td><td>44</td><td>30</td><td>1.47</td><td>23.39</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>23</td><td>Bahçe</td><td>-</td><td>-</td><td>3</td><td>63</td><td>%64.1</td><td>35</td><td>70</td><td>30</td><td>2.33</td><td>19.47</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>24</td><td>Bahçe</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%81.9</td><td>72</td><td>104</td><td>26</td><td>4.00</td><td>25.84</td><td><strong>Orta</strong></td></tr>
+          <tr><td>25</td><td>Bahçe</td><td>-</td><td>Kraliyet Kupası açılıyor</td><td>3</td><td>81</td><td>%90</td><td>48</td><td>99</td><td>26</td><td>3.81</td><td>20.86</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>26</td><td>Bahçe</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%88.9</td><td>51</td><td>102</td><td>23</td><td>4.43</td><td>27.50</td><td><strong>Orta</strong></td></tr>
+          <tr><td>27</td><td>Bahçe</td><td>-</td><td>Koleksiyon Barı açılıyor (Yün Yumağı)</td><td>3</td><td>65</td><td>%100</td><td>36</td><td>108</td><td>22</td><td>4.91</td><td>31.79</td><td><strong>Orta Zor</strong></td></tr>
+          <tr><td>28</td><td>Bahçe</td><td>-</td><td>Mahzende Mahsur Kalma mini-oyunu (ara ekran)</td><td>4</td><td>64</td><td>%100</td><td>48</td><td>100</td><td>26</td><td>3.85</td><td>38.94</td><td><strong>Orta Zor Zor</strong></td></tr>
+          <tr><td>29</td><td>Bahçe</td><td>-</td><td>-</td><td>2</td><td>81</td><td>%100</td><td>60</td><td>120</td><td>30</td><td>4.00</td><td>11.31</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>30</td><td>Bahçe (blok 3 biter)</td><td>-</td><td>Işık Yarışması açılıyor</td><td>3</td><td>54</td><td>%80</td><td>28</td><td>56</td><td>28</td><td>2.00</td><td>17.43</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>31</td><td>Mahzen (blok 4 başlar)</td><td>Tüy İstilası</td><td>-</td><td>3</td><td>63</td><td>%90</td><td>20</td><td>50</td><td>32</td><td>1.56</td><td>11.00</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>32</td><td>Mahzen</td><td>-</td><td>2x Joker devreye giriyor</td><td>3</td><td>76</td><td>%88.9</td><td>51</td><td>112</td><td>26</td><td>4.31</td><td>25.30</td><td><strong>Orta</strong></td></tr>
+          <tr><td>33</td><td>Mahzen</td><td>-</td><td>-</td><td>4</td><td>81</td><td>%88.9</td><td>51</td><td>108</td><td>32</td><td>3.38</td><td>28.64</td><td><strong>Orta</strong></td></tr>
+          <tr><td>34</td><td>Mahzen</td><td>-</td><td>-</td><td>5</td><td>81</td><td>%90</td><td>25</td><td>50</td><td>30</td><td>1.67</td><td>19.64</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>35</td><td>Mahzen (blok 4 biter)</td><td>-</td><td>Mahzen tamamlanıyor, 2 makine açılıyor</td><td>4</td><td>81</td><td>%100</td><td>40</td><td>80</td><td>26</td><td>3.08</td><td>24.62</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>36</td><td>Mutfak (blok 5 başlar)</td><td>-</td><td>Mahzenin Mahsulü açılıyor</td><td>3</td><td>64</td><td>%88.9</td><td>54</td><td>108</td><td>28</td><td>3.86</td><td>26.90</td><td><strong>Orta</strong></td></tr>
+          <tr><td>37</td><td>Mutfak</td><td>-</td><td>Kahve Bileti açılıyor</td><td>4</td><td>64</td><td>%88.9</td><td>54</td><td>96</td><td>34</td><td>2.82</td><td>30.32</td><td><strong>Orta</strong></td></tr>
+          <tr><td>38</td><td>Mutfak</td><td>-</td><td>Yorgan Bulmacası açılıyor</td><td>4</td><td>72</td><td>%100</td><td>54</td><td>108</td><td>26</td><td>4.15</td><td>37.38</td><td><strong>Orta Zor</strong></td></tr>
+          <tr><td>39</td><td>Mutfak</td><td>-</td><td>-</td><td>4</td><td>68</td><td>%100</td><td>54</td><td>108</td><td>26</td><td>4.15</td><td>39.58</td><td><strong>Orta Zor Zor</strong></td></tr>
+          <tr><td>40</td><td>Mutfak</td><td>-</td><td>Bonus altın toplama bölümü</td><td>3</td><td>81</td><td>%100</td><td>20</td><td>60</td><td>28</td><td>2.14</td><td>11.13</td><td><strong>Çok Kolay</strong></td></tr>
+          <tr><td>41</td><td>Mutfak</td><td>Mama Makinesi (renk kümesi)</td><td>Pati Albümü açılıyor</td><td>3</td><td>81</td><td>%100</td><td>20</td><td>60</td><td>26</td><td>2.31</td><td>11.99</td><td><strong>Kolay</strong></td></tr>
+          <tr><td>42</td><td>Mutfak</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%100</td><td>26</td><td>112</td><td>32</td><td>3.50</td><td>20.46</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>43</td><td>Mutfak</td><td>-</td><td>Hafıza/eşleştirme mini-oyunu</td><td>3</td><td>62</td><td>%90</td><td>54</td><td>104</td><td>26</td><td>4.00</td><td>28.62</td><td><strong>Orta</strong></td></tr>
+          <tr><td>44</td><td>Mutfak</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%90</td><td>64</td><td>96</td><td>22</td><td>4.36</td><td>26.89</td><td><strong>Orta</strong></td></tr>
+          <tr><td>45</td><td>Mutfak</td><td>-</td><td>-</td><td>3</td><td>70</td><td>%100</td><td>72</td><td>130</td><td>24</td><td>5.42</td><td>32.57</td><td><strong>Orta Zor</strong></td></tr>
+          <tr><td>46</td><td>Mutfak</td><td>-</td><td>-</td><td>4</td><td>81</td><td>%92</td><td>32</td><td>80</td><td>28</td><td>2.86</td><td>23.83</td><td><strong>Orta Kolay</strong></td></tr>
+          <tr><td>47</td><td>Mutfak</td><td>-</td><td>-</td><td>3</td><td>72</td><td>%90</td><td>72</td><td>104</td><td>24</td><td>4.33</td><td>26.70</td><td><strong>Orta</strong></td></tr>
+          <tr><td>48</td><td>Mutfak</td><td>-</td><td>-</td><td>4</td><td>72</td><td>%90</td><td>54</td><td>108</td><td>32</td><td>3.38</td><td>32.02</td><td><strong>Orta Zor</strong></td></tr>
+          <tr><td>49</td><td>Mutfak</td><td>-</td><td>-</td><td>4</td><td>72</td><td>%80</td><td>54</td><td>148</td><td>28</td><td>5.29</td><td>53.19</td><td><strong>Çok Zor</strong></td></tr>
+          <tr><td>50</td><td>Mutfak (blok 5 biter, oyun sonu)</td><td>-</td><td>Bonus altın dağıtma bölümü</td><td>3</td><td>72</td><td>%100</td><td>36</td><td>36</td><td>20</td><td>1.80</td><td>10.52</td><td><strong>Çok Kolay</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>UI Design (Wireframe)</h2>
+
+    <p>Case'in istediği son madde: <strong>Home Screen ve Gameplay Screen</strong> için UI tasarımı. Royal Match'in gerçek ekran görüntüleri referans alınıp, aynı yerleşim iskeleti kendi meta sistemlerimizle yeniden dolduruldu.</p>
+
+    <h3 class="subhead">Home Screen</h3>
+
+    <div class="ui-row">
+      <img src="assets/ui_home_screen.jpg" alt="Home Screen mockup">
+      <dl class="term-list">
+        <dt>Koleksiyon Barı</dt>
+        <dd>Üstteki Yün Yumağı ilerleme çubuğu (580/900). Dolunca bir <strong>Pre-Game power-up ödülü</strong> veriyor, 24 saatte bir sıfırlanıyor.</dd>
+        <dt>Kraliyet Kupası</dt>
+        <dd>Sol taraftaki kupa rozeti. <strong>Güncel puanı</strong> (20) ve döngü sonuna kalan süreyi gösteriyor.</dd>
+        <dt>Pati Albümü rozeti</dt>
+        <dd>Sağ üstteki pati madalyonu. <strong>Eksik kart sayısını</strong> (2) ve ay sonu geri sayımını gösteriyor.</dd>
+        <dt>Mahzen Makinesi 1</dt>
+        <dd>Soldaki ikram kavanozu. <strong>Pre-Game power-up</strong> üretiyor, üstündeki geri sayım bir sonraki üretime kalan süre.</dd>
+        <dt>Işık Yarışması</dt>
+        <dd>Şimşek ikonlu "BAŞLA" butonu. Günlük, 30 dakikalık, <strong>Işıltı Topu kullanımına</strong> bağlı turnuvaya giriyor.</dd>
+        <dt>Mahzen Makinesi 2</dt>
+        <dd>Sağdaki pati desenli dişli çark. Booster üretiyor, aynı 48 saatlik döngüyle çalışıyor ama <strong>Makine 1'den bağımsız</strong>.</dd>
+        <dt>Kahve Bileti</dt>
+        <dd>Pati kilitli ahşap sandık. <strong>Sezonun bitmesine</strong> kalan süreyi (gün cinsinden) gösteriyor.</dd>
+        <dt>"Bölüm 42" + 2x Joker rozeti</dt>
+        <dd>Ana "seviyeye başla" butonu. Üzerindeki "x2" etiketi, <strong>2x Joker aktifken</strong> beliriyor.</dd>
+        <dt>Bahçe ilerlemesi</dt>
+        <dd>Sağdaki "3/8" çubuğu, o bloğun yenileme aşamasında <strong>biriktirilen yıldızı</strong> gösteriyor.</dd>
+        <dt>Alt navigasyon</dt>
+        <dd>Soldan sağa: Kahve Bileti (kitap), Kraliyet Kupası/Yarışmalar (kupa), Ana Ekran (café, aktif), Takım/Klan (kalkan), Pati Albümü (kartlar).</dd>
+      </dl>
+    </div>
+
+    <h3 class="subhead">Gameplay Screen</h3>
+
+    <div class="ui-row">
+      <img src="assets/ui_gameplay_screen.png" alt="Gameplay Screen mockup">
+      <dl class="term-list">
+        <dt>Hedef / Maskot / Hamle</dt>
+        <dd>Üst bar RM'nin iskeletini <strong>birebir izliyor</strong>: solda hedef (Kedi Kutusu adedi), ortada café sahibinin portresi, sağda kalan hamle.</dd>
+        <dt>Board</dt>
+        <dd>4 element (Patili Kurabiye, Yün Yumağı, Kemik, Sabun Baloncuğu) ve <strong>tek engel ailesi</strong> (Kedi Kutusu) ile sade tutuldu.</dd>
+        <dt>Alt booster sırası</dt>
+        <dd>Pati Vuruşu, Kuyruk Süpürgesi, Kedi Sıçrayışı, Oyuncak Sepeti, en sağda ayar dişlisi.</dd>
+      </dl>
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

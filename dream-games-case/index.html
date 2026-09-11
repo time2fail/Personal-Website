@@ -1,0 +1,2048 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Royal Match & Toon Blast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF;
+    --surface:#FFFFFF;
+    --ink:#241F33;
+    --ink-soft:#4A4358;
+    --muted:#8A7F68;
+    --line:#E3D8BE;
+    --accent:#B07C22;
+    --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2;
+    --crown:#E8A320;
+    --book:#D14B3C;
+    --shield:#3C74C4;
+    --leaf:#4C9A4E;
+    --diamond:#CE4FAE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420;
+      --surface:#221C2E;
+      --ink:#F3EEDD;
+      --ink-soft:#D9D1BC;
+      --muted:#A79C86;
+      --line:#3A3244;
+      --accent:#E0B458;
+      --accent-strong:#F0C878;
+      --accent-soft:#3A3020;
+      --crown:#F0B03A;
+      --book:#E36657;
+      --shield:#6C9BE0;
+      --leaf:#6BB86E;
+      --diamond:#E070C4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420;
+    --surface:#221C2E;
+    --ink:#F3EEDD;
+    --ink-soft:#D9D1BC;
+    --muted:#A79C86;
+    --line:#3A3244;
+    --accent:#E0B458;
+    --accent-strong:#F0C878;
+    --accent-soft:#3A3020;
+    --crown:#F0B03A;
+    --book:#E36657;
+    --shield:#6C9BE0;
+    --leaf:#6BB86E;
+    --diamond:#E070C4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto 0 clamp(32px, 10vw, 160px);
+    padding:56px 24px 90px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    padding-bottom:28px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:44px;
+    flex-wrap:wrap;
+  }
+  .masthead h1{
+    font-size:clamp(2rem, 5vw, 2.7rem);
+    line-height:1.08;
+    margin-top:8px;
+  }
+  .masthead .sub{
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin-top:10px;
+    max-width:46ch;
+  }
+
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{
+    font-size:1.62rem;
+    margin-bottom:18px;
+  }
+  .sec p{
+    font-size:1.02rem;
+    line-height:1.68;
+    color:var(--ink-soft);
+    max-width:64ch;
+    margin:0 0 16px;
+  }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+
+  .sec-row{
+    display:grid;
+    grid-template-columns:1fr 260px;
+    gap:36px;
+    align-items:start;
+  }
+  .sec-text p{ margin-bottom:16px; }
+  .sec-text p:last-child{ margin-bottom:0; }
+  .sec-art img{
+    width:100%;
+    display:block;
+    border-radius:16px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+  }
+
+  .facts{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin:22px 0 26px;
+  }
+  .fact{
+    background:var(--surface);
+    padding:16px 18px;
+  }
+  .fact .k{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:6px;
+  }
+  .fact .v{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.06rem;
+    color:var(--ink);
+  }
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:16px 20px;
+    margin:24px 0 8px;
+    font-size:.98rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+  }
+  .callout strong{ color:var(--ink); }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:52px 0;
+    color:var(--accent);
+  }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+
+  .site-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .site-nav a{
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+  }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{
+    color:var(--accent-strong);
+    border-bottom-color:var(--accent);
+  }
+  .site-nav .sep{ color:var(--line); }
+
+  .grid4{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    margin:22px 0 28px;
+  }
+  .elcard{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 18px 20px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:10px;
+  }
+  .elcard img{
+    width:84px;
+    height:84px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .elcard .swatch{
+    width:10px;height:10px;border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+    vertical-align:middle;
+  }
+  .elcard .name-tr{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.08rem;
+    color:var(--ink);
+  }
+  .elcard .name-en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  .secret{
+    background:var(--surface);
+    border:1.5px dashed var(--accent);
+    border-radius:16px;
+    padding:22px 24px 24px;
+    display:grid;
+    grid-template-columns:96px 1fr;
+    gap:20px;
+    align-items:start;
+    box-shadow:var(--shadow);
+  }
+  .secret img{
+    width:96px;height:96px;object-fit:contain;
+    border-radius:10px;
+  }
+  .badge{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:4px 10px;
+    margin-bottom:8px;
+  }
+  .secret .name-tr{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.2rem;
+    color:var(--ink);
+  }
+  .secret .name-en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.68rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .secret p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+  }
+  .secret .note{
+    font-size:.78rem;
+    color:var(--muted);
+    margin-top:10px;
+    font-style:italic;
+    line-height:1.5;
+  }
+
+  /* ---- power-up rows ---- */
+  .pu-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .pu-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:100px 1fr 210px;
+    gap:32px;
+    align-items:center;
+  }
+  .pu-row img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .subhead{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.2rem;
+    color:var(--ink);
+    margin:38px 0 10px;
+  }
+  .pu-pair{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+  .pu-row .pu-pair img{
+    width:56px;
+    height:56px;
+    object-fit:contain;
+    border-radius:8px;
+    border:1px solid var(--line);
+  }
+  .pu-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.14rem;
+    color:var(--ink);
+    margin-bottom:2px;
+  }
+  .pu-name .en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .pu-text{
+    padding-left:6px;
+  }
+  .pu-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    max-width:52ch;
+  }
+  .pu-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+  .pu-shape{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
+  .shape-grid{
+    display:inline-grid;
+    gap:6px;
+  }
+  .shape-cell{
+    width:32px;
+    height:32px;
+    border-radius:7px;
+    border:1.5px dashed var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .shape-cell.filled{
+    border-style:solid;
+    border-color:var(--accent);
+    background:var(--accent-soft);
+  }
+  .shape-cell.filled img{
+    width:23px;
+    height:23px;
+    object-fit:contain;
+  }
+  .shape-cell.marked{
+    border-color:var(--book);
+    box-shadow:0 0 0 2px var(--book);
+  }
+  .shape-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-align:center;
+  }
+  .pu-count{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.7rem;
+    color:var(--accent);
+    text-align:center;
+  }
+  .part-break{
+    margin:72px 0 44px;
+    padding:30px 0;
+    border-top:2px solid var(--accent);
+    border-bottom:2px solid var(--accent);
+    text-align:center;
+  }
+  .part-break .eyebrow{
+    justify-content:center;
+    margin-bottom:10px;
+  }
+  .part-break h2{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2.1rem;
+    color:var(--ink);
+    text-wrap:balance;
+  }
+  .part-break p{
+    color:var(--ink-soft);
+    max-width:58ch;
+    margin:10px auto 0;
+    font-size:1rem;
+    line-height:1.6;
+  }
+  .compare-table-wrap{
+    overflow-x:auto;
+    margin:22px 0;
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+  }
+  .compare-table{
+    width:100%;
+    min-width:520px;
+    border-collapse:collapse;
+    font-size:.92rem;
+  }
+  .compare-table th,
+  .compare-table td{
+    padding:12px 18px;
+    text-align:left;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .compare-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+  }
+  .compare-table td:first-child{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .compare-table td{
+    color:var(--ink-soft);
+  }
+  .compare-table tbody tr:last-child td{
+    border-bottom:none;
+  }
+  .creation-preview{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:14px;
+  }
+  .creation-preview figure{
+    margin:0;
+    text-align:center;
+  }
+  .creation-preview img{
+    width:96px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .creation-preview figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    color:var(--muted);
+    margin-top:6px;
+  }
+  .combo-shot{
+    width:100%;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .combo-shot-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 22px;
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:22px;
+    align-items:center;
+  }
+  .flow-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .flow-row.vertical{
+    flex-direction:column;
+    gap:6px;
+  }
+  .flow-arrow{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.1rem;
+    color:var(--accent);
+    line-height:1;
+    flex-shrink:0;
+  }
+  .shape-cell.sm{
+    width:16px;
+    height:16px;
+    border-radius:4px;
+  }
+  .shape-cell.sm img{
+    width:11px;
+    height:11px;
+  }
+
+  /* ---- power-up combinations ---- */
+  .combo-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .combo-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 26px;
+    display:grid;
+    grid-template-columns:230px 1fr 120px;
+    gap:28px;
+    align-items:center;
+  }
+  .combo-row.wide{
+    grid-template-columns:230px 1fr 220px;
+  }
+  .combo-impact{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .combo-impact img{
+    width:100%;
+    border-radius:8px;
+    border:1px solid var(--line);
+    display:block;
+  }
+  .impact-grid{
+    display:inline-grid;
+    gap:3px;
+  }
+  .impact-cell{
+    width:16px;
+    height:16px;
+    border-radius:3px;
+    background:var(--line);
+  }
+  .impact-cell.hit{
+    background:var(--book);
+  }
+  .impact-cell.origin{
+    box-shadow:0 0 0 2px var(--accent);
+  }
+  .combo-pair{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+  }
+  .combo-pair img{
+    width:76px;
+    height:76px;
+    object-fit:contain;
+    border-radius:10px;
+    border:1px solid var(--line);
+  }
+  .combo-plus{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.5rem;
+    color:var(--accent);
+    flex-shrink:0;
+  }
+  .combo-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:0;
+    max-width:58ch;
+  }
+  .combo-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  /* ---- boosters ---- */
+  .bs-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .bs-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:100px 1fr 150px;
+    gap:28px;
+    align-items:center;
+  }
+  .bs-row img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .bs-text{ padding-left:6px; }
+  .bs-name{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.14rem;
+    color:var(--ink);
+  }
+  .bs-name .en{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-left:8px;
+    vertical-align:middle;
+  }
+  .bs-badge{
+    display:block;
+    margin:6px 0 0;
+  }
+  .bs-badge-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin:6px 0 0;
+  }
+  .bs-badge-row .badge{
+    margin-bottom:0;
+  }
+  .bs-text p{
+    font-size:.94rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    max-width:50ch;
+  }
+  .bs-text p strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  /* ---- obstacles ---- */
+  .obs-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .obs-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 26px;
+    display:grid;
+    grid-template-columns:auto 1fr 140px;
+    gap:28px;
+    align-items:center;
+  }
+  .obs-media img{
+    width:100px;
+    height:100px;
+    object-fit:contain;
+    border-radius:10px;
+  }
+  .obs-media.pair img{
+    width:78px;
+    height:78px;
+  }
+  .stack-callout{
+    display:flex;
+    align-items:center;
+    gap:20px;
+  }
+  .stack-visual{
+    position:relative;
+    width:72px;
+    height:72px;
+    flex-shrink:0;
+  }
+  .stack-visual img{
+    position:absolute;
+    width:54px;
+    height:54px;
+    object-fit:contain;
+    border-radius:8px;
+  }
+  .stack-visual .stack-back{
+    top:0;
+    left:0;
+    opacity:.75;
+  }
+  .stack-visual .stack-front{
+    bottom:0;
+    right:0;
+    border:2px solid var(--surface);
+    box-shadow:var(--shadow);
+  }
+
+  footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    line-height:1.7;
+  }
+
+  @media (max-width:760px){
+    .sec-row{ grid-template-columns:1fr; }
+    .sec-art{ max-width:220px; margin:0 auto; }
+    .pu-row{ grid-template-columns:1fr; text-align:center; }
+    .pu-row img{ margin:0 auto; }
+    .pu-text p{ max-width:none; }
+    .combo-row, .combo-row.wide{ grid-template-columns:1fr; text-align:center; }
+    .combo-text p{ max-width:none; }
+    .combo-impact{ margin:0 auto; }
+    .bs-row{ grid-template-columns:1fr; text-align:center; }
+    .bs-row img{ margin:0 auto; }
+    .bs-text{ padding-left:0; }
+    .bs-text p{ max-width:none; }
+    .obs-row{ grid-template-columns:1fr; text-align:center; }
+    .obs-media{ display:flex; justify-content:center; }
+    .combo-shot-row{ grid-template-columns:1fr; text-align:center; }
+    .combo-shot-row img{ margin:0 auto; }
+  }
+  @media (max-width:560px){
+    .grid4{ grid-template-columns:1fr 1fr; }
+    .secret{ grid-template-columns:1fr; }
+    .secret img{ margin:0 auto; }
+    .facts{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html" class="active">Game Mechanics</a>
+    <span class="sep">·</span>
+    <a href="level-design.html">Level Design</a>
+    <span class="sep">·</span>
+    <a href="level-difficulty.html">Level Difficulty</a>
+    <span class="sep">·</span>
+    <a href="graphics.html">Grafik</a>
+    <span class="sep">·</span>
+    <a href="animation.html">Animasyon</a>
+    <span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a>
+    <span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> GAME MECHANICS ANALİZİ</div>
+      <h1>Royal Match & Toon Blast</h1>
+      <div class="sub">Dream Games'in iki match/blast oyununun çekirdek mekanikleri üzerine karşılaştırmalı bir analiz. Doğrudan oynanış gözlemine ve resmi kaynaklara dayanıyor.</div>
+    </div>
+    <div class="progress">§ 1-6 / 7</div>
+  </header>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Nasıl Oynanır, Amaç Ne</h2>
+
+    <div class="sec-row">
+      <div class="sec-text">
+        <p>Royal Match, King Robert'ın yaz sarayını yenilemek üzerine kurulu, <strong>swap tabanlı bir match-3 bulmacasıdır</strong>. Oyuncu iki bitişik taşı yer değiştirerek en az üç aynı renkli taşı yan yana getirir; taşlar patlar, üstteki taşlar aşağı kayar, boşluklar yeni taşlarla dolar.</p>
+
+        <p>Her seviyenin amacı, ekranın sol üstünde gösterilen bir veya daha fazla <strong>hedefi</strong>, sınırlı bir <strong>hamle</strong> sayısı içinde tamamlamaktır. Hedefler genellikle belirli engelleri belirli sayıda temizlemeyi ya da belirli nesneleri toplamayı gerektirir. Hamle bitmeden tüm hedefler tamamlanırsa seviye kazanılır ve bir yıldız kazanılır; bu yıldızlar meta-oyunda saray odalarını yenilemek için harcanır. Hamle biterken hedefler tamamlanmamışsa seviye başarısız olur.</p>
+      </div>
+      <div class="sec-art">
+        <img src="assets/kral.jpg" alt="King Robert">
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Mekanik</div><div class="v">Swap · Match-3</div></div>
+      <div class="fact"><div class="k">Zorluk kısıtı</div><div class="v">Hamle sayısı</div></div>
+    </div>
+
+    <div class="callout">
+      <strong>Dikkat çeken bir detay:</strong> board, patlama/düşme animasyonu sürerken bile girdiye kapanmıyor. Oyuncu kademe (cascade) devam ederken bir sonraki hamlesini yapabiliyor, bu da oyunu belirgin biçimde akıcı hissettiriyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Beş Eşleşme Elementi</h2>
+
+    <p>Board'daki eşleşme elemanları dört sabit renkten oluşur. Bu dördü işlevsel olarak birbirinin tıpatıp aynısıdır: aralarında bir hiyerarşi ya da özel kural yok, sadece görsel çeşitlilik sağlarlar.</p>
+
+    <div class="grid4">
+      <div class="elcard">
+        <img src="assets/tac.jpg" alt="Taç elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--crown)"></span>Taç</div>
+        <div class="name-en">Crown</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/kitap.jpg" alt="Kitap elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--book)"></span>Kitap</div>
+        <div class="name-en">Book</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/kalkan.jpg" alt="Kalkan elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--shield)"></span>Kalkan</div>
+        <div class="name-en">Shield</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/yaprak.jpg" alt="Yaprak elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--leaf)"></span>Yaprak</div>
+        <div class="name-en">Leaf</div>
+      </div>
+    </div>
+
+    <p>Bunlara ek olarak, bazı levellerde kullanılan bir beşinci element vardır.</p>
+
+    <div class="secret">
+      <img src="assets/elmas.jpg" alt="Beşinci element - elmas (taslak görsel)">
+      <div>
+        <div class="badge">Gizli · Sessiz Zorluk Aracı</div>
+        <div class="name-tr">Pembe Elmas</div>
+        <div class="name-en">Pink Diamond</div>
+        <p>Sabit bir açılış eşiği yok; tasarımcı board'a bu elementi ekleyip çıkararak, hamle veya engel sayısına dokunmadan zorluk ayarlıyor gibi görünüyor.</p>
+        <div class="note">İlk gözlemlendiği seviye 4. Her seviyede yer almıyor, seviyeden seviyeye açılıp kapanıyor.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Power-Up'lar</h2>
+
+    <p>Dört veya daha fazla aynı renkli taş, belirli bir dizilimde eşleştirildiğinde bir power-up oluşur. Aşağıdaki örnekler tek bir renk üzerinden gösteriliyor, ama kural tüm renkler için aynı: önemli olan renk değil, dizilimin şekli.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <img src="assets/pu_pervane.jpg" alt="Pervane">
+        <div class="pu-text">
+          <div class="pu-name">Pervane <span class="en">Propeller</span></div>
+          <p><strong>2×2 kare</strong> biçiminde eşleşen <strong>4 taş</strong> bir Pervane oluşturur. Aktif olduğunda önce <strong>bulunduğu hücre ve komşularını</strong> temizler, ardından uçup <strong>1 hedefe</strong> daha gidip vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(2,22px);">
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">2×2</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_tnt.jpg" alt="TNT">
+        <div class="pu-text">
+          <div class="pu-name">TNT</div>
+          <p><strong>L ya da T biçiminde</strong> eşleşen <strong>5 taş</strong> bir TNT oluşturur. Patladığında etrafındaki <strong>5×5'lik alanı</strong> (çaprazlar dahil) temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(3,22px);">
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell"></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell"></div>
+            <div class="shape-cell"></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell"></div>
+          </div>
+          <div class="shape-label">T şekli</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_roket.jpg" alt="Roket">
+        <div class="pu-text">
+          <div class="pu-name">Roket <span class="en">Rocket</span></div>
+          <p><strong>Düz bir çizgide eşleşen 4 taş</strong> bir Roket oluşturur. Dizilimin ekseni ile roketin çalışma ekseni <strong>ters yönde</strong>: yatay bir eşleşme <strong>dikey</strong> çalışan bir roket üretir, dikey bir eşleşme <strong>yatay</strong> çalışan bir roket üretir. Roket, bulunduğu <strong>satırın ya da sütunun tamamını</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(4,22px);">
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">4'lü çizgi → çapraz eksen</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_lightball.jpg" alt="Işık Topu">
+        <div class="pu-text">
+          <div class="pu-name">Işık Topu <span class="en">Light Ball</span></div>
+          <p><strong>Düz bir çizgide eşleşen 5 taş</strong> bir Işık Topu oluşturur. Aktif olduğunda board'daki <strong>seçilen rengin tamamını</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(5,22px);">
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tac.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">5'li çizgi</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="subhead">Tek Başına Kullanım</h3>
+    <p>Bir power-up'ı oluşturduktan sonra tek başına aktive etmenin iki yolu var: doğrudan dokunmak ya da normal bir taşla yer değiştirmek. İkisi de çalışır, ama patladığı nokta değişir.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <img src="assets/pu_pervane.jpg" alt="Pervane">
+        <div class="pu-text">
+          <div class="pu-name">Pervane <span class="en">Propeller</span></div>
+          <p>Dokunursan önce <strong>bulunduğu hücre ve komşularını</strong> temizler, ardından uçup <strong>1 hedefe</strong> daha gidip vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+              <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+              <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+              <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="impact-grid" style="grid-template-columns:16px;">
+              <div class="impact-cell hit"></div>
+            </div>
+          </div>
+          <div class="shape-label">yerel + 1 hedef</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_tnt.jpg" alt="TNT">
+        <div class="pu-text">
+          <div class="pu-name">TNT</div>
+          <p>Dokunursan bulunduğu noktanın etrafındaki <strong>5×5'lik tüm alanı</strong> (çaprazlar dahil) temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">5×5, çaprazlar dahil</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_roket.jpg" alt="Roket">
+        <div class="pu-text">
+          <div class="pu-name">Roket <span class="en">Rocket</span></div>
+          <p>Dokunursan <strong>bulunduğu satırın ya da sütunun tamamını</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">olduğu yerde patlar</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/pu_lightball.jpg" alt="Işık Topu">
+        <div class="pu-text">
+          <div class="pu-name">Işık Topu <span class="en">Light Ball</span></div>
+          <p>Dokunursan, board'daki <strong>en yaygın rengin tamamını</strong> temizler; konumu değil, rengi önemli.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="shape-grid" style="grid-template-columns:repeat(3,22px);">
+            <div class="shape-cell filled marked"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/kitap.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/kalkan.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tac.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/yaprak.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">renk her yerde gider</div>
+        </div>
+      </div>
+
+    </div>
+
+    <h3 class="subhead">Yer Değiştirerek</h3>
+    <p>Aynı dört power-up, normal bir taşla yer değiştirdiğinde de aktive olur. Sadece bulunduğu yerde değil, <strong>taşındığı yeni konumda</strong> patlar. Mantık hepsi için aynı, örneği Roket üzerinden gösteriyoruz.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <div class="pu-pair">
+          <img src="assets/pu_roket.jpg" alt="Roket">
+          <span class="flow-arrow">&#8594;</span>
+          <img src="assets/tac.jpg" alt="Normal taş">
+        </div>
+        <div class="pu-text">
+          <div class="pu-name">Yer Değiştirerek</div>
+          <p>Normal bir taşla yer değiştirirsen, <strong>yeni konumunda</strong> patlar. Dokunduğun nokta değil, taşındığı nokta önemli.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell origin"></div><div class="impact-cell hit origin"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">taşındığı yerde patlar</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <strong>Işık Topu istisnası:</strong> dokunulduğunda tahtadaki en yaygın rengi temizler, ama bir taşla yer değiştirdiğinde <strong>o taşın rengini</strong> temizler, hangi renk olursa olsun en yaygın olması gerekmiyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Power-Up Kombinasyonları</h2>
+
+    <p>İki power-up yan yana getirilip birleştirildiğinde, tek başlarına yaratabileceklerinden daha büyük bir etki oluşur.</p>
+
+    <div class="combo-list">
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_roket.jpg" alt="Roket">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_roket.jpg" alt="Roket">
+        </div>
+        <div class="combo-text">
+          <p>Birleştiği noktadan <strong>bir satırın ve bir sütunun tamamını</strong> temizler.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">1+1</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_roket.jpg" alt="Roket">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_tnt.jpg" alt="TNT">
+        </div>
+        <div class="combo-text">
+          <p>Birleştiği noktadan <strong>3 satır ve 3 sütunu</strong> temizler.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">3+3</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_tnt.jpg" alt="TNT">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_tnt.jpg" alt="TNT">
+        </div>
+        <div class="combo-text">
+          <p><strong>9×9'luk tüm alanı</strong> temizler.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(9,10px); gap:2px;">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">9×9</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_pervane.jpg" alt="Pervane">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_roket.jpg" alt="Roket">
+        </div>
+        <div class="combo-text">
+          <p>Pervane, Roket'i (ya da TNT'yi) alıp <strong>rastgele bir engele</strong> taşır.</p>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_pervane.jpg" alt="Pervane">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_pervane.jpg" alt="Pervane">
+        </div>
+        <div class="combo-text">
+          <p><strong>3 Pervane</strong> oluşturur, her biri rastgele bir engele gider. Birleştikleri noktada çevredeki <strong>4 kutuyu</strong> de anında patlatır.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">4 komşu</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_lightball.jpg" alt="Işık Topu">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_roket.jpg" alt="Roket">
+        </div>
+        <div class="combo-text">
+          <p>Tahtadaki <strong>en çok bulunan öğeyi</strong> seçilen power-up'a (Roket, TNT ya da Pervane) çevirir.</p>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/pu_lightball.jpg" alt="Işık Topu">
+          <span class="combo-plus">+</span>
+          <img src="assets/pu_lightball.jpg" alt="Işık Topu">
+        </div>
+        <div class="combo-text">
+          <p>Tahtadaki <strong>tüm öğeleri</strong> temizler ve engellerden <strong>1 katman</strong> düşürür.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">tüm board</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Booster'lar</h2>
+
+    <p>Power-up'ların aksine booster'lar eşleştirilerek değil, seviye ilerledikçe kazanılarak açılır. Kullanımları <strong>hamle harcamaz</strong>.</p>
+
+    <div class="bs-list">
+
+      <div class="bs-row">
+        <img src="assets/bs_cekic.jpg" alt="Çekiç">
+        <div class="bs-text">
+          <div class="bs-name">Çekiç <span class="en">Royal Hammer</span></div>
+          <span class="badge bs-badge">L8 sonu · ×3 hediye</span>
+          <p>Tek bir hücreye vurur, o hücredeki engelden <strong>1 katman</strong> kaldırır.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit origin"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">1 hücre</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/bs_ok.jpg" alt="Ok">
+        <div class="bs-text">
+          <div class="bs-name">Ok <span class="en">Arrow</span></div>
+          <span class="badge bs-badge">L13 sonu · ×3 hediye · ilk ücretsiz kullanım L14</span>
+          <p>Seçilen <strong>satırdaki</strong> tüm engellere tek seferde vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <span class="flow-arrow">&#8594;</span>
+            <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            </div>
+          </div>
+          <div class="shape-label">1 satır</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/bs_top.jpg" alt="Top">
+        <div class="bs-text">
+          <div class="bs-name">Top <span class="en">Cannon</span></div>
+          <span class="badge bs-badge">L16 sonu · ×3 hediye · ilk ücretsiz kullanım L17</span>
+          <p>Seçilen <strong>sütundaki</strong> tüm engellere bir kez vurur.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row vertical">
+            <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            </div>
+            <span class="flow-arrow" style="transform:rotate(-90deg);">&#8594;</span>
+          </div>
+          <div class="shape-label">1 sütun</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/bs_soytari.jpg" alt="Soytarı Şapkası">
+        <div class="bs-text">
+          <div class="bs-name">Soytarı Şapkası <span class="en">Jester Hat</span></div>
+          <span class="badge bs-badge">L18 sonu · ×3 hediye · ilk ücretsiz kullanım L19</span>
+          <p>Board'daki tüm elemanları <strong>rastgele</strong> karıştırır. En az bir eşleşme garantisi yok, tamamen şansa bağlı.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <div class="shape-grid" style="grid-template-columns:repeat(3,16px); gap:4px;">
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kitap.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kitap.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kalkan.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kalkan.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="shape-grid" style="grid-template-columns:repeat(3,16px); gap:4px;">
+              <div class="shape-cell sm filled"><img src="assets/yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kalkan.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kitap.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kalkan.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tac.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/kitap.jpg" alt=""></div>
+            </div>
+          </div>
+          <div class="shape-label">önce → sonra</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Engeller</h2>
+
+    <p>Her engel bir <strong>board footprint'i</strong> (kaç hücre kapladığı), bir <strong>komşuluk kuralı</strong>, bir <strong>katman sayısı</strong> ve o katmanı düşürmek için gereken bir <strong>eşleşme türü</strong> ile tanımlanır. Aşağıdaki örnekler, komşuluk kuralının nasıl genişleyebildiğini gösteriyor: kendi üstünde, tek bir komşudan, dik komşularında, ya da çapraz dahil tüm komşularında. Posta Kutusu ayrıca farklı bir eksende ayrışıyor: diğerleri temizlenebilirken, o <strong>hiç temizlenmiyor</strong>, sadece üretim yapıyor.</p>
+
+    <div class="obs-list">
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/obs_cim.jpg" alt="Çimen">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Çimen <span class="en">Grass</span></div>
+          <div class="bs-badge-row"><span class="badge">1×1 hücre</span></div>
+          <p>Açık çimen <strong>1</strong>, koyu çimen <strong>2</strong> eşleşme gerektirir. Diğerlerinden farklı: engel hücrenin <strong>üstünde</strong> duruyor, altındaki taş her zaman normal ve eşleşebilir. Eşleşme doğrudan o hücrede yapılmalı.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit origin"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">üstünde</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/obs_kutu.jpg" alt="Kutu">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Kutu <span class="en">Box</span></div>
+          <div class="bs-badge-row"><span class="badge">1×1 hücre</span></div>
+          <p>Taçlı kutu <strong>1</strong>, perçinli/sandık versiyonu <strong>2</strong> eşleşme gerektirir. İkisi de <strong>4 yönlü komşulukla</strong> temizlenir: yalnızca dik komşularda yapılan eşleşme sayılır, çapraz sayılmaz.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">4-yön</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media pair">
+          <div class="flow-row">
+            <img src="assets/obs_dolap_1.jpg" alt="Tabak Dolabı, kapalı">
+            <span class="flow-arrow">&#8594;</span>
+            <img src="assets/obs_dolap_2.jpg" alt="Tabak Dolabı, açık">
+          </div>
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Tabak Dolabı <span class="en">Plate Cupboard</span></div>
+          <div class="bs-badge-row"><span class="badge">L11'de tanıtılıyor</span><span class="badge">2×2 hücre</span></div>
+          <p>İlk eşleşme dolabı açar. İçinden <strong>10 tabak</strong> çıkar, her tabak ayrı bir eşleşme ister. Komşuluk kuralı en geniş olanı: <strong>8 yönlü</strong>, çapraz dahil.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(4,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">2×2 + 8-yön</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/obs_posta.jpg" alt="Posta Kutusu">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Posta Kutusu <span class="en">Mailbox</span></div>
+          <div class="bs-badge-row"><span class="badge">L21'de tanıtılıyor</span><span class="badge">1×1 hücre</span></div>
+          <p>Kutu'nun aksine <strong>hiç temizlenmiyor</strong>: yanında eşleşme yapıldıkça yok olmak yerine yerinde kalıp içinden bir posta üretiyor. Genelde board'un kenarında/köşesinde durduğu için pratikte sadece <strong>1 komşu yönden</strong> eşleşme alabiliyor.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(2,16px);">
+            <div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">1 komşu</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout stack-callout">
+      <div class="stack-visual">
+        <img class="stack-back" src="assets/obs_cim.jpg" alt="Çimen">
+        <img class="stack-front" src="assets/obs_kutu.jpg" alt="Kutu">
+      </div>
+      <div>
+        <strong>Katmanlama:</strong> Aynı hücrede iki farklı engel üst üste bulunabilir, ör. <strong>Kutu(1) üzerinde koyu Çimen(2)</strong>. Bu durumda hedef sayacı aynı anda iki farklı engel tipi gösterir, ama board'da bunu ele veren ayrı bir ikinci doku her zaman görünmeyebilir.
+      </div>
+    </div>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">İKİNCİ OYUN <span class="sep">·</span> KARŞILAŞTIRMALI ANALİZ</div>
+    <h2>Toon Blast</h2>
+    <p>Aynı stüdyonun başka bir match/blast oyunu, ama çekirdek mekaniği baştan farklı: swap yok, tap-to-blast var. Aşağıdaki bölümler Royal Match'teki sırayı birebir izliyor, karşılaştırma kolay olsun diye.</p>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Nasıl Oynanır, Amaç Ne</h2>
+
+    <div class="sec-row">
+      <div class="sec-text">
+        <p>Toon Blast <strong>tap-to-blast bir bulmacadır</strong>: swap yok. Oyuncu, en az iki bitişik aynı renk küpten oluşan bir gruba tek dokunuşla basar, grup patlar. Royal Match'in "iki taşı yer değiştir" modelinden temelden farklı: derinlik taş değiştirme kombinatoriğinden değil, <strong>grubun büyüklüğünü ve şeklini okumaktan</strong> geliyor.</p>
+        <p>Kazanma koşulu her zaman aynı kalıpta duyurulur: "Hamlelerin bitmeden [hedefi] ortadan kaldır!" Bu metin bilinçli olarak oyuncunun <strong>ilk hamlesinden sonra</strong> gösterilir, önce değil. Önce nasıl dokunacağı öğretiliyor, sonra neden dokunduğu açıklanıyor.</p>
+      </div>
+      <div class="sec-art">
+        <img src="assets/tb_bruno.jpg" alt="Bruno Bear">
+      </div>
+    </div>
+
+    <div class="facts">
+      <div class="fact"><div class="k">Mekanik</div><div class="v">Tap · Blast</div></div>
+      <div class="fact"><div class="k">Zorluk kısıtı</div><div class="v">Hamle sayısı</div></div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Dört Eşleşme Elementi</h2>
+
+    <p>Board'daki eşleşme elemanları dört renkten oluşur, her biri kendi ikonunu taşıyor. Royal Match'teki gizli beşinci renk gibi bir sürpriz burada şimdiye kadar gözlenmedi; dört renk baştan itibaren sabit görünüyor.</p>
+
+    <div class="grid4">
+      <div class="elcard">
+        <img src="assets/tb_kalp.jpg" alt="Kalp elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--book)"></span>Kalp</div>
+        <div class="name-en">Heart</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/tb_ay.jpg" alt="Hilal elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--crown)"></span>Hilal</div>
+        <div class="name-en">Moon</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/tb_su.jpg" alt="Su damlası elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--shield)"></span>Su Damlası</div>
+        <div class="name-en">Water Drop</div>
+      </div>
+      <div class="elcard">
+        <img src="assets/tb_yaprak.jpg" alt="Yaprak elementi">
+        <div class="name-tr"><span class="swatch" style="background:var(--leaf)"></span>Yaprak</div>
+        <div class="name-en">Leaf</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Power-Up'lar</h2>
+
+    <p>Power-up'lar sabit bir dizilim şeklinden değil, <strong>grup büyüklüğünden</strong> doğar: aynı renkte, bitişik kaç küp patlatıldığı sayılır, grubun şekli önemli değil.</p>
+
+    <div class="pu-list">
+
+      <div class="pu-row">
+        <img src="assets/tb_pu_roket.jpg" alt="Roket">
+        <div class="pu-text">
+          <div class="pu-name">Roket <span class="en">Rocket</span></div>
+          <p><strong>5-6 bitişik küp</strong> bir Roket oluşturur. Tek başına kullanıldığında bir satır ya da sütunu temizler, yön <strong>rastgele</strong> seçilir (Royal Match'teki dizilim eksenine bağlı deterministik kuraldan farklı).</p>
+        </div>
+        <div class="pu-shape">
+          <div class="pu-count">5-6</div>
+          <div class="shape-label">küp, şekil serbest</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/tb_pu_tnt.jpg" alt="Bomba">
+        <div class="pu-text">
+          <div class="pu-name">Bomba <span class="en">Bomb</span></div>
+          <p><strong>7-8 bitişik küp</strong> bir Bomba oluşturur. Patladığında <strong>3×3'lük bir alanı</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="pu-count">7-8</div>
+          <div class="shape-label">küp, şekil serbest</div>
+        </div>
+      </div>
+
+      <div class="pu-row">
+        <img src="assets/tb_pu_lightball.jpg" alt="Disco Ball">
+        <div class="pu-text">
+          <div class="pu-name">Disco Ball <span class="en">Disko</span></div>
+          <p><strong>9 veya daha fazla</strong> bitişik küp bir Disco Ball oluşturur (9 üzeri de yine Disco Ball veriyor, ayrı bir eşik yok). Oluştuğu renkteki <strong>tüm elementleri</strong> temizler.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="pu-count">9+</div>
+          <div class="shape-label">küp, şekil serbest</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      <strong>Güç sıralaması:</strong> tahtada 3 veya daha fazla grup aynı anda power-up eşiğini geçerse, en güçlü 2'si seçiliyor. Sıralama: <strong>Disco Ball &gt; Bomba &gt; Roket</strong>.
+    </div>
+
+    <h3 class="subhead">Eşik Önizleme Sistemi</h3>
+    <p>Bir grup power-up oluşturacak büyüklüğe ulaştığında, gruptaki tüm hücreler oluşacak power-up'ın dokusunu üstlerine alıyor. Oyuncu grubu elle saymak zorunda kalmıyor, üstteki dokuya bakması yetiyor. Royal Match'te bunun bir karşılığı yok.</p>
+    <div class="creation-preview">
+      <figure>
+        <img src="assets/tb_creation_roket.jpg" alt="Roket eşik önizlemesi">
+        <figcaption>Roket eşiği</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_creation_tnt.jpg" alt="Bomba eşik önizlemesi">
+        <figcaption>Bomba eşiği</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/tb_creation_lightball.jpg" alt="Disco Ball eşik önizlemesi">
+        <figcaption>Disco Ball eşiği</figcaption>
+      </figure>
+    </div>
+
+    <h3 class="subhead">Tek Başına Kullanım</h3>
+    <p>Toon Blast'ta swap yok, tek yol <strong>dokunmak</strong>. Roket oluştuktan sonra hemen patlamıyor, tahtada bekliyor; oyuncunun <strong>üzerine ayrıca dokunup ateşlemesi</strong> gerekiyor. Bu, Royal Match'ten farklı değil: orada da bir power-up önce eşleştirerek oluşturulur, sonra ayrıca dokunularak ya da swap edilerek patlatılır. İki oyunda da oluşturma ve kullanma iki ayrı eylem.</p>
+
+    <div class="callout">
+      Bir hamlenin patlama/düşme animasyonu bitmeden sıradaki hamle kabul edilmiyor, tahta geçici olarak kilitleniyor (Royal Match'te animasyon bitmeden bir sonraki hamle alınabiliyordu). Bu yüzden bir power-up'ı ya da kombinasyonu ateşledikten sonra, sonucunu görüp tahtanın açılmasını beklemek gerekiyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Power-Up Kombinasyonları</h2>
+
+    <p>İki power-up birbirine dokundurulup <strong>tek dokunuşla</strong> birleştiriliyor (Royal Match'te swap ile birleştirme yapılırken, burada da tap ile).</p>
+
+    <div class="combo-list">
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_roket.jpg" alt="Roket">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_roket.jpg" alt="Roket">
+        </div>
+        <div class="combo-text">
+          <p>Birleştiği noktadan <strong>bir satırın ve bir sütunun tamamını</strong> temizler. Royal Match'in Roket+Roket kombosuyla birebir aynı mantık.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">1+1</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_roket.jpg" alt="Roket">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_tnt.jpg" alt="Bomba">
+        </div>
+        <div class="combo-text">
+          <p>Birleştiği noktadan <strong>3 satır ve 3 sütunu</strong> temizler. Royal Match'in Roket+TNT kombosuyla birebir aynı mantık.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">3+3</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_tnt.jpg" alt="Bomba">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_tnt.jpg" alt="Bomba">
+        </div>
+        <div class="combo-text">
+          <p><strong>7×7'lik bir alanda</strong> patlıyor.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(7,14px); gap:2px;">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">7×7</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_roket.jpg" alt="Roket">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_lightball.jpg" alt="Disco Ball">
+        </div>
+        <div class="combo-text">
+          <p>Disko topunun rengindeki elementler <strong>sırayla</strong> rokete çevriliyor, ardından yine sırayla ateşleniyor.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="shape-grid" style="grid-template-columns:repeat(3,22px);">
+            <div class="shape-cell filled marked"><img src="assets/tb_ay.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tb_su.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tb_ay.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tb_yaprak.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tb_ay.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tb_su.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">renk sırayla rokete döner</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_lightball.jpg" alt="Disco Ball">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_lightball.jpg" alt="Disco Ball">
+        </div>
+        <div class="combo-text">
+          <p><strong>Tüm board'u</strong> 1 katman indiriyor.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+          </div>
+          <div class="shape-label">tüm board</div>
+        </div>
+      </div>
+
+      <div class="combo-row">
+        <div class="combo-pair">
+          <img src="assets/tb_pu_lightball.jpg" alt="Disco Ball">
+          <span class="combo-plus">+</span>
+          <img src="assets/tb_pu_tnt.jpg" alt="Bomba">
+        </div>
+        <div class="combo-text">
+          <p>Disko topunun rengindeki elementlere <strong>sırayla</strong> küçük bomba ikonları yerleşiyor, ardından yine sırayla patlıyor.</p>
+        </div>
+        <div class="combo-impact">
+          <div class="shape-grid" style="grid-template-columns:repeat(3,22px);">
+            <div class="shape-cell filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tb_yaprak.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tb_su.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tb_yaprak.jpg" alt=""></div>
+            <div class="shape-cell filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+            <div class="shape-cell filled marked"><img src="assets/tb_yaprak.jpg" alt=""></div>
+          </div>
+          <div class="shape-label">renk sırayla bombalanır</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Booster'lar</h2>
+
+    <p>Booster'lar da Royal Match'teki gibi eşleştirilerek değil, seviye ilerledikçe kazanılarak açılıyor. Kullanımları <strong>hamle harcamaz</strong>.</p>
+
+    <div class="bs-list">
+
+      <div class="bs-row">
+        <img src="assets/tb_bs_cekic.jpg" alt="Çekiç">
+        <div class="bs-text">
+          <div class="bs-name">Çekiç <span class="en">Hammer</span></div>
+          <div class="bs-badge-row"><span class="badge">L9'da 3 ücretsiz</span><span class="badge">L10'da kullanımı öğretiliyor</span></div>
+          <p>Tek bir hücredeki cismi <strong>1 katman</strong> indiriyor. Royal Match'teki Çekiç ile aynı isim ve işlev.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit origin"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">1 hücre</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/tb_bs_boks.jpg" alt="Boks Eldiveni">
+        <div class="bs-text">
+          <div class="bs-name">Boks Eldiveni <span class="en">Boxing Glove</span></div>
+          <div class="bs-badge-row"><span class="badge">L12'de 3 ücretsiz</span><span class="badge">L13'te kullanımı öğretiliyor</span></div>
+          <p>Bütün bir <strong>yatay sırayı</strong> 1 katman indiriyor. Çekiç'in etkisinin satır geneline yayılmış hali.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <span class="flow-arrow">&#8594;</span>
+            <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div><div class="impact-cell hit"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            </div>
+          </div>
+          <div class="shape-label">1 satır</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/tb_bs_ors.jpg" alt="Örs">
+        <div class="bs-text">
+          <div class="bs-name">Örs <span class="en">Anvil</span></div>
+          <div class="bs-badge-row"><span class="badge">L16 sonunda hediye</span></div>
+          <p>Bütün bir <strong>dikey sütunu</strong> 1 katman indiriyor. Boks Eldiveni'nin sütun versiyonu.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row vertical">
+            <div class="impact-grid" style="grid-template-columns:repeat(5,16px);">
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+              <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            </div>
+            <span class="flow-arrow" style="transform:rotate(-90deg);">&#8594;</span>
+          </div>
+          <div class="shape-label">1 sütun</div>
+        </div>
+      </div>
+
+      <div class="bs-row">
+        <img src="assets/tb_bs_zar.jpg" alt="Zar">
+        <div class="bs-text">
+          <div class="bs-name">Zar <span class="en">Dice</span></div>
+          <div class="bs-badge-row"><span class="badge">L18'de tanıtılıyor</span><span class="badge">İlk kullanım L19</span></div>
+          <p>Tahtayı <strong>karıştırıyor</strong> (shuffle). Diğer üçü "yok etme" ailesindenken, Zar farklı bir kategoride: "yeniden düzenleme". Royal Match'teki Soytarı Şapkası'nın karşılığı.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="flow-row">
+            <div class="shape-grid" style="grid-template-columns:repeat(3,16px); gap:4px;">
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_ay.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_ay.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_su.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_su.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+            </div>
+            <span class="flow-arrow">&#8594;</span>
+            <div class="shape-grid" style="grid-template-columns:repeat(3,16px); gap:4px;">
+              <div class="shape-cell sm filled"><img src="assets/tb_yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_su.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_yaprak.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_ay.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_su.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_kalp.jpg" alt=""></div>
+              <div class="shape-cell sm filled"><img src="assets/tb_ay.jpg" alt=""></div>
+            </div>
+          </div>
+          <div class="shape-label">önce → sonra</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      Çekiç → tek hücre, Boks Eldiveni → satır, Örs → sütun: üçü aynı "1 katman indirme" etkisinin farklı geometrik kapsamlarda tekrarı, booster ailesi kademeli olarak kapsama alanını büyüterek tanıtılıyor. İlk booster'ın (Çekiç) L9-10 civarında açılması, Royal Match'in "L8'de ilk booster açılıyor" zamanlamasına çok yakın; iki oyunun da ilk 10 seviye içinde tek bir booster'ı erken açması ortak bir FTUE prensibi gibi duruyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Engeller</h2>
+
+    <p>Şimdiye kadar üç engel ailesi doğrulandı. Dış kaynaklar ilk 50 seviyede toplam 8 aile olduğunu söylüyor, geri kalan beşi henüz kendi verimizde görülmedi.</p>
+
+    <div class="obs-list">
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/tb_obs_balon.jpg" alt="Balon">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Balon <span class="en">Balloon</span></div>
+          <p>Etraftaki bir küp patlatılınca yok oluyor: hem <strong>engel</strong> hem <strong>hedef</strong> aynı anda. Tahtada hedefi karşılayacak kadar Balon yoksa, eksik kalan kısım yukarıdan rastgele gelerek tamamlanıyor; sabit bir havuz değil.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">komşuluk</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/tb_obs_kutu.jpg" alt="Kutu">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Kutu <span class="en">Crate</span></div>
+          <p>Balon ile <strong>aynı kural</strong>, farklı görsel (ahşap sandık). Fizik farkı: Kutu <strong>sabit</strong>, altındaki destek kırılsa bile yerinden oynamıyor. Balon'un altı kırılırsa Balon aşağı düşer, normal taş gibi yer çekiminden etkilenir.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">komşuluk</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/tb_obs_baloncuk.jpg" alt="Baloncuk">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Baloncuk <span class="en">Bubble</span></div>
+          <p>Normal bir küpün <strong>üstünde</strong> duran şeffaf bir kabarcık. O küp eşleşince kabarcık kalkıyor. Royal Match'teki Çimen'in "üstünde" mantığının birebir karşılığı.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit origin"></div><div class="impact-cell"></div>
+            <div class="impact-cell"></div><div class="impact-cell"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">üstünde</div>
+        </div>
+      </div>
+
+      <div class="obs-row">
+        <div class="obs-media">
+          <img src="assets/tb_obs_sapka.jpg" alt="Şapka">
+        </div>
+        <div class="bs-text">
+          <div class="bs-name">Şapka <span class="en">Magic Hat</span></div>
+          <div class="bs-badge-row"><span class="badge">L21'de tanıtılıyor</span><span class="badge">Statik üretici</span></div>
+          <p>Balon/Kutu'nun aksine <strong>hiç temizlenmiyor</strong>: yanında eşleşme yapıldıkça yerinde kalıp içinden hedef öğesi (havuç) üretmeye devam ediyor. Royal Match'teki Posta Kutusu'nun birebir karşılığı; board kenarını çevreleyen bir dizilim.</p>
+        </div>
+        <div class="pu-shape">
+          <div class="impact-grid" style="grid-template-columns:repeat(3,16px);">
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+            <div class="impact-cell hit"></div><div class="impact-cell hit origin"></div><div class="impact-cell hit"></div>
+            <div class="impact-cell"></div><div class="impact-cell hit"></div><div class="impact-cell"></div>
+          </div>
+          <div class="shape-label">komşuluk</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="callout">
+      Board şekli her zaman dikdörtgen değil: köşeleri kesik ya da girintili dış hatlar görülüyor, Royal Match'te de var olan bir Level Design ekseni burada da doğrulandı. Dış kaynaklar 4 engel ailesi daha listeliyor (İngilizce isimlerden tahmini: Ampul, Can Toss, Sabun, Lastik Ördek), kendi verimizle henüz doğrulanmadı.
+    </div>
+  </section>
+
+  <div class="part-break">
+    <div class="eyebrow">SENTEZ <span class="sep">·</span> İKİ OYUN YAN YANA</div>
+    <h2>Çapraz Analiz</h2>
+    <p>İki oyunun Game Mechanics bölümlerini aynı sırayla yazmamızın sebebi buydu: yan yana koyunca nerede aynı dili konuştukları, nerede bilinçli olarak ayrıştıkları netleşiyor.</p>
+  </div>
+
+  <section class="sec">
+    <div class="compare-table-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr><th>Boyut</th><th>Royal Match</th><th>Toon Blast</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Çekirdek mekanik</td><td>Swap (match-3)</td><td>Tap-to-blast (grup)</td></tr>
+          <tr><td>Cascade</td><td>Var, tahta kilitlenmiyor</td><td>Yok, tahta geçici kilitleniyor</td></tr>
+          <tr><td>Eşleşme elementi</td><td>4 sabit + gizli 5.</td><td>4 sabit, gizli renk yok</td></tr>
+          <tr><td>Power-up oluşturma</td><td>Sabit dizilim şekli</td><td>Grup büyüklüğü, şekil serbest</td></tr>
+          <tr><td>Roket yönü</td><td>Dizilime bağlı, deterministik</td><td>Rastgele</td></tr>
+          <tr><td>Kombinasyon tetikleme</td><td>Swap ile</td><td>Tap ile</td></tr>
+          <tr><td>Roket+Roket etkisi</td><td>1 satır + 1 sütun</td><td>1 satır + 1 sütun (birebir aynı)</td></tr>
+          <tr><td>Roket+TNT etkisi</td><td>3 satır + 3 sütun</td><td>3 satır + 3 sütun (birebir aynı)</td></tr>
+          <tr><td>TNT+TNT etkisi</td><td>9×9</td><td>7×7</td></tr>
+          <tr><td>Lightball+Lightball etkisi</td><td>Tüm board, 1 katman</td><td>Tüm board, 1 katman (birebir aynı)</td></tr>
+          <tr><td>İlk booster açılışı</td><td>L9'da ilk kullanım (L8 sonu açılıyor)</td><td>L9-10'da ilk kullanım (aynı ritim)</td></tr>
+          <tr><td>Booster hamle maliyeti</td><td>Harcamıyor</td><td>Harcamıyor (aynı)</td></tr>
+          <tr><td>Booster ailesi</td><td>4 tane: hücre, satır, sütun, karıştırma</td><td>4 tane: hücre, satır, sütun, karıştırma (aynı ilerleme)</td></tr>
+          <tr><td>Engel kural tipleri</td><td>Üstünde, 4-yön, 8-yön, statik üretici</td><td>Üstünde, 4-yön, statik üretici (üçü de aynı)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Çıkarım:</strong> power-up kombinasyon formülleri (Roket+Roket, Roket+TNT, Lightball+Lightball), booster'ların ilk açılış zamanlaması ve hatta booster ailesinin kendisi (4 tane, aynı hücre→satır→sütun→karıştırma ilerlemesi) neredeyse birebir örtüşüyor; bunlar muhtemelen türün oturmuş standartları. Statik üretici engel tipi de (Posta Kutusu / Şapka) her iki oyunda da var, aynı işlevle. Asıl ayrışma çekirdek mekanikte: Royal Match derinliği swap kombinatoriğinden, Toon Blast ise grup okumaktan alıyor, bu da cascade var/yok kararını doğrudan belirliyor. Kendi oyunumuz için çıkarım: kombinasyon ve booster ritmi gibi standart hale gelmiş kuralları yeniden icat etmeye gerek yok, asıl farklılaşma alanı çekirdek dokunuş mekaniği ve onun getirdiği tempo kararı olmalı.
+    </div>
+  </section>
+
+</div>
+</body>
+</html>

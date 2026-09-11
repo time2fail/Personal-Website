@@ -1,0 +1,2040 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Görünen Zorluk, Gerçek Zorluk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#FFFFFF;
+    --surface:#FFFFFF;
+    --ink:#241F33;
+    --ink-soft:#4A4358;
+    --muted:#8A7F68;
+    --line:#E3D8BE;
+    --accent:#B07C22;
+    --accent-strong:#8E611A;
+    --accent-soft:#F1E3C2;
+    --crown:#E8A320;
+    --book:#D14B3C;
+    --shield:#3C74C4;
+    --leaf:#4C9A4E;
+    --diamond:#CE4FAE;
+    --line-vh:#B07C22;
+    --line-naif:#3C74C4;
+    --kisit-gecici:#3C74C4;
+    --kisit-kalici:#4C9A4E;
+    --delta-fall:#0D9080;
+    --game-tb:#CE4FAE;
+    --shadow: 0 1px 2px rgba(60,45,10,.06), 0 8px 24px -12px rgba(60,45,10,.18);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#181420;
+      --surface:#221C2E;
+      --ink:#F3EEDD;
+      --ink-soft:#D9D1BC;
+      --muted:#A79C86;
+      --line:#3A3244;
+      --accent:#E0B458;
+      --accent-strong:#F0C878;
+      --accent-soft:#3A3020;
+      --crown:#F0B03A;
+      --book:#E36657;
+      --shield:#6C9BE0;
+      --leaf:#6BB86E;
+      --diamond:#E070C4;
+      --line-vh:#B8853A;
+      --line-naif:#4C7AC2;
+      --kisit-gecici:#5389D1;
+      --kisit-kalici:#5CA85F;
+      --delta-fall:#3AA894;
+      --game-tb:#C858A8;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#181420;
+    --surface:#221C2E;
+    --ink:#F3EEDD;
+    --ink-soft:#D9D1BC;
+    --muted:#A79C86;
+    --line:#3A3244;
+    --accent:#E0B458;
+    --accent-strong:#F0C878;
+    --accent-soft:#3A3020;
+    --crown:#F0B03A;
+    --book:#E36657;
+    --shield:#6C9BE0;
+    --leaf:#6BB86E;
+    --diamond:#E070C4;
+    --line-vh:#B8853A;
+    --line-naif:#4C7AC2;
+    --kisit-gecici:#5389D1;
+    --kisit-kalici:#5CA85F;
+    --delta-fall:#3AA894;
+    --game-tb:#C858A8;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto 0 clamp(32px, 10vw, 160px);
+    padding:56px 24px 90px;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    text-wrap:balance;
+    margin:0;
+    color:var(--ink);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', ui-monospace, monospace;
+    font-size:.72rem;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+    font-weight:500;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow .sep{ color:var(--line); }
+  .progress{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  .masthead{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:20px;
+    padding-bottom:28px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:44px;
+    flex-wrap:wrap;
+  }
+  .masthead h1{
+    font-size:clamp(2rem, 5vw, 2.7rem);
+    line-height:1.08;
+    margin-top:8px;
+  }
+  .masthead .sub{
+    font-family:'Source Sans 3', sans-serif;
+    color:var(--ink-soft);
+    font-size:1.02rem;
+    margin-top:10px;
+    max-width:46ch;
+  }
+
+  section.sec{ margin-bottom:8px; }
+  .sec .eyebrow{ margin-bottom:10px; }
+  .sec h2{
+    font-size:1.62rem;
+    margin-bottom:18px;
+  }
+  .sec p{
+    font-size:1.02rem;
+    line-height:1.68;
+    color:var(--ink-soft);
+    max-width:64ch;
+    margin:0 0 16px;
+  }
+  .sec p strong{ color:var(--ink); font-weight:600; }
+  .sec p code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.88em;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:5px;
+    padding:1px 6px;
+  }
+  .sec p .gloss{
+    font-size:.9em;
+    color:var(--muted);
+    font-style:italic;
+  }
+
+  .callout{
+    border-left:3px solid var(--accent);
+    background:var(--accent-soft);
+    border-radius:0 10px 10px 0;
+    padding:16px 20px;
+    margin:24px 0 8px;
+    font-size:.98rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+  }
+  .callout strong{ color:var(--ink); }
+
+  .chart-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:24px 26px 20px;
+    margin:22px 0 26px;
+    box-shadow:var(--shadow);
+  }
+  .chart-eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:14px;
+  }
+  .chart-svg-wrap{ position:relative; }
+  .chart-svg-wrap svg{ width:100%; height:auto; display:block; overflow:visible; }
+  .chart-grid line{ stroke:var(--line); stroke-width:1; }
+  .chart-axis text{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    fill:var(--muted);
+  }
+  .chart-line{ fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .chart-area{ stroke:none; opacity:.12; }
+  .area-vh{ fill:var(--line-vh); }
+  .line-vh{ stroke:var(--line-vh); }
+  .line-naif{ stroke:var(--line-naif); }
+  .line-tb{ stroke:var(--game-tb); }
+  .chart-dot{ stroke:var(--surface); stroke-width:2; }
+  .dot-vh{ fill:var(--line-vh); }
+  .dot-naif{ fill:var(--line-naif); }
+  .dot-tb{ fill:var(--game-tb); }
+  .key-tb{ background:var(--game-tb); }
+  .chart-datalabel{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    fill:var(--ink-soft);
+  }
+  .chart-gap-line{ stroke:var(--line); stroke-width:1; stroke-dasharray:3 3; }
+  .chart-gap-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    fill:var(--muted);
+  }
+  .chart-crosshair{ stroke:var(--muted); stroke-width:1; opacity:0; pointer-events:none; }
+  .scatter-dot{ fill:var(--line-vh); stroke:var(--surface); stroke-width:1.5; }
+  .scatter-trend{ stroke:var(--ink-soft); stroke-width:1.5; stroke-dasharray:5 4; fill:none; opacity:.6; }
+  .chart-hoverdot{ opacity:0; pointer-events:none; }
+  .chart-hit{ fill:transparent; cursor:crosshair; }
+  .chart-tooltip{
+    position:absolute;
+    pointer-events:none;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:var(--shadow);
+    padding:8px 12px;
+    font-size:.78rem;
+    line-height:1.6;
+    opacity:0;
+    transition:opacity .1s;
+    white-space:nowrap;
+    z-index:5;
+  }
+  .chart-tooltip .tt-level{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:4px;
+  }
+  .chart-tooltip .tt-row{ display:flex; align-items:center; gap:7px; }
+  .chart-tooltip .tt-key{ width:11px; height:2px; border-radius:1px; display:inline-block; }
+  .chart-tooltip .tt-name{ color:var(--ink-soft); }
+  .chart-tooltip .tt-val{ font-family:'IBM Plex Mono', monospace; font-weight:600; color:var(--ink); margin-left:auto; padding-left:10px; }
+  .chart-legend{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+  .legend-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:.84rem;
+    color:var(--ink-soft);
+  }
+  .legend-key{ width:18px; height:2px; border-radius:1px; }
+  .key-vh{ background:var(--line-vh); }
+  .key-naif{ background:var(--line-naif); }
+
+  details.chart-table-toggle{ margin-top:14px; }
+  details.chart-table-toggle summary{
+    cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.7rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--accent-strong);
+  }
+  details.chart-table-toggle .table-wrap{ margin-top:14px; }
+
+  /* ---- silent levers ---- */
+  .lever-list{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    margin:22px 0 8px;
+  }
+  .lever-row{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:20px 24px;
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:24px;
+    align-items:center;
+  }
+  .lever-media{
+    display:flex;
+    gap:8px;
+  }
+  .lever-media figure{
+    margin:0;
+    text-align:center;
+  }
+  .lever-media img{
+    width:82px;
+    height:118px;
+    object-fit:contain;
+    background:var(--ground);
+    border-radius:10px;
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    display:block;
+  }
+  .lever-media.icon img{
+    height:82px;
+    object-fit:cover;
+  }
+  .lever-media figcaption{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.62rem;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-top:5px;
+  }
+  .lever-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.66rem;
+    color:var(--accent-strong);
+    letter-spacing:.06em;
+  }
+  .lever-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.08rem;
+    color:var(--ink);
+    margin-left:8px;
+  }
+  .lever-body p{
+    font-size:.92rem;
+    line-height:1.62;
+    color:var(--ink-soft);
+    margin:6px 0 0;
+    max-width:58ch;
+  }
+  .lever-example{
+    display:inline-block;
+    margin-top:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:3px 10px;
+  }
+  @media (max-width:640px){
+    .lever-row{ grid-template-columns:1fr; text-align:center; }
+    .lever-media{ justify-content:center; }
+    .lever-body p{ max-width:none; }
+  }
+
+  /* ---- summary stats ---- */
+  .stat-row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:22px 0 24px;
+  }
+  .stat-tile{
+    flex:1;
+    min-width:160px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:18px 20px;
+  }
+  .stat-tile .stat-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .stat-tile .stat-value{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:2rem;
+    color:var(--ink);
+    line-height:1;
+  }
+  .stat-tile .stat-sub{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--accent-strong);
+    margin-top:6px;
+  }
+
+  .prop-block{ margin:8px 0 28px; }
+  .prop-heading{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.02rem;
+    color:var(--ink);
+    margin-bottom:10px;
+  }
+  .prop-bar{
+    display:flex;
+    height:34px;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--line);
+    gap:2px;
+  }
+  .prop-seg{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.74rem;
+    font-weight:600;
+    white-space:nowrap;
+    color:var(--ink);
+  }
+  .prop-seg.on-accent{ color:#fff; }
+  .prop-legend{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:10px;
+  }
+  .prop-legend-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    font-size:.84rem;
+    color:var(--ink-soft);
+  }
+  .prop-dot{
+    width:10px;
+    height:10px;
+    border-radius:3px;
+    flex-shrink:0;
+  }
+  .prop-callouts{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+  }
+
+  .delta-zero{ stroke:var(--muted); stroke-width:1; }
+  .delta-bar.rise{ fill:var(--line-vh); }
+  .delta-bar.fall{ fill:var(--delta-fall); }
+  .delta-axis text{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    fill:var(--muted);
+  }
+  .delta-datalabel{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    font-weight:600;
+  }
+  .delta-datalabel.rise{ fill:var(--line-vh); }
+  .delta-datalabel.fall{ fill:var(--delta-fall); }
+  .delta-gap-line{ stroke:var(--line); stroke-width:1; stroke-dasharray:3 3; }
+  .delta-gap-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    fill:var(--muted);
+  }
+  .delta-legend{
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+  }
+
+  .tag-designed{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    background:transparent;
+    border:1px solid var(--line);
+    border-radius:999px;
+    padding:3px 10px;
+    margin-top:8px;
+    margin-right:6px;
+  }
+  .tag-felt{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--accent-strong);
+    background:var(--accent-soft);
+    border-radius:999px;
+    padding:3px 10px;
+    margin-top:8px;
+  }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:52px 0;
+    color:var(--accent);
+  }
+  .divider .rule{ flex:1; height:1px; background:var(--line); }
+
+  .site-nav{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .site-nav a{
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+  }
+  .site-nav a:hover{ color:var(--ink-soft); }
+  .site-nav a.active{
+    color:var(--accent-strong);
+    border-bottom-color:var(--accent);
+  }
+  .site-nav .sep{ color:var(--line); }
+
+  .table-wrap{
+    overflow-x:auto;
+    margin:22px 0 28px;
+    border:1px solid var(--line);
+    border-radius:14px;
+  }
+  .arch-table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:.9rem;
+    background:var(--surface);
+  }
+  .arch-table th, .arch-table td{
+    text-align:left;
+    padding:13px 16px;
+    border-bottom:1px solid var(--line);
+    vertical-align:top;
+  }
+  .arch-table tr:last-child td{ border-bottom:none; }
+  .arch-table th{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.64rem;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .arch-table td.pattern{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    min-width:150px;
+  }
+  .arch-table td.formula{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.8rem;
+    color:var(--accent-strong);
+    white-space:nowrap;
+  }
+  .arch-table td.note{
+    color:var(--ink-soft);
+    line-height:1.55;
+    min-width:200px;
+  }
+
+  footer{
+    margin-top:60px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    color:var(--muted);
+    line-height:1.7;
+  }
+
+  @media (max-width:760px){
+    .arch-table td.note{ min-width:0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <nav class="site-nav">
+    <a href="index.html">Game Mechanics</a>
+    <span class="sep">·</span>
+    <a href="level-design.html">Level Design</a>
+    <span class="sep">·</span>
+    <a href="level-difficulty.html" class="active">Level Difficulty</a>
+    <span class="sep">·</span>
+    <a href="graphics.html">Grafik</a>
+    <span class="sep">·</span>
+    <a href="animation.html">Animasyon</a>
+    <span class="sep">·</span>
+    <a href="particles-fx.html">Özel Efektler</a>
+    <span class="sep">·</span>
+    <a href="user-interface.html">Arayüz</a>
+    <span class="sep">·</span>
+    <a href="oyunum.html">Oyunum</a>
+  </nav>
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">GAME DESIGN DOCUMENT <span class="sep">·</span> LEVEL DIFFICULTY ANALİZİ</div>
+      <h1>Görünen Zorluk, Gerçek Zorluk</h1>
+      <div class="sub">Royal Match ve Toon Blast'te zorluğun nasıl kurulduğuna dair, seviye seviye toplanan verilere dayanan bir analiz.</div>
+    </div>
+    <div class="progress">§ 1-11 / 11</div>
+  </header>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 1</div>
+    <h2>Açılış</h2>
+
+    <p>L1-L29 aralığındaki her seviye tek tek incelendi: board'un ilk karesi, <strong>hedef sayısı, verilen hamle, engel katmanları</strong> ve kendi oynayışımdan gelen deneme sayısı ile kalan hamle. Bu veri seti seviye seviye toplanıp bir tabloya işlendi.</p>
+
+    <p>Aşağıdaki grafik her seviyenin <strong>efektif vuruşunu</strong> gösteriyor: engel katmanı × adet toplamından oluşan, tasarımcının o seviyeye gerçekte kurduğu iş yükü. Hedef sayacı bunun çoğu zaman çok daha azını gösteriyor; aradaki fark, ilerleyen bölümlerde tek tek açıklanan zorluk kaldıraçlarından kaynaklanıyor.</p>
+
+    <div class="chart-card">
+      <div class="chart-eyebrow">Efektif Vuruş · L1-L29</div>
+      <div class="chart-svg-wrap" id="difficulty-chart-wrap">
+        <svg id="difficulty-chart" viewBox="0 0 880 360" role="img" aria-label="L1-L29 arası Efektif Vuruş değerlerini gösteren çizgi grafik">
+
+          <g class="chart-grid">
+            <line x1="44" y1="320" x2="860" y2="320"></line>
+            <line x1="44" y1="220.0" x2="860" y2="220.0"></line>
+            <line x1="44" y1="120.0" x2="860" y2="120.0"></line>
+            <line x1="44" y1="20.0" x2="860" y2="20.0"></line>
+          </g>
+          <g class="chart-axis">
+            <text x="36" y="323" text-anchor="end">0</text>
+            <text x="36" y="223.0" text-anchor="end">50</text>
+            <text x="36" y="123.0" text-anchor="end">100</text>
+            <text x="36" y="23.0" text-anchor="end">150</text>
+            <text x="44" y="334" text-anchor="middle">L1</text>
+            <text x="160.6" y="334" text-anchor="middle">L5</text>
+            <text x="306.3" y="334" text-anchor="middle">L10</text>
+            <text x="452" y="334" text-anchor="middle">L15</text>
+            <text x="597.7" y="334" text-anchor="middle">L20</text>
+            <text x="743.4" y="334" text-anchor="middle">L25</text>
+            <text x="860" y="334" text-anchor="middle">L29</text>
+          </g>
+
+          <line class="chart-gap-line" x1="597.7" y1="20" x2="597.7" y2="320"></line>
+          <text class="chart-gap-label" x="597.7" y="13" text-anchor="middle">L20 · Bonus, veri yok</text>
+
+          <path class="chart-area area-vh" d="M44.0,320 L44.0,248.0 L73.1,248.0 L102.3,220.0 L131.4,222.0 L160.6,174.0 L189.7,104.0 L218.9,124.0 L248.0,152.0 L277.1,196.0 L306.3,104.0 L335.4,232.0 L364.6,168.0 L393.7,126.0 L422.9,76.0 L452.0,104.0 L481.1,92.0 L510.3,150.0 L539.4,132.0 L568.6,64.0 L568.6,320 Z"></path>
+          <path class="chart-area area-vh" d="M626.9,320 L626.9,220.0 L656.0,200.0 L685.1,180.0 L714.3,112.0 L743.4,122.0 L772.6,116.0 L801.7,40.0 L830.9,80.0 L860.0,40.0 L860.0,320 Z"></path>
+
+          <path class="chart-line line-vh" d="M44.0,248.0 L73.1,248.0 L102.3,220.0 L131.4,222.0 L160.6,174.0 L189.7,104.0 L218.9,124.0 L248.0,152.0 L277.1,196.0 L306.3,104.0 L335.4,232.0 L364.6,168.0 L393.7,126.0 L422.9,76.0 L452.0,104.0 L481.1,92.0 L510.3,150.0 L539.4,132.0 L568.6,64.0"></path>
+          <path class="chart-line line-vh" d="M626.9,220.0 L656.0,200.0 L685.1,180.0 L714.3,112.0 L743.4,122.0 L772.6,116.0 L801.7,40.0 L830.9,80.0 L860.0,40.0"></path>
+
+          <circle class="chart-dot dot-vh" cx="44.0" cy="248.0" r="4"></circle>
+          <text class="chart-datalabel" x="50" y="238" text-anchor="start">L1, L2 · 36</text>
+
+          <circle class="chart-dot dot-vh" cx="801.7" cy="40.0" r="4"></circle>
+          <text class="chart-datalabel" x="801.7" y="30" text-anchor="middle">L27, L29 · 140</text>
+
+          <line id="difficulty-crosshair" class="chart-crosshair" x1="44" y1="20" x2="44" y2="320"></line>
+          <circle id="difficulty-hoverdot-vh" class="chart-dot dot-vh chart-hoverdot" cx="0" cy="0" r="4"></circle>
+
+          <rect id="difficulty-hit" class="chart-hit" x="44" y="20" width="816" height="300"></rect>
+        </svg>
+
+        <div id="difficulty-tooltip" class="chart-tooltip">
+          <div class="tt-level"></div>
+          <div class="tt-row"><span class="tt-key" style="background:var(--line-vh)"></span><span class="tt-name">Efektif Vuruş</span><span class="tt-val"></span></div>
+        </div>
+      </div>
+
+      <details class="chart-table-toggle">
+        <summary>Veri tablosunu göster</summary>
+        <div class="table-wrap">
+          <table class="arch-table">
+            <thead><tr><th>Lv</th><th>Efektif Vuruş</th></tr></thead>
+            <tbody>
+              <tr><td class="pattern">L1</td><td class="formula">36</td></tr>
+              <tr><td class="pattern">L2</td><td class="formula">36</td></tr>
+              <tr><td class="pattern">L3</td><td class="formula">50</td></tr>
+              <tr><td class="pattern">L4</td><td class="formula">49</td></tr>
+              <tr><td class="pattern">L5</td><td class="formula">73</td></tr>
+              <tr><td class="pattern">L6</td><td class="formula">108</td></tr>
+              <tr><td class="pattern">L7</td><td class="formula">98</td></tr>
+              <tr><td class="pattern">L8</td><td class="formula">84</td></tr>
+              <tr><td class="pattern">L9</td><td class="formula">62</td></tr>
+              <tr><td class="pattern">L10</td><td class="formula">108</td></tr>
+              <tr><td class="pattern">L11</td><td class="formula">44</td></tr>
+              <tr><td class="pattern">L12</td><td class="formula">76</td></tr>
+              <tr><td class="pattern">L13</td><td class="formula">97</td></tr>
+              <tr><td class="pattern">L14</td><td class="formula">122</td></tr>
+              <tr><td class="pattern">L15</td><td class="formula">108</td></tr>
+              <tr><td class="pattern">L16</td><td class="formula">114</td></tr>
+              <tr><td class="pattern">L17</td><td class="formula">85</td></tr>
+              <tr><td class="pattern">L18</td><td class="formula">94</td></tr>
+              <tr><td class="pattern">L19</td><td class="formula">128</td></tr>
+              <tr><td class="pattern">L20</td><td class="note">Bonus, veri yok</td></tr>
+              <tr><td class="pattern">L21</td><td class="formula">50</td></tr>
+              <tr><td class="pattern">L22</td><td class="formula">60</td></tr>
+              <tr><td class="pattern">L23</td><td class="formula">70</td></tr>
+              <tr><td class="pattern">L24</td><td class="formula">104</td></tr>
+              <tr><td class="pattern">L25</td><td class="formula">99</td></tr>
+              <tr><td class="pattern">L26</td><td class="formula">102</td></tr>
+              <tr><td class="pattern">L27</td><td class="formula">140</td></tr>
+              <tr><td class="pattern">L28</td><td class="formula">120</td></tr>
+              <tr><td class="pattern">L29</td><td class="formula">140</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 2</div>
+    <h2>Metrik Tanımları</h2>
+
+    <p>Analiz <strong>beş metrik</strong> üzerine kuruldu:</p>
+
+    <div class="table-wrap">
+      <table class="arch-table">
+        <thead>
+          <tr>
+            <th>Metrik</th>
+            <th>Formül</th>
+            <th>Ne ölçüyor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="pattern">Efektif vuruş</td>
+            <td class="formula">Σ(engel katmanı × adet)</td>
+            <td class="note">Hedef sayacının göstermediği gerçek iş yükü.</td>
+          </tr>
+          <tr>
+            <td class="pattern">Vuruş / hamle</td>
+            <td class="formula">Efektif vuruş ÷ Verilen hamle</td>
+            <td class="note">Tasarımcının kurduğu zorluk.</td>
+          </tr>
+          <tr>
+            <td class="pattern">Naif hedef / hamle</td>
+            <td class="formula">Toplam hedef ÷ Verilen hamle</td>
+            <td class="note">Ekran arayüzünün oyuncuya gösterdiği zorluk.</td>
+          </tr>
+          <tr>
+            <td class="pattern">Hamle marjı %</td>
+            <td class="formula">Kalan hamle ÷ Verilen hamle</td>
+            <td class="note">Tek denemede kalan bolluk.</td>
+          </tr>
+          <tr>
+            <td class="pattern">Yaşanan zorluk</td>
+            <td class="formula">Deneme sayısı + hamle marjı</td>
+            <td class="note">Otomatik sınıflama: Deneme≥3 Çok zor, =2 Zor, tek denemede marj≥%25 Kolay, ≥%10 Orta, &lt;%10 Kıl payı.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Not:</strong> Yaşanan zorluk verisi tek bir oyuncunun (kendi) oynayışından geliyor, genel bir oyuncu kitlesinin ortalaması değil. Amaç evrensel bir zorluk skoru üretmek değil, sayısal metriklerin (Vuruş/hamle, Naif hedef/hamle) hissedilen zorluğu ne kadar iyi öngördüğünü test etmek.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 3</div>
+    <h2>Sessiz Zorluk Kaldıraçları</h2>
+
+    <p>Tasarımcının <strong>Verilen hamle</strong>'yi sabit veya yumuşak tutup zorluğu başka yollarla ayarladığı, oynanıştan doğrulanmış <strong>yedi yöntem</strong>. Her biri, "Vuruş / hamle" ile "Naif hedef / hamle" arasındaki farkı büyütüyor.</p>
+
+    <div class="lever-list">
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l3.png" alt="L3 board"><figcaption>L3</figcaption></figure>
+          <figure><img src="assets/board_l6.png" alt="L6 board"><figcaption>L6</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">01</span><span class="lever-title">Engel katmanı</span>
+          <p>Taçlı kutudan perçinliye, açık çimenden koyuya geçmek efektif vuruşu <strong>ikiye katlıyor</strong>, ama hedef sayısında bir değişiklik yaşanmıyor.</p>
+          <span class="lever-example">L3, L6</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media icon">
+          <figure><img src="assets/elmas.jpg" alt="Pembe elmas"><figcaption>Elmas</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">02</span><span class="lever-title">Renk sayısı</span>
+          <p>Board'daki <strong>renk sayısı</strong> 4 ile 5 arasında sessizce açılıp kapanıyor, hamle veya hedef sayısına dokunmadan zorluğu değiştiriyor.</p>
+          <span class="lever-example">L4'te açılıyor, L7'de kapanıyor</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l7.png" alt="L7 board"><figcaption>L7</figcaption></figure>
+          <figure><img src="assets/board_l13.png" alt="L13 board"><figcaption>L13</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">03</span><span class="lever-title">Board şekli</span>
+          <p>Serbest alanın darlığı güçlü power-up'ların (lightball, roket, TNT) <strong>üretilmesini engelliyor</strong>, oyuncunun araç setini fakirleştiriyor.</p>
+          <span class="lever-example">L7, L13</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l1.png" alt="L1 board"><figcaption>L1</figcaption></figure>
+          <figure><img src="assets/board_l2.png" alt="L2 board"><figcaption>L2</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">04</span><span class="lever-title">Engel dizilimi</span>
+          <p>Aynı hedef sayısı farklı bir <strong>geometriye</strong> yerleştirilerek zorluk, hamle sayısına dokunmadan değiştirilebiliyor.</p>
+          <span class="lever-example">L1 vs L2 (ikisi de 36 kutu hedefli)</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l6.png" alt="L6 board"><figcaption>L6</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">05</span><span class="lever-title">Bölgesel maliyet asimetrisi</span>
+          <p>Aynı boyuttaki iki bölge farklı katman maliyetiyle kurulup board'u <strong>eşit olmayan</strong> iki kaynak havuzuna bölüyor.</p>
+          <span class="lever-example">L6</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l10.png" alt="L10 board"><figcaption>L10</figcaption></figure>
+          <figure><img src="assets/board_l15.png" alt="L15 board"><figcaption>L15</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">06</span><span class="lever-title">Engel katmanlama</span>
+          <p>Aynı hücrede iki farklı engel <strong>üst üste</strong> bulunuyor; hedef sayacı ikisini birden gösteriyor ama görsel bunu her zaman ele vermeyebiliyor.</p>
+          <span class="lever-example">L10, L15</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media icon">
+          <figure><img src="assets/obs_posta.jpg" alt="Posta Kutusu"><figcaption>Posta Kutusu</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">07</span><span class="lever-title">Fiziksel-adet / hedef oranı</span>
+          <p>Statik üretici ailesinde (posta kutusu gibi) aynı hedefe <strong>daha az fiziksel segmentle</strong> ulaşmak, aynı segmentlere daha sık geri dönmeyi gerektirip zorluğu yükseltiyor.</p>
+          <span class="lever-example">L21, L30</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 4</div>
+    <h2>Tasarlanmış vs Yaşanan Ayrışması</h2>
+
+    <p>Vuruş/hamle bir seviyenin ne kadar zor <strong>kurulduğunu</strong> ölçüyor. Ama <strong>Yaşanan zorluk</strong> (kendi oynayışımdan gelen deneme sayısı ve hamle marjı) her zaman aynı sırayla gitmiyor. Aşağıdaki dört seviye, bu iki eksenin ayrıştığı ya da uyuştuğu noktaları gösteriyor.</p>
+
+    <div class="lever-list">
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l7.png" alt="L7 board"><figcaption>L7</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L7</span>
+          <p>Yüksek iş yükü, ama hamle bütçesi <strong>fazlasıyla tolere ediyor</strong>, tek denemede rahat geçiliyor.</p>
+          <span class="tag-designed">Tasarlanmış: 3.92 (yüksek)</span>
+          <span class="tag-felt">Yaşanan: Kolay, tek deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l23.png" alt="L23 board"><figcaption>L23</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L23</span>
+          <p>Orta düzeyde tasarlanmış bir zorluk, oynanışta <strong>beklenenden daha dirençli</strong> çıktı.</p>
+          <span class="tag-designed">Tasarlanmış: 3.50 (orta)</span>
+          <span class="tag-felt">Yaşanan: Zor, 2 deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l27.png" alt="L27 board"><figcaption>L27</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L27</span>
+          <p><strong>Veri setindeki en ağır tasarım</strong>, ama "Çok zor" eşiğine varmadı çünkü hamle bütçesi bir kısmını dengeliyor.</p>
+          <span class="tag-designed">Tasarlanmış: 6.67 (en yüksek)</span>
+          <span class="tag-felt">Yaşanan: Zor, 2 deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/board_l19.png" alt="L19 board"><figcaption>L19</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L19</span>
+          <p>Tasarlanmış ve yaşanan zorluk burada <strong>uyumlu</strong>: ikisi de veri setinin zirvesinde buluşuyor.</p>
+          <span class="tag-designed">Tasarlanmış: 4.74 (yüksek)</span>
+          <span class="tag-felt">Yaşanan: Çok zor, 3 deneme</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Efektif Vuruş ile Hamle Marjı arasında bir yön var mı</div>
+      <p>Yukarıdaki örnekler tek tek anlatıyor, bu grafik hepsini birden gösteriyor: her nokta bir seviye, X ekseni o seviyenin efektif vuruşu (tasarlanmış iş yükü), Y ekseni kalan hamle marjı (yaşanan bolluk). Kesikli çizgi eğilim doğrusu.</p>
+
+      <div class="chart-card">
+        <div class="chart-eyebrow">Efektif Vuruş vs Hamle Marjı % · L1-L29</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 880 380" role="img" aria-label="Royal Match L1-L29 için Efektif Vuruş ile Hamle Marjı yüzdesi arasındaki ilişkiyi gösteren saçılım grafiği">
+            <g class="chart-grid">
+              <line x1="54" y1="340" x2="860" y2="340"></line>
+              <line x1="54" y1="260" x2="860" y2="260"></line>
+              <line x1="54" y1="180" x2="860" y2="180"></line>
+              <line x1="54" y1="100" x2="860" y2="100"></line>
+              <line x1="54" y1="20" x2="860" y2="20"></line>
+            </g>
+            <g class="chart-axis">
+              <text x="46" y="343" text-anchor="end">%0</text>
+              <text x="46" y="263" text-anchor="end">%20</text>
+              <text x="46" y="183" text-anchor="end">%40</text>
+              <text x="46" y="103" text-anchor="end">%60</text>
+              <text x="46" y="23" text-anchor="end">%80</text>
+              <text x="54" y="358" text-anchor="middle">0</text>
+              <text x="322.7" y="358" text-anchor="middle">50</text>
+              <text x="591.3" y="358" text-anchor="middle">100</text>
+              <text x="860" y="358" text-anchor="middle">150</text>
+              <text x="457" y="374" text-anchor="middle">Efektif Vuruş</text>
+            </g>
+
+            <line class="scatter-trend" x1="54" y1="47.0" x2="860" y2="305.3"></line>
+
+            <circle class="scatter-dot" cx="247.4" cy="60.0" r="5"><title>L1: Efektif Vuruş 36, Hamle Marjı %70</title></circle>
+            <circle class="scatter-dot" cx="247.4" cy="73.3" r="5"><title>L2: Efektif Vuruş 36, Hamle Marjı %67</title></circle>
+            <circle class="scatter-dot" cx="322.7" cy="103.0" r="5"><title>L3: Efektif Vuruş 50, Hamle Marjı %59</title></circle>
+            <circle class="scatter-dot" cx="317.3" cy="153.3" r="5"><title>L4: Efektif Vuruş 49, Hamle Marjı %47</title></circle>
+            <circle class="scatter-dot" cx="446.3" cy="73.3" r="5"><title>L5: Efektif Vuruş 73, Hamle Marjı %67</title></circle>
+            <circle class="scatter-dot" cx="634.3" cy="294.3" r="5"><title>L6: Efektif Vuruş 108, Hamle Marjı %11</title></circle>
+            <circle class="scatter-dot" cx="580.6" cy="212.0" r="5"><title>L7: Efektif Vuruş 98, Hamle Marjı %32</title></circle>
+            <circle class="scatter-dot" cx="505.4" cy="191.8" r="5"><title>L8: Efektif Vuruş 84, Hamle Marjı %37</title></circle>
+            <circle class="scatter-dot" cx="387.1" cy="113.3" r="5"><title>L9: Efektif Vuruş 62, Hamle Marjı %57</title></circle>
+            <circle class="scatter-dot" cx="634.3" cy="102.5" r="5"><title>L10: Efektif Vuruş 108, Hamle Marjı %59</title></circle>
+            <circle class="scatter-dot" cx="290.4" cy="162.2" r="5"><title>L11: Efektif Vuruş 44, Hamle Marjı %44</title></circle>
+            <circle class="scatter-dot" cx="462.4" cy="166.7" r="5"><title>L12: Efektif Vuruş 76, Hamle Marjı %43</title></circle>
+            <circle class="scatter-dot" cx="575.2" cy="180.0" r="5"><title>L13: Efektif Vuruş 97, Hamle Marjı %40</title></circle>
+            <circle class="scatter-dot" cx="709.5" cy="251.1" r="5"><title>L14: Efektif Vuruş 122, Hamle Marjı %22</title></circle>
+            <circle class="scatter-dot" cx="634.3" cy="235.6" r="5"><title>L15: Efektif Vuruş 108, Hamle Marjı %26</title></circle>
+            <circle class="scatter-dot" cx="666.6" cy="237.2" r="5"><title>L16: Efektif Vuruş 114, Hamle Marjı %26</title></circle>
+            <circle class="scatter-dot" cx="510.7" cy="270.4" r="5"><title>L17: Efektif Vuruş 85, Hamle Marjı %17</title></circle>
+            <circle class="scatter-dot" cx="559.1" cy="340.0" r="5"><title>L18: Efektif Vuruş 94, Hamle Marjı %0</title></circle>
+            <circle class="scatter-dot" cx="741.8" cy="251.1" r="5"><title>L19: Efektif Vuruş 128, Hamle Marjı %22</title></circle>
+            <circle class="scatter-dot" cx="322.7" cy="140.0" r="5"><title>L21: Efektif Vuruş 50, Hamle Marjı %50</title></circle>
+            <circle class="scatter-dot" cx="376.4" cy="212.0" r="5"><title>L22: Efektif Vuruş 60, Hamle Marjı %32</title></circle>
+            <circle class="scatter-dot" cx="430.1" cy="180.0" r="5"><title>L23: Efektif Vuruş 70, Hamle Marjı %40</title></circle>
+            <circle class="scatter-dot" cx="612.8" cy="170.8" r="5"><title>L24: Efektif Vuruş 104, Hamle Marjı %42</title></circle>
+            <circle class="scatter-dot" cx="586.0" cy="324.6" r="5"><title>L25: Efektif Vuruş 99, Hamle Marjı %4</title></circle>
+            <circle class="scatter-dot" cx="602.1" cy="270.4" r="5"><title>L26: Efektif Vuruş 102, Hamle Marjı %17</title></circle>
+            <circle class="scatter-dot" cx="806.3" cy="301.9" r="5"><title>L27: Efektif Vuruş 140, Hamle Marjı %10</title></circle>
+            <circle class="scatter-dot" cx="698.8" cy="232.3" r="5"><title>L28: Efektif Vuruş 120, Hamle Marjı %27</title></circle>
+            <circle class="scatter-dot" cx="806.3" cy="244.0" r="5"><title>L29: Efektif Vuruş 140, Hamle Marjı %24</title></circle>
+
+            <text class="chart-datalabel" x="559.1" y="356" text-anchor="middle">L18</text>
+            <text class="chart-datalabel" x="247.4" y="50" text-anchor="middle">L1, L2</text>
+          </svg>
+        </div>
+
+        <details class="chart-table-toggle">
+          <summary>Veri tablosunu göster</summary>
+          <div class="table-wrap">
+            <table class="arch-table">
+              <thead><tr><th>Lv</th><th>Efektif Vuruş</th><th>Hamle Marjı</th></tr></thead>
+              <tbody>
+                <tr><td class="pattern">L1</td><td class="formula">36</td><td class="formula">%70</td></tr>
+                <tr><td class="pattern">L2</td><td class="formula">36</td><td class="formula">%67</td></tr>
+                <tr><td class="pattern">L3</td><td class="formula">50</td><td class="formula">%59</td></tr>
+                <tr><td class="pattern">L4</td><td class="formula">49</td><td class="formula">%47</td></tr>
+                <tr><td class="pattern">L5</td><td class="formula">73</td><td class="formula">%67</td></tr>
+                <tr><td class="pattern">L6</td><td class="formula">108</td><td class="formula">%11</td></tr>
+                <tr><td class="pattern">L7</td><td class="formula">98</td><td class="formula">%32</td></tr>
+                <tr><td class="pattern">L8</td><td class="formula">84</td><td class="formula">%37</td></tr>
+                <tr><td class="pattern">L9</td><td class="formula">62</td><td class="formula">%57</td></tr>
+                <tr><td class="pattern">L10</td><td class="formula">108</td><td class="formula">%59</td></tr>
+                <tr><td class="pattern">L11</td><td class="formula">44</td><td class="formula">%44</td></tr>
+                <tr><td class="pattern">L12</td><td class="formula">76</td><td class="formula">%43</td></tr>
+                <tr><td class="pattern">L13</td><td class="formula">97</td><td class="formula">%40</td></tr>
+                <tr><td class="pattern">L14</td><td class="formula">122</td><td class="formula">%22</td></tr>
+                <tr><td class="pattern">L15</td><td class="formula">108</td><td class="formula">%26</td></tr>
+                <tr><td class="pattern">L16</td><td class="formula">114</td><td class="formula">%26</td></tr>
+                <tr><td class="pattern">L17</td><td class="formula">85</td><td class="formula">%17</td></tr>
+                <tr><td class="pattern">L18</td><td class="formula">94</td><td class="formula">%0</td></tr>
+                <tr><td class="pattern">L19</td><td class="formula">128</td><td class="formula">%22</td></tr>
+                <tr><td class="pattern">L21</td><td class="formula">50</td><td class="formula">%50</td></tr>
+                <tr><td class="pattern">L22</td><td class="formula">60</td><td class="formula">%32</td></tr>
+                <tr><td class="pattern">L23</td><td class="formula">70</td><td class="formula">%40</td></tr>
+                <tr><td class="pattern">L24</td><td class="formula">104</td><td class="formula">%42</td></tr>
+                <tr><td class="pattern">L25</td><td class="formula">99</td><td class="formula">%4</td></tr>
+                <tr><td class="pattern">L26</td><td class="formula">102</td><td class="formula">%17</td></tr>
+                <tr><td class="pattern">L27</td><td class="formula">140</td><td class="formula">%10</td></tr>
+                <tr><td class="pattern">L28</td><td class="formula">120</td><td class="formula">%27</td></tr>
+                <tr><td class="pattern">L29</td><td class="formula">140</td><td class="formula">%24</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <p>Yön var: <strong>Pearson korelasyonu r ≈ -0.68</strong>, yani efektif vuruş arttıkça hamle marjı genel olarak azalıyor, beklenen yönde orta-güçlü bir ilişki. Ama ilişki mükemmel değil (r = -1 olsaydı öyle olurdu): L10 gibi yüksek iş yüküne (108) rağmen geniş marj (%59) bırakılan seviyeler var, L18 gibi orta düzey iş yüküyle (94) marjı sıfıra kadar düşüren seviyeler de. Yani tasarımcı hamle marjını <strong>sadece iş yüküne bakarak belirlemiyor, üstüne ayrıca ince ayar yapıyor</strong>; bu ince ayarda board yapısı ve renk sayısı gibi başka tasarım değişkenlerinin de payı olabilir.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Çıkarım:</strong> Vuruş/hamle tek başına "ne kadar zor hissedileceğinin" güvenilir bir göstergesi değil, çünkü hamle bütçesinin cömertliği bu ilişkiyi kolayca tersine çevirebiliyor.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 5</div>
+    <h2>Genel İstatistik Özeti</h2>
+
+    <p>L1-L29 aralığının rekorları ve dağılımı.</p>
+
+    <div class="stat-row">
+      <div class="stat-tile">
+        <div class="stat-label">En düşük Vuruş / hamle</div>
+        <div class="stat-value">1.20</div>
+        <div class="stat-sub">L1, ilk tutorial seviyesi</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">En yüksek Vuruş / hamle</div>
+        <div class="stat-value">6.67</div>
+        <div class="stat-sub">L27</div>
+      </div>
+    </div>
+
+    <p>Rekor L1'den sonra iki kez değişti: önce L15 (4.70), sonra L19 (4.74) zirveye çıktı. <strong>L27'nin 6.67'si</strong> ikisini de aşıyor.</p>
+
+    <div class="prop-block">
+      <div class="prop-heading">Zorluk İniş Çıkışı</div>
+      <p>Bu grafik yeni bir veri değil, yukarıdaki Vuruş/hamle sayılarının art arda kıyaslanmış hali. Her seviye için şu hesap yapıldı: <strong>o seviyenin Vuruş/hamle'si, bir önceki seviyenin Vuruş/hamle'sinden çıkarıldı.</strong> Sonuç pozitifse (yukarı çıkan altın çubuk) o seviye bir öncekinden daha zor kurulmuş demektir, negatifse (aşağı inen teal çubuk) daha kolay kurulmuş demektir.</p>
+      <p>Örnek: L26'nın Vuruş/hamle'si 4.43, L27'ninki 6.67. <code>6.67 - 4.43 = +2.24</code>, yani L27, L26'ya göre belirgin biçimde zorlaşmış. Hemen ardından L28'in Vuruş/hamle'si 4.62'ye düşüyor: <code>4.62 - 6.67 = -2.05</code>, yani L28, L27'ye göre belirgin biçimde kolaylaşmış. Grafikteki en uzun iki çubuk (en sağdaki altın ve teal çubuklar) tam bu iki geçişi gösteriyor.</p>
+      <p>Sıfır çizgisi "bir öncekiyle aynı zorlukta" noktası; bir çubuk ne kadar uzunsa, o seviye bir öncekine göre o kadar büyük bir sıçrama yapmış demektir. Düz bir tırmanış yerine böyle <strong>inişli çıkışlı bir ritim</strong>, oyuncuya art arda zorluk yığmamak için kullanılan bir yöntem.</p>
+
+      <div class="chart-card">
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 880 300" role="img" aria-label="L2-L29 arası, bir önceki seviyeye göre Vuruş/hamle değişimini gösteren çubuk grafik">
+            <line class="delta-zero" x1="44" y1="142" x2="860" y2="142"></line>
+
+            <g class="delta-axis">
+              <text x="44" y="15" text-anchor="middle">L2</text>
+              <text x="152.6" y="15" text-anchor="middle">L5</text>
+              <text x="298.3" y="15" text-anchor="middle">L10</text>
+              <text x="444.0" y="15" text-anchor="middle">L15</text>
+              <text x="568.6" y="15" text-anchor="middle">L19</text>
+              <text x="656.0" y="15" text-anchor="middle">L22</text>
+              <text x="735.4" y="15" text-anchor="middle">L25</text>
+              <text x="860" y="15" text-anchor="middle">L29</text>
+            </g>
+
+            <line class="delta-gap-line" x1="608" y1="20" x2="608" y2="264"></line>
+            <text class="delta-gap-label" x="608" y="278" text-anchor="middle">L20, L21: kıyas yok</text>
+
+            <rect class="delta-bar rise" x="65.1" y="135.7" width="16" height="6.3"></rect>
+            <rect class="delta-bar rise" x="94.3" y="116.6" width="16" height="25.4"></rect>
+            <rect class="delta-bar fall" x="123.4" y="142.0" width="16" height="10.7"></rect>
+            <rect class="delta-bar rise" x="152.6" y="103.0" width="16" height="39.0"></rect>
+            <rect class="delta-bar rise" x="181.7" y="109.8" width="16" height="32.2"></rect>
+            <rect class="delta-bar rise" x="210.9" y="101.5" width="16" height="40.5"></rect>
+            <rect class="delta-bar fall" x="240.0" y="142.0" width="16" height="39.5"></rect>
+            <rect class="delta-bar fall" x="269.1" y="142.0" width="16" height="50.8"></rect>
+            <rect class="delta-bar rise" x="298.3" y="78.1" width="16" height="63.9"></rect>
+            <rect class="delta-bar fall" x="327.4" y="142.0" width="16" height="85.4"></rect>
+            <rect class="delta-bar rise" x="356.6" y="98.1" width="16" height="43.9"></rect>
+            <rect class="delta-bar rise" x="385.7" y="107.8" width="16" height="34.2"></rect>
+            <rect class="delta-bar rise" x="414.9" y="79.0" width="16" height="63.0"></rect>
+            <rect class="delta-bar rise" x="444.0" y="133.2" width="16" height="8.8"></rect>
+            <rect class="delta-bar fall" x="473.1" y="142.0" width="16" height="70.3"></rect>
+            <rect class="delta-bar rise" x="502.3" y="120.5" width="16" height="21.5"></rect>
+            <rect class="delta-bar rise" x="531.4" y="131.3" width="16" height="10.7"></rect>
+            <rect class="delta-bar rise" x="560.6" y="102.0" width="16" height="40.0"></rect>
+
+            <rect class="delta-bar rise" x="648.0" y="112.2" width="16" height="29.8"></rect>
+            <rect class="delta-bar rise" x="677.1" y="88.3" width="16" height="53.7"></rect>
+            <rect class="delta-bar rise" x="706.3" y="117.6" width="16" height="24.4"></rect>
+            <rect class="delta-bar fall" x="735.4" y="142.0" width="16" height="9.3"></rect>
+            <rect class="delta-bar rise" x="764.6" y="111.7" width="16" height="30.3"></rect>
+            <rect class="delta-bar rise" x="793.7" y="32.7" width="16" height="109.3"></rect>
+            <rect class="delta-bar fall" x="822.9" y="142.0" width="16" height="100.0"></rect>
+            <rect class="delta-bar rise" x="852.0" y="94.2" width="16" height="47.8"></rect>
+
+            <text class="delta-datalabel rise" x="801.7" y="27" text-anchor="middle">+2.24</text>
+            <text class="delta-datalabel fall" x="830.9" y="257" text-anchor="middle">-2.05</text>
+          </svg>
+        </div>
+
+        <div class="delta-legend">
+          <div class="legend-item"><span class="legend-key" style="background:var(--line-vh)"></span>Zorlaştı (bir önceki seviyeye göre)</div>
+          <div class="legend-item"><span class="legend-key" style="background:var(--delta-fall)"></span>Rahatladı (bir önceki seviyeye göre)</div>
+        </div>
+
+        <details class="chart-table-toggle">
+          <summary>Veri tablosunu göster</summary>
+          <div class="table-wrap">
+            <table class="arch-table">
+              <thead><tr><th>Geçiş</th><th>Değişim</th></tr></thead>
+              <tbody>
+                <tr><td class="pattern">L1 → L2</td><td class="formula">+0.13</td></tr>
+                <tr><td class="pattern">L2 → L3</td><td class="formula">+0.52</td></tr>
+                <tr><td class="pattern">L3 → L4</td><td class="formula">-0.22</td></tr>
+                <tr><td class="pattern">L4 → L5</td><td class="formula">+0.80</td></tr>
+                <tr><td class="pattern">L5 → L6</td><td class="formula">+0.66</td></tr>
+                <tr><td class="pattern">L6 → L7</td><td class="formula">+0.83</td></tr>
+                <tr><td class="pattern">L7 → L8</td><td class="formula">-0.81</td></tr>
+                <tr><td class="pattern">L8 → L9</td><td class="formula">-1.04</td></tr>
+                <tr><td class="pattern">L9 → L10</td><td class="formula">+1.31</td></tr>
+                <tr><td class="pattern">L10 → L11</td><td class="formula">-1.75</td></tr>
+                <tr><td class="pattern">L11 → L12</td><td class="formula">+0.90</td></tr>
+                <tr><td class="pattern">L12 → L13</td><td class="formula">+0.70</td></tr>
+                <tr><td class="pattern">L13 → L14</td><td class="formula">+1.29</td></tr>
+                <tr><td class="pattern">L14 → L15</td><td class="formula">+0.18</td></tr>
+                <tr><td class="pattern">L15 → L16</td><td class="formula">-1.44</td></tr>
+                <tr><td class="pattern">L16 → L17</td><td class="formula">+0.44</td></tr>
+                <tr><td class="pattern">L17 → L18</td><td class="formula">+0.22</td></tr>
+                <tr><td class="pattern">L18 → L19</td><td class="formula">+0.82</td></tr>
+                <tr><td class="pattern">L19 → L20 → L21</td><td class="note">L20'de veri yok, kıyas yapılamıyor</td></tr>
+                <tr><td class="pattern">L21 → L22</td><td class="formula">+0.61</td></tr>
+                <tr><td class="pattern">L22 → L23</td><td class="formula">+1.10</td></tr>
+                <tr><td class="pattern">L23 → L24</td><td class="formula">+0.50</td></tr>
+                <tr><td class="pattern">L24 → L25</td><td class="formula">-0.19</td></tr>
+                <tr><td class="pattern">L25 → L26</td><td class="formula">+0.62</td></tr>
+                <tr><td class="pattern">L26 → L27</td><td class="formula">+2.24</td></tr>
+                <tr><td class="pattern">L27 → L28</td><td class="formula">-2.05</td></tr>
+                <tr><td class="pattern">L28 → L29</td><td class="formula">+0.98</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <p>En sert tırmanış L26'dan L27'ye (+2.24), en sert rahatlama ise hemen ardından L27'den L28'e (-2.05). Yani veri setindeki en zor seviyenin hemen arkasından, o zamana kadarki en büyük tek seferlik rahatlama geliyor: <strong>zirve, bir sonraki seviyede kasten geri çekiliyor</strong>.</p>
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Yaşanan Zorluk Dağılımı</div>
+      <div class="prop-bar">
+        <div class="prop-seg" style="width:83%; background:var(--accent-soft); color:var(--accent-strong);">24 · Kolay / Orta</div>
+        <div class="prop-seg on-accent" style="width:17%; background:var(--accent-strong);">5</div>
+      </div>
+      <div class="prop-legend">
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--accent-soft)"></span>Kolay / Orta: 24 seviye (L20 dahil)</div>
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--accent-strong)"></span>Zor ve üzeri: 5 seviye</div>
+      </div>
+      <div class="prop-callouts">
+        <span class="lever-example">Çok zor, 3 deneme: L19</span>
+        <span class="lever-example">Zor, 2 deneme: L23, L27</span>
+        <span class="lever-example">Kıl payı, marj %10 altı: L18, L25</span>
+      </div>
+      <div class="callout">
+        Bu dağılım tek bir oyuncunun, kendi oynayışıma dayanıyor. Genel bir oyuncu kitlesinin ortalaması değil. Deneme sayısı ve hamle marjı burada benim oynayış tarzımı ve şansımı da taşıyor, başka biri aynı seviyeleri farklı bir sırayla, farklı bir sonuçla geçebilir. Vuruş/hamle ve Naif hedef/hamle bunun aksine tamamen tasarımdan geliyor, kimin oynadığından bağımsız.
+      </div>
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Kısıt Tipi Dağılımı</div>
+      <p>Kısıt tipi, bir levelin başlangıçtaki serbest alanı ile tüm engeller temizlendiğinde ulaşılan serbest alanı karşılaştırarak hesaplanıyor. İkisi arasında fark yoksa board'un kendisi dar demektir, bu <strong>Kalıcı (geometri)</strong>. Fark varsa engeller kırıldıkça board açılıyor demektir, bu <strong>Geçici (engel)</strong>. İkisi de dolaylı bir zorluk bileşeni: Geçici bir levelde oyuncu ilerledikçe nefes alıyor, Kalıcı bir levelde o darlıkla baştan sona oynuyor.</p>
+
+      <div class="lever-list">
+        <div class="lever-row">
+          <div class="lever-media">
+            <figure><img src="assets/board_l6.png" alt="L6 board"><figcaption>L6</figcaption></figure>
+          </div>
+          <div class="lever-body">
+            <span class="lever-num">Kalıcı</span>
+            <p>İki tahta arasındaki boşluk <strong>hiçbir zaman kapanmıyor</strong>, çünkü orada kırılacak bir engel yok, board bu şekilde oyulmuş. Seviye boyunca aynı dar geometriyle oynanıyor.</p>
+          </div>
+        </div>
+        <div class="lever-row">
+          <div class="lever-media">
+            <figure><img src="assets/board_l10.png" alt="L10 board"><figcaption>L10</figcaption></figure>
+          </div>
+          <div class="lever-body">
+            <span class="lever-num">Geçici</span>
+            <p>Ortadaki 3 sütunluk darlığı sandıklar yaratıyor. Sandıklar kırıldıkça bölge <strong>açılıyor</strong>, seviyenin sonuna doğru board başlangıçtakinden daha ferah hale geliyor.</p>
+          </div>
+        </div>
+      </div>
+
+      <p>L20 (Bonus Bölüm) hedef/hamle yapısı olmadığı için bu dağılıma dahil değil, geri kalan 28 Normal seviye üzerinden hesaplandı.</p>
+      <div class="prop-bar">
+        <div class="prop-seg on-accent" style="width:61%; background:var(--kisit-gecici);">17 · Geçici</div>
+        <div class="prop-seg on-accent" style="width:39%; background:var(--kisit-kalici);">11 · Kalıcı</div>
+      </div>
+      <div class="prop-legend">
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--kisit-gecici)"></span>Geçici (engel): 17 seviye, engeller kırıldıkça board açılıyor</div>
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--kisit-kalici)"></span>Kalıcı (geometri): 11 seviye, board hiç açılmıyor</div>
+      </div>
+      <p>Board'un kendi şeklinin darlığı ile engellerin yarattığı geçici darlık yaklaşık <strong>40/60 oranında</strong> dağılmış: tasarımcı zorluğun bir kısmını sabit geometriyle, çoğunu ise engellerle kuruyor.</p>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 6</div>
+    <h2>Toon Blast, Açılış</h2>
+
+    <p>Royal Match'te L20 (Bonus Bölüm) hedef/hamle yapısı olmadığı için tamamen dışlanmıştı. Toon Blast'ta L20 gerçek bir hedef/hamle yapısına sahip, ama 500 hedefli tek renkli özel bir tasarım olduğu için efektif vuruşu <strong>500'e fırlıyor</strong>, aralığın geri kalanından kopuk bir aykırı değer. Bu yüzden dışlanmadı ama grafikte ayrı bir not olarak işaretlendi.</p>
+
+    <div class="chart-card">
+      <div class="chart-eyebrow">Toon Blast · Efektif Vuruş · L1-L29</div>
+      <div class="chart-svg-wrap" id="tb-chart-wrap">
+        <svg id="tb-chart" viewBox="0 0 880 360" role="img" aria-label="Toon Blast L1-L29 arası Efektif Vuruş değerlerini gösteren çizgi grafik">
+
+          <g class="chart-grid">
+            <line x1="44" y1="320" x2="860" y2="320"></line>
+            <line x1="44" y1="245.0" x2="860" y2="245.0"></line>
+            <line x1="44" y1="170.0" x2="860" y2="170.0"></line>
+            <line x1="44" y1="95.0" x2="860" y2="95.0"></line>
+            <line x1="44" y1="20.0" x2="860" y2="20.0"></line>
+          </g>
+          <g class="chart-axis">
+            <text x="36" y="323" text-anchor="end">0</text>
+            <text x="36" y="248.0" text-anchor="end">125</text>
+            <text x="36" y="173.0" text-anchor="end">250</text>
+            <text x="36" y="98.0" text-anchor="end">375</text>
+            <text x="36" y="23.0" text-anchor="end">500</text>
+            <text x="44" y="334" text-anchor="middle">L1</text>
+            <text x="160.6" y="334" text-anchor="middle">L5</text>
+            <text x="306.3" y="334" text-anchor="middle">L10</text>
+            <text x="452" y="334" text-anchor="middle">L15</text>
+            <text x="597.7" y="334" text-anchor="middle">L20</text>
+            <text x="743.4" y="334" text-anchor="middle">L25</text>
+            <text x="860" y="334" text-anchor="middle">L29</text>
+          </g>
+
+          <path class="chart-area area-vh" d="M44.0,320 L44.0,276.8 L73.1,276.8 L102.3,248.0 L131.4,290.6 L160.6,287.6 L189.7,278.6 L218.9,255.2 L248.0,276.8 L277.1,271.4 L306.3,252.8 L335.4,305.0 L364.6,298.4 L393.7,286.4 L422.9,287.6 L452.0,249.8 L481.1,288.8 L510.3,264.8 L539.4,243.2 L568.6,266.0 L597.7,20.0 L626.9,269.0 L656.0,273.2 L685.1,260.6 L714.3,230.0 L743.4,200.0 L772.6,158.0 L801.7,260.6 L830.9,261.8 L860.0,261.8 L860.0,320 Z"></path>
+
+          <path class="chart-line line-vh" d="M44.0,276.8 L73.1,276.8 L102.3,248.0 L131.4,290.6 L160.6,287.6 L189.7,278.6 L218.9,255.2 L248.0,276.8 L277.1,271.4 L306.3,252.8 L335.4,305.0 L364.6,298.4 L393.7,286.4 L422.9,287.6 L452.0,249.8 L481.1,288.8 L510.3,264.8 L539.4,243.2 L568.6,266.0 L597.7,20.0 L626.9,269.0 L656.0,273.2 L685.1,260.6 L714.3,230.0 L743.4,200.0 L772.6,158.0 L801.7,260.6 L830.9,261.8 L860.0,261.8"></path>
+
+          <circle class="chart-dot dot-vh" cx="335.4" cy="305.0" r="4"></circle>
+          <text class="chart-datalabel" x="341" y="315" text-anchor="start">L11 · 25</text>
+
+          <circle class="chart-dot dot-vh" cx="597.7" cy="20.0" r="4"></circle>
+          <text class="chart-datalabel" x="597.7" y="14" text-anchor="middle">L20 · 500 (aykırı değer)</text>
+
+          <circle class="chart-dot dot-vh" cx="772.6" cy="158.0" r="4"></circle>
+          <text class="chart-datalabel" x="772.6" y="148" text-anchor="middle">L26 · 270</text>
+
+          <line id="tb-crosshair" class="chart-crosshair" x1="44" y1="20" x2="44" y2="320"></line>
+          <circle id="tb-hoverdot-vh" class="chart-dot dot-vh chart-hoverdot" cx="0" cy="0" r="4"></circle>
+
+          <rect id="tb-hit" class="chart-hit" x="44" y="20" width="816" height="300"></rect>
+        </svg>
+
+        <div id="tb-tooltip" class="chart-tooltip">
+          <div class="tt-level"></div>
+          <div class="tt-row"><span class="tt-key" style="background:var(--line-vh)"></span><span class="tt-name">Efektif Vuruş</span><span class="tt-val"></span></div>
+        </div>
+      </div>
+
+      <details class="chart-table-toggle">
+        <summary>Veri tablosunu göster</summary>
+        <div class="table-wrap">
+          <table class="arch-table">
+            <thead><tr><th>Lv</th><th>Efektif Vuruş</th></tr></thead>
+            <tbody>
+              <tr><td class="pattern">L1</td><td class="formula">72</td></tr>
+              <tr><td class="pattern">L2</td><td class="formula">72</td></tr>
+              <tr><td class="pattern">L3</td><td class="formula">120</td></tr>
+              <tr><td class="pattern">L4</td><td class="formula">49</td></tr>
+              <tr><td class="pattern">L5</td><td class="formula">54</td></tr>
+              <tr><td class="pattern">L6</td><td class="formula">69</td></tr>
+              <tr><td class="pattern">L7</td><td class="formula">108</td></tr>
+              <tr><td class="pattern">L8</td><td class="formula">72</td></tr>
+              <tr><td class="pattern">L9</td><td class="formula">81</td></tr>
+              <tr><td class="pattern">L10</td><td class="formula">112</td></tr>
+              <tr><td class="pattern">L11</td><td class="formula">25</td></tr>
+              <tr><td class="pattern">L12</td><td class="formula">36</td></tr>
+              <tr><td class="pattern">L13</td><td class="formula">56</td></tr>
+              <tr><td class="pattern">L14</td><td class="formula">54</td></tr>
+              <tr><td class="pattern">L15</td><td class="formula">117</td></tr>
+              <tr><td class="pattern">L16</td><td class="formula">52</td></tr>
+              <tr><td class="pattern">L17</td><td class="formula">92</td></tr>
+              <tr><td class="pattern">L18</td><td class="formula">128</td></tr>
+              <tr><td class="pattern">L19</td><td class="formula">90</td></tr>
+              <tr><td class="pattern">L20</td><td class="note">500 (aykırı değer)</td></tr>
+              <tr><td class="pattern">L21</td><td class="formula">85</td></tr>
+              <tr><td class="pattern">L22</td><td class="formula">78</td></tr>
+              <tr><td class="pattern">L23</td><td class="formula">99</td></tr>
+              <tr><td class="pattern">L24</td><td class="formula">150</td></tr>
+              <tr><td class="pattern">L25</td><td class="formula">200</td></tr>
+              <tr><td class="pattern">L26</td><td class="formula">270</td></tr>
+              <tr><td class="pattern">L27</td><td class="formula">99</td></tr>
+              <tr><td class="pattern">L28</td><td class="formula">97</td></tr>
+              <tr><td class="pattern">L29</td><td class="formula">97</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 7</div>
+    <h2>Toon Blast, Sessiz Zorluk Kaldıraçları</h2>
+
+    <p>Aynı kaldıraç mantığı burada da geçerli, ama biri Royal Match'te hiç görülmeyen bir yönde çalışıyor: <strong>renk sayısı azaltılarak</strong> kullanılıyor.</p>
+
+    <div class="lever-list">
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l4.png" alt="Toon Blast L4"><figcaption>L4</figcaption></figure>
+          <figure><img src="assets/tb_l7.png" alt="Toon Blast L7"><figcaption>L7</figcaption></figure>
+          <figure><img src="assets/tb_l9.png" alt="Toon Blast L9"><figcaption>L9</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">01</span><span class="lever-title">Engel katmanı</span>
+          <p>Kutu ailesi 1, 2 ve 3 katmanlı versiyonlarıyla sırayla tanıtılıyor. Katman arttıkça <strong>efektif vuruş büyüyor</strong>, hedef sayısında bir değişiklik yaşanmıyor.</p>
+          <span class="lever-example">Kutu 1 → 2 → 3: L4 → L7 → L9</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l1.png" alt="Toon Blast L1"><figcaption>L1</figcaption></figure>
+          <figure><img src="assets/tb_l20.png" alt="Toon Blast L20"><figcaption>L20</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">02</span><span class="lever-title">Renk sayısı, düşürülerek</span>
+          <p><strong>Royal Match'in tersi bir kullanım</strong>: orada renk sayısı arttıkça zorlaşıyordu, burada azaltılarak oyuncuya bir kolaylık payı bırakılıyor. Renk sayısı L1'de 4, L20'de 1'e, L25-29'da 2'ye düşüyor, bu kolaylık başka bir kaldıraçla (Şapka yoğunluğu) fazlasıyla telafi ediliyor.</p>
+          <span class="lever-example">L1: 4 renk, L20: 1 renk</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l7.png" alt="Toon Blast L7"><figcaption>L7</figcaption></figure>
+          <figure><img src="assets/tb_l14.png" alt="Toon Blast L14"><figcaption>L14</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">03</span><span class="lever-title">Karışık hedef aileleri</span>
+          <p>Tek hedeften çift hedefe, çift hedeften üçlü hedefe geçiş, oyuncunun <strong>dikkatini birden fazla engel ailesi arasında bölmeye</strong> zorluyor.</p>
+          <span class="lever-example">İlk çift hedef: L7, ilk üçlü hedef: L14</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l21.png" alt="Toon Blast L21"><figcaption>L21</figcaption></figure>
+          <figure><img src="assets/tb_l25.png" alt="Toon Blast L25"><figcaption>L25</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">04</span><span class="lever-title">Statik üretici (Şapka), fiziksel-adet / hedef oranı</span>
+          <p>Royal Match'teki Posta Kutusu ile aynı matematik: Şapka <strong>kırılmıyor</strong>, yanında eşleşme yapıldıkça üretmeye devam ediyor. Aynı fiziksel segmentlere ne kadar sık geri dönülmesi gerektiği zorluğu belirliyor.</p>
+          <span class="lever-example">L21, L25</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l18.png" alt="Toon Blast L18"><figcaption>L18</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">05</span><span class="lever-title">Board bölünmesi</span>
+          <p>İlk kez ortadan bölünmüş bir harita, geç tanıtılan bir kalıcı-geometri kaldıracı. Board'un ikiye bölünmesi <strong>güçlü power-up'ların üretimini kısıtlıyor</strong>.</p>
+          <span class="lever-example">L18</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l16.png" alt="Toon Blast L16"><figcaption>L16</figcaption></figure>
+          <figure><img src="assets/tb_l23.png" alt="Toon Blast L23"><figcaption>L23</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">06</span><span class="lever-title">Tahta Dizaynı</span>
+          <p>Efektif vuruş yüksek olmasa bile hamle marjını daraltarak "kıl payı" hissi yaratan ayrı bir kaldıraç. <strong>Zorluk burada vuruş sayısından değil, tahtanın tasarım şeklinden geliyor.</strong></p>
+          <span class="lever-example">L16: marj %5.3, L23: marj %0</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 8</div>
+    <h2>Toon Blast, Tasarlanmış vs Yaşanan Ayrışması</h2>
+
+    <p>Royal Match'te de görülen ayrışma burada da var, ama Toon Blast'ta bunu açıklayan en büyük tek etken <strong>renk sayısı</strong>: yüksek tasarlanmış zorluk, düşük renk sayısıyla kolayca sönümlenebiliyor.</p>
+
+    <div class="lever-list">
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l20.png" alt="Toon Blast L20"><figcaption>L20</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L20</span>
+          <p>500 hedefli, tek renkli özel bir tasarım. Vuruş/hamle 20.0'a fırlıyor ama <strong>tek renk sayesinde</strong> şaşırtıcı derecede yönetilebilir çıkmış.</p>
+          <span class="tag-designed">Tasarlanmış: 20.0 (aşırı)</span>
+          <span class="tag-felt">Yaşanan: Orta, tek deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l26.png" alt="Toon Blast L26"><figcaption>L26</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L26</span>
+          <p>Aykırı değer L20 hariç tutulunca <strong>aralığın en yüksek tasarlanmış zorluğu</strong>, ama düşük renk sayısı (2) burada da telafi ediyor.</p>
+          <span class="tag-designed">Tasarlanmış: 10.38 (en yüksek)</span>
+          <span class="tag-felt">Yaşanan: Orta, tek deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l25.png" alt="Toon Blast L25"><figcaption>L25</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L25</span>
+          <p>Burada tasarlanmış ve yaşanan zorluk <strong>uyumlu</strong>, ikisi de zirvede buluşuyor. Royal Match'in L19'una denk bir örnek.</p>
+          <span class="tag-designed">Tasarlanmış: 7.69 (en yüksek Şapka seviyesi)</span>
+          <span class="tag-felt">Yaşanan: Çok zor, 5 deneme</span>
+        </div>
+      </div>
+
+      <div class="lever-row">
+        <div class="lever-media">
+          <figure><img src="assets/tb_l27.png" alt="Toon Blast L27"><figcaption>L27</figcaption></figure>
+        </div>
+        <div class="lever-body">
+          <span class="lever-num">L27</span>
+          <p>Tasarım bu seviyeyi en zor olarak işaretlemiyor, en yüksek Vuruş/hamle değeri bu değil, ama <strong>gerçekte L25 kadar zor çıkmış</strong>. Modelin altında kalan bir sürpriz.</p>
+          <span class="tag-designed">Tasarlanmış: 5.50 (orta-yüksek)</span>
+          <span class="tag-felt">Yaşanan: Çok zor, 3 deneme</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Efektif Vuruş ile Hamle Marjı arasında bir yön var mı</div>
+      <p>Royal Match'teki aynı soru burada da soruldu. Her nokta bir seviye (L20 hariç, aykırı değer olduğu için), X ekseni efektif vuruş, Y ekseni kalan hamle marjı. Kesikli çizgi eğilim doğrusu.</p>
+
+      <div class="chart-card">
+        <div class="chart-eyebrow">Toon Blast · Efektif Vuruş vs Hamle Marjı % · L1-L29</div>
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 880 380" role="img" aria-label="Toon Blast L1-L29 için Efektif Vuruş ile Hamle Marjı yüzdesi arasındaki ilişkiyi gösteren saçılım grafiği">
+            <g class="chart-grid">
+              <line x1="54" y1="340" x2="860" y2="340"></line>
+              <line x1="54" y1="260" x2="860" y2="260"></line>
+              <line x1="54" y1="180" x2="860" y2="180"></line>
+              <line x1="54" y1="100" x2="860" y2="100"></line>
+              <line x1="54" y1="20" x2="860" y2="20"></line>
+            </g>
+            <g class="chart-axis">
+              <text x="46" y="343" text-anchor="end">%0</text>
+              <text x="46" y="263" text-anchor="end">%20</text>
+              <text x="46" y="183" text-anchor="end">%40</text>
+              <text x="46" y="103" text-anchor="end">%60</text>
+              <text x="46" y="23" text-anchor="end">%80</text>
+              <text x="54" y="358" text-anchor="middle">0</text>
+              <text x="255.5" y="358" text-anchor="middle">75</text>
+              <text x="457.0" y="358" text-anchor="middle">150</text>
+              <text x="658.5" y="358" text-anchor="middle">225</text>
+              <text x="860" y="358" text-anchor="middle">300</text>
+              <text x="457" y="374" text-anchor="middle">Efektif Vuruş</text>
+            </g>
+
+            <line class="scatter-trend" x1="54" y1="127.6" x2="823.4" y2="340"></line>
+
+            <circle class="scatter-dot" cx="247.4" cy="117.8" r="5"><title>L1: Efektif Vuruş 72, Hamle Marjı %56</title></circle>
+            <circle class="scatter-dot" cx="247.4" cy="140.0" r="5"><title>L2: Efektif Vuruş 72, Hamle Marjı %50</title></circle>
+            <circle class="scatter-dot" cx="376.4" cy="170.0" r="5"><title>L3: Efektif Vuruş 120, Hamle Marjı %42</title></circle>
+            <circle class="scatter-dot" cx="185.6" cy="145.7" r="5"><title>L4: Efektif Vuruş 49, Hamle Marjı %49</title></circle>
+            <circle class="scatter-dot" cx="199.1" cy="158.2" r="5"><title>L5: Efektif Vuruş 54, Hamle Marjı %45</title></circle>
+            <circle class="scatter-dot" cx="239.4" cy="215.9" r="5"><title>L6: Efektif Vuruş 69, Hamle Marjı %31</title></circle>
+            <circle class="scatter-dot" cx="344.2" cy="108.4" r="5"><title>L7: Efektif Vuruş 108, Hamle Marjı %58</title></circle>
+            <circle class="scatter-dot" cx="247.4" cy="215.9" r="5"><title>L8: Efektif Vuruş 72, Hamle Marjı %31</title></circle>
+            <circle class="scatter-dot" cx="271.6" cy="188.0" r="5"><title>L9: Efektif Vuruş 81, Hamle Marjı %38</title></circle>
+            <circle class="scatter-dot" cx="354.9" cy="220.0" r="5"><title>L10: Efektif Vuruş 112, Hamle Marjı %30</title></circle>
+            <circle class="scatter-dot" cx="121.2" cy="100.0" r="5"><title>L11: Efektif Vuruş 25, Hamle Marjı %60</title></circle>
+            <circle class="scatter-dot" cx="150.7" cy="54.3" r="5"><title>L12: Efektif Vuruş 36, Hamle Marjı %71</title></circle>
+            <circle class="scatter-dot" cx="204.5" cy="78.5" r="5"><title>L13: Efektif Vuruş 56, Hamle Marjı %65</title></circle>
+            <circle class="scatter-dot" cx="199.1" cy="215.0" r="5"><title>L14: Efektif Vuruş 54, Hamle Marjı %31</title></circle>
+            <circle class="scatter-dot" cx="368.3" cy="190.0" r="5"><title>L15: Efektif Vuruş 117, Hamle Marjı %38</title></circle>
+            <circle class="scatter-dot" cx="193.7" cy="319.0" r="5"><title>L16: Efektif Vuruş 52, Hamle Marjı %5</title></circle>
+            <circle class="scatter-dot" cx="301.2" cy="260.0" r="5"><title>L17: Efektif Vuruş 92, Hamle Marjı %20</title></circle>
+            <circle class="scatter-dot" cx="397.9" cy="254.3" r="5"><title>L18: Efektif Vuruş 128, Hamle Marjı %21</title></circle>
+            <circle class="scatter-dot" cx="295.8" cy="100.0" r="5"><title>L19: Efektif Vuruş 90, Hamle Marjı %60</title></circle>
+            <circle class="scatter-dot" cx="282.4" cy="126.7" r="5"><title>L21: Efektif Vuruş 85, Hamle Marjı %53</title></circle>
+            <circle class="scatter-dot" cx="263.6" cy="149.5" r="5"><title>L22: Efektif Vuruş 78, Hamle Marjı %48</title></circle>
+            <circle class="scatter-dot" cx="320.0" cy="340.0" r="5"><title>L23: Efektif Vuruş 99, Hamle Marjı %0</title></circle>
+            <circle class="scatter-dot" cx="457.0" cy="263.8" r="5"><title>L24: Efektif Vuruş 150, Hamle Marjı %19</title></circle>
+            <circle class="scatter-dot" cx="591.3" cy="278.5" r="5"><title>L25: Efektif Vuruş 200, Hamle Marjı %15</title></circle>
+            <circle class="scatter-dot" cx="779.4" cy="278.5" r="5"><title>L26: Efektif Vuruş 270, Hamle Marjı %15</title></circle>
+            <circle class="scatter-dot" cx="320.0" cy="317.8" r="5"><title>L27: Efektif Vuruş 99, Hamle Marjı %6</title></circle>
+            <circle class="scatter-dot" cx="314.6" cy="249.7" r="5"><title>L28: Efektif Vuruş 97, Hamle Marjı %23</title></circle>
+            <circle class="scatter-dot" cx="314.6" cy="270.4" r="5"><title>L29: Efektif Vuruş 97, Hamle Marjı %17</title></circle>
+
+            <text class="chart-datalabel" x="320.0" y="333" text-anchor="middle">L23</text>
+            <text class="chart-datalabel" x="150.7" y="47" text-anchor="middle">L12</text>
+          </svg>
+        </div>
+
+        <details class="chart-table-toggle">
+          <summary>Veri tablosunu göster</summary>
+          <div class="table-wrap">
+            <table class="arch-table">
+              <thead><tr><th>Lv</th><th>Efektif Vuruş</th><th>Hamle Marjı</th></tr></thead>
+              <tbody>
+                <tr><td class="pattern">L1</td><td class="formula">72</td><td class="formula">%56</td></tr>
+                <tr><td class="pattern">L2</td><td class="formula">72</td><td class="formula">%50</td></tr>
+                <tr><td class="pattern">L3</td><td class="formula">120</td><td class="formula">%42</td></tr>
+                <tr><td class="pattern">L4</td><td class="formula">49</td><td class="formula">%49</td></tr>
+                <tr><td class="pattern">L5</td><td class="formula">54</td><td class="formula">%45</td></tr>
+                <tr><td class="pattern">L6</td><td class="formula">69</td><td class="formula">%31</td></tr>
+                <tr><td class="pattern">L7</td><td class="formula">108</td><td class="formula">%58</td></tr>
+                <tr><td class="pattern">L8</td><td class="formula">72</td><td class="formula">%31</td></tr>
+                <tr><td class="pattern">L9</td><td class="formula">81</td><td class="formula">%38</td></tr>
+                <tr><td class="pattern">L10</td><td class="formula">112</td><td class="formula">%30</td></tr>
+                <tr><td class="pattern">L11</td><td class="formula">25</td><td class="formula">%60</td></tr>
+                <tr><td class="pattern">L12</td><td class="formula">36</td><td class="formula">%71</td></tr>
+                <tr><td class="pattern">L13</td><td class="formula">56</td><td class="formula">%65</td></tr>
+                <tr><td class="pattern">L14</td><td class="formula">54</td><td class="formula">%31</td></tr>
+                <tr><td class="pattern">L15</td><td class="formula">117</td><td class="formula">%38</td></tr>
+                <tr><td class="pattern">L16</td><td class="formula">52</td><td class="formula">%5</td></tr>
+                <tr><td class="pattern">L17</td><td class="formula">92</td><td class="formula">%20</td></tr>
+                <tr><td class="pattern">L18</td><td class="formula">128</td><td class="formula">%21</td></tr>
+                <tr><td class="pattern">L19</td><td class="formula">90</td><td class="formula">%60</td></tr>
+                <tr><td class="pattern">L20</td><td class="note">500 (aykırı değer)</td><td class="note">%12</td></tr>
+                <tr><td class="pattern">L21</td><td class="formula">85</td><td class="formula">%53</td></tr>
+                <tr><td class="pattern">L22</td><td class="formula">78</td><td class="formula">%48</td></tr>
+                <tr><td class="pattern">L23</td><td class="formula">99</td><td class="formula">%0</td></tr>
+                <tr><td class="pattern">L24</td><td class="formula">150</td><td class="formula">%19</td></tr>
+                <tr><td class="pattern">L25</td><td class="formula">200</td><td class="formula">%15</td></tr>
+                <tr><td class="pattern">L26</td><td class="formula">270</td><td class="formula">%15</td></tr>
+                <tr><td class="pattern">L27</td><td class="formula">99</td><td class="formula">%6</td></tr>
+                <tr><td class="pattern">L28</td><td class="formula">97</td><td class="formula">%23</td></tr>
+                <tr><td class="pattern">L29</td><td class="formula">97</td><td class="formula">%17</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <p>Burada da bir yön var ama Royal Match'ten <strong>daha zayıf</strong>: Pearson korelasyonu r ≈ -0.47 (Royal Match'te -0.68'di). Yani efektif vuruş arttıkça marj yine genel olarak azalıyor, ama ilişki daha gürültülü. L12 gibi düşük iş yüküne (36) rağmen çok geniş marj (%71) bırakılan seviyeler var, L23 gibi orta iş yüküyle (99) marjı sıfıra indiren seviyeler de. Daha zayıf korelasyon, Toon Blast'ta hamle marjının efektif vuruştan bağımsız başka bir kaldıraçla (renk sayısı) <strong>daha güçlü şekilde ayarlandığını</strong> düşündürüyor.</p>
+    </div>
+
+    <div class="callout">
+      <strong>Çıkarım:</strong> Royal Match'teki gibi, Vuruş/hamle tek başına yaşanan zorluğun güvenilir bir göstergesi değil. L20 ve L26 tasarlanmış zorluğun renk sayısı azaltılarak kolayca sönümlenebileceğini gösteriyor, L27 ise düşük tasarlanmış zorluğun yine de sert hissedilebileceğini gösteriyor. Toon Blast'ta bu ayrışmanın en büyük tek nedeni renk sayısı, Royal Match'te bu kaldıraç bu kadar belirgin kullanılmamıştı.
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 9</div>
+    <h2>Toon Blast, Genel İstatistik Özeti</h2>
+
+    <p>L1-L29 aralığının rekorları ve dağılımı, L20'nin aykırı değer olduğu unutulmadan.</p>
+
+    <div class="stat-row">
+      <div class="stat-tile">
+        <div class="stat-label">En düşük Vuruş / hamle</div>
+        <div class="stat-value">1.25</div>
+        <div class="stat-sub">L11</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">En yüksek (L20 hariç)</div>
+        <div class="stat-value">10.38</div>
+        <div class="stat-sub">L26</div>
+      </div>
+      <div class="stat-tile">
+        <div class="stat-label">Aykırı değer</div>
+        <div class="stat-value">20.0</div>
+        <div class="stat-sub">L20, tek renk, 500 hedef</div>
+      </div>
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Zorluk İniş Çıkışı</div>
+      <p>Aynı hesap: o seviyenin Vuruş/hamle'si, bir önceki seviyenin Vuruş/hamle'sinden çıkarıldı. L19→L20 ve L20→L21 geçişleri bu grafikten çıkarıldı çünkü L20'nin aykırı değeri (+14.00 ve -17.17 gibi) diğer 26 geçişi görünmez kılıyordu; bu iki geçiş kesikli çizgiyle işaretlendi.</p>
+
+      <div class="chart-card">
+        <div class="chart-svg-wrap">
+          <svg viewBox="0 0 880 300" role="img" aria-label="Toon Blast L2-L29 arası, bir önceki seviyeye göre Vuruş/hamle değişimini gösteren çubuk grafik">
+            <line class="delta-zero" x1="44" y1="142" x2="860" y2="142"></line>
+
+            <g class="delta-axis">
+              <text x="44" y="15" text-anchor="middle">L2</text>
+              <text x="160.6" y="15" text-anchor="middle">L5</text>
+              <text x="306.3" y="15" text-anchor="middle">L10</text>
+              <text x="452.0" y="15" text-anchor="middle">L15</text>
+              <text x="656.0" y="15" text-anchor="middle">L22</text>
+              <text x="743.4" y="15" text-anchor="middle">L25</text>
+              <text x="860" y="15" text-anchor="middle">L29</text>
+            </g>
+
+            <line class="delta-gap-line" x1="583" y1="20" x2="583" y2="264"></line>
+            <text class="delta-gap-label" x="583" y="278" text-anchor="middle">L20: aykırı değer, kıyas dışı</text>
+
+            <rect class="delta-bar fall" x="65.1" y="142.0" width="16" height="4.9"></rect>
+            <rect class="delta-bar rise" x="94.3" y="112.7" width="16" height="29.3"></rect>
+            <rect class="delta-bar fall" x="123.4" y="142.0" width="16" height="39.0"></rect>
+            <rect class="delta-bar rise" x="152.6" y="136.1" width="16" height="5.9"></rect>
+            <rect class="delta-bar rise" x="181.7" y="123.9" width="16" height="18.1"></rect>
+            <rect class="delta-bar rise" x="210.9" y="130.8" width="16" height="11.2"></rect>
+            <rect class="delta-bar fall" x="240.0" y="142.0" width="16" height="8.8"></rect>
+            <rect class="delta-bar fall" x="269.1" y="142.0" width="16" height="21.0"></rect>
+            <rect class="delta-bar rise" x="298.3" y="113.2" width="16" height="28.8"></rect>
+            <rect class="delta-bar fall" x="327.4" y="142.0" width="16" height="37.8"></rect>
+            <rect class="delta-bar rise" x="356.6" y="130.8" width="16" height="11.2"></rect>
+            <rect class="delta-bar rise" x="385.7" y="131.3" width="16" height="10.7"></rect>
+            <rect class="delta-bar rise" x="414.9" y="112.2" width="16" height="29.8"></rect>
+            <rect class="delta-bar rise" x="444.0" y="45.9" width="16" height="96.1"></rect>
+            <rect class="delta-bar fall" x="473.1" y="142.0" width="16" height="111.8"></rect>
+            <rect class="delta-bar rise" x="502.3" y="119.1" width="16" height="22.9"></rect>
+            <rect class="delta-bar rise" x="531.4" y="120.3" width="16" height="21.7"></rect>
+            <rect class="delta-bar rise" x="560.6" y="107.1" width="16" height="34.9"></rect>
+
+            <rect class="delta-bar rise" x="648.0" y="120.5" width="16" height="21.5"></rect>
+            <rect class="delta-bar rise" x="677.1" y="122.7" width="16" height="19.3"></rect>
+            <rect class="delta-bar rise" x="706.3" y="77.6" width="16" height="64.4"></rect>
+            <rect class="delta-bar rise" x="735.4" y="128.6" width="16" height="13.4"></rect>
+            <rect class="delta-bar rise" x="764.6" y="76.4" width="16" height="65.6"></rect>
+            <rect class="delta-bar fall" x="793.7" y="142.0" width="16" height="119.1"></rect>
+            <rect class="delta-bar fall" x="822.9" y="142.0" width="16" height="57.8"></rect>
+            <rect class="delta-bar rise" x="852.0" y="115.4" width="16" height="26.6"></rect>
+
+            <text class="delta-datalabel rise" x="452.0" y="38" text-anchor="middle">+3.94</text>
+            <text class="delta-datalabel fall" x="481.1" y="261" text-anchor="middle">-4.58</text>
+            <text class="delta-datalabel fall" x="801.7" y="268" text-anchor="middle">-4.88</text>
+          </svg>
+        </div>
+
+        <div class="delta-legend">
+          <div class="legend-item"><span class="legend-key" style="background:var(--line-vh)"></span>Zorlaştı (bir önceki seviyeye göre)</div>
+          <div class="legend-item"><span class="legend-key" style="background:var(--delta-fall)"></span>Rahatladı (bir önceki seviyeye göre)</div>
+        </div>
+      </div>
+
+      <p>En sert tırmanış L14'ten L15'e (+3.94), en sert rahatlama hemen ardından L15'ten L16'ya (-4.58). L26'dan L27'ye de sert bir rahatlama var (-4.88), Royal Match'teki L27→L28 örüntüsüne benziyor: <strong>zirveden hemen sonra kasten geri çekilme</strong>.</p>
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Yaşanan Zorluk Dağılımı</div>
+      <div class="prop-bar">
+        <div class="prop-seg" style="width:83%; background:var(--accent-soft); color:var(--accent-strong);">24 · Kolay / Orta</div>
+        <div class="prop-seg on-accent" style="width:17%; background:var(--accent-strong);">5</div>
+      </div>
+      <div class="prop-legend">
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--accent-soft)"></span>Kolay / Orta: 24 seviye</div>
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--accent-strong)"></span>Zor ve üzeri: 5 seviye</div>
+      </div>
+      <div class="prop-callouts">
+        <span class="lever-example">Çok zor, 5 deneme: L25 ("Korkunç bir seviye")</span>
+        <span class="lever-example">Çok zor, 3 deneme: L27</span>
+        <span class="lever-example">Zor, 2 deneme: L24</span>
+        <span class="lever-example">Kıl payı, marj %10 altı: L16, L23</span>
+      </div>
+      <div class="callout">
+        Royal Match'te olduğu gibi bu dağılım da tek bir oyuncunun, kendi oynayışıma dayanıyor, genel bir ortalama değil. Royal Match'in tek "Çok zor" örneğine (L19) karşı burada iki tane var (L25, L27), ikisi de "Çılgın Orkestra" bölümünün başlangıcından hemen sonra kümeleniyor.
+      </div>
+    </div>
+
+    <div class="prop-block">
+      <div class="prop-heading">Kısıt Tipi Dağılımı</div>
+      <p>Toon Blast'ta Royal Match'teki gibi hedef/hamle yapısı olmayan bir seviye yok, bu yüzden dağılım 29 seviyenin tamamı üzerinden hesaplandı.</p>
+      <div class="prop-bar">
+        <div class="prop-seg on-accent" style="width:62%; background:var(--kisit-gecici);">18 · Geçici</div>
+        <div class="prop-seg on-accent" style="width:38%; background:var(--kisit-kalici);">11 · Kalıcı</div>
+      </div>
+      <div class="prop-legend">
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--kisit-gecici)"></span>Geçici (engel): 18 seviye</div>
+        <div class="prop-legend-item"><span class="prop-dot" style="background:var(--kisit-kalici)"></span>Kalıcı (geometri): 11 seviye</div>
+      </div>
+      <p>Royal Match'in 28 Normal seviyedeki 11 Kalıcı / 17 Geçici dağılımına (~%39 Kalıcı) <strong>şaşırtıcı derecede yakın</strong> bir oran (~%38 Kalıcı). Devamı Bölüm 10'da.</p>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 10</div>
+    <h2>Royal Match Karşılaştırması</h2>
+
+    <p>İki oyunun Vuruş/hamle eğrisi <strong>üst üste</strong>. Ölçek 0-11 aralığında tutuldu, Toon Blast'ın L20'si (20.0) bu ölçeğe sığmadığı için çizgiden çıkarıldı ve ayrı işaretlendi, aksi halde tek bir seviye grafiğin geri kalanını okunmaz hale getirirdi.</p>
+
+    <div class="chart-card">
+      <div class="chart-eyebrow">Vuruş / hamle · Royal Match vs Toon Blast · L1-L29</div>
+      <div class="chart-svg-wrap">
+        <svg viewBox="0 0 880 360" role="img" aria-label="Royal Match ve Toon Blast'ın L1-L29 arası Vuruş/hamle değerlerini karşılaştıran çizgi grafik">
+
+          <g class="chart-grid">
+            <line x1="44" y1="320" x2="860" y2="320"></line>
+            <line x1="44" y1="245.0" x2="860" y2="245.0"></line>
+            <line x1="44" y1="170.0" x2="860" y2="170.0"></line>
+            <line x1="44" y1="95.0" x2="860" y2="95.0"></line>
+            <line x1="44" y1="20.0" x2="860" y2="20.0"></line>
+          </g>
+          <g class="chart-axis">
+            <text x="36" y="323" text-anchor="end">0</text>
+            <text x="36" y="248.0" text-anchor="end">2.75</text>
+            <text x="36" y="173.0" text-anchor="end">5.5</text>
+            <text x="36" y="98.0" text-anchor="end">8.25</text>
+            <text x="36" y="23.0" text-anchor="end">11</text>
+            <text x="44" y="334" text-anchor="middle">L1</text>
+            <text x="160.6" y="334" text-anchor="middle">L5</text>
+            <text x="306.3" y="334" text-anchor="middle">L10</text>
+            <text x="452" y="334" text-anchor="middle">L15</text>
+            <text x="597.7" y="334" text-anchor="middle">L20</text>
+            <text x="743.4" y="334" text-anchor="middle">L25</text>
+            <text x="860" y="334" text-anchor="middle">L29</text>
+          </g>
+
+          <line class="chart-gap-line" x1="597.7" y1="20" x2="597.7" y2="320"></line>
+          <text class="chart-gap-label" x="597.7" y="13" text-anchor="middle">L20: RM veri yok, TB 20.0 (grafik dışı)</text>
+
+          <path class="chart-line line-tb" d="M44.0,265.5 L73.1,270.9 L102.3,238.2 L131.4,281.8 L160.6,275.4 L189.7,255.1 L218.9,242.5 L248.0,252.3 L277.1,275.8 L306.3,243.6 L335.4,285.9 L364.6,273.3 L393.7,261.3 L422.9,228.0 L452.0,120.6 L481.1,245.4 L510.3,219.6 L539.4,195.3 L568.6,156.4"></path>
+          <path class="chart-line line-tb" d="M626.9,242.7 L656.0,218.7 L685.1,197.3 L714.3,125.2 L743.4,110.2 L772.6,36.8 L801.7,170.0 L830.9,234.7 L860.0,205.0"></path>
+
+          <path class="chart-line line-vh" d="M44.0,287.3 L73.1,283.7 L102.3,269.5 L131.4,275.5 L160.6,253.7 L189.7,235.7 L218.9,213.1 L248.0,235.2 L277.1,263.5 L306.3,227.8 L335.4,275.5 L364.6,251.0 L393.7,231.9 L422.9,196.7 L452.0,191.8 L481.1,231.1 L510.3,219.1 L539.4,213.1 L568.6,190.7"></path>
+          <path class="chart-line line-vh" d="M626.9,271.2 L656.0,254.5 L685.1,224.5 L714.3,210.9 L743.4,216.1 L772.6,199.2 L801.7,138.1 L830.9,194.0 L860.0,167.3"></path>
+
+          <circle class="chart-dot dot-vh" cx="801.7" cy="138.1" r="4"></circle>
+          <text class="chart-datalabel" x="801.7" y="128" text-anchor="middle">RM L27 · 6.67</text>
+
+          <circle class="chart-dot dot-tb" cx="772.6" cy="36.8" r="4"></circle>
+          <text class="chart-datalabel" x="772.6" y="27" text-anchor="middle">TB L26 · 10.38</text>
+        </svg>
+      </div>
+
+      <div class="chart-legend">
+        <div class="legend-item"><span class="legend-key key-vh"></span>Royal Match</div>
+        <div class="legend-item"><span class="legend-key key-tb"></span>Toon Blast</div>
+      </div>
+    </div>
+
+    <p>İki eğri de benzer bir bölgede dalgalanıyor, ama Toon Blast genel olarak <strong>daha yüksek bir bandda</strong> seyrediyor ve L14-L15 ile L23-L26 arasında Royal Match'in hiçbir noktada ulaşmadığı seviyelere çıkıyor. Bu iki farkı renk sayısı kaldıracıyla birlikte okumak gerekiyor: Toon Blast'ın tasarlanmış zorluğu daha yüksek görünse de renk sayısını azaltarak bunu telafi eden bir mekanizması var, Royal Match'te böyle bir denge unsuru yok.</p>
+
+    <div class="prop-block">
+      <div class="prop-heading">Kısıt Tipi: iki oyun neredeyse aynı oranda</div>
+      <div class="stat-row">
+        <div class="stat-tile">
+          <div class="stat-label">Royal Match</div>
+          <div class="stat-value">%39</div>
+          <div class="stat-sub">Kalıcı (11 / 28 Normal seviye)</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-label">Toon Blast</div>
+          <div class="stat-value">%38</div>
+          <div class="stat-sub">Kalıcı (11 / 29 seviye)</div>
+        </div>
+      </div>
+      <p><strong>İki farklı stüdyo, birbirinden bağımsız olarak neredeyse aynı kalıcı/geçici kısıt dengesine ulaşmış.</strong> Bu, tek bir oyunun tercihi olmaktan çok, tap-to-blast/match-3 türünde işe yarayan bir denge noktası olabilir: board'un yaklaşık üçte biri baştan sona dar kalırken, geri kalanı engellerle geçici olarak daraltılıyor.</p>
+    </div>
+  </section>
+
+  <div class="divider">
+    <div class="rule"></div>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1 L15 6 L8 15 L1 6 Z" stroke="currentColor" stroke-width="1.2"/></svg>
+    <div class="rule"></div>
+  </div>
+
+  <section class="sec">
+    <div class="eyebrow">BÖLÜM 11</div>
+    <h2>Kapanış</h2>
+
+    <p>İki oyun, <strong>iki farklı kaldıraç setiyle aynı sonuca ulaşıyor</strong>: hedef sayısı ya da hamle sayısı tek başına okununca zorluk hikayesinin küçük bir parçasını anlatıyor. Royal Match bunu engel katmanlarında ve board şeklinde gizliyor, Toon Blast ise buna ek olarak renk sayısını da bir kaldıraç olarak kullanıyor, üstelik ters yönde.</p>
+
+    <p>Bu veri setinden çıkan ilke şu: <strong>hamle bütçesi iş yüküyle birlikte ayarlanmalı, tek başına vuruş sayısı yeterli bir zorluk göstergesi değil.</strong> Toon Blast bir madde daha ekliyor: <strong>eşleşme elemanı (renk) sayısı da hamle ve engel kadar güçlü bir sessiz zorluk kaldıracı olabilir.</strong> Bir seviyeyi zorlaştırmak ya da kolaylaştırmak için tek bir kaldıracı çekmek yeterli değil; kaç renk var, kaç hamle var, kaç katmanlı engel var, board ne kadar açık, bunların hepsi aynı anda kararlaştırılan bir bütün.</p>
+  </section>
+
+
+</div>
+
+<script>
+(function(){
+  var DATA = [
+    {l:1,ev:36},{l:2,ev:36},{l:3,ev:50},{l:4,ev:49},{l:5,ev:73},{l:6,ev:108},
+    {l:7,ev:98},{l:8,ev:84},{l:9,ev:62},{l:10,ev:108},{l:11,ev:44},{l:12,ev:76},
+    {l:13,ev:97},{l:14,ev:122},{l:15,ev:108},{l:16,ev:114},{l:17,ev:85},{l:18,ev:94},
+    {l:19,ev:128},{l:21,ev:50},{l:22,ev:60},{l:23,ev:70},{l:24,ev:104},{l:25,ev:99},
+    {l:26,ev:102},{l:27,ev:140},{l:28,ev:120},{l:29,ev:140}
+  ];
+  var ML=44, MR=20, MT=20, MB=40, W=880, H=360;
+  var PW=W-ML-MR, PH=H-MT-MB;
+  var XMIN=1, XMAX=29, YMIN=0, YMAX=150;
+  function X(l){ return ML + (l-XMIN)/(XMAX-XMIN)*PW; }
+  function Y(v){ return MT + PH - (v-YMIN)/(YMAX-YMIN)*PH; }
+
+  var svg = document.getElementById('difficulty-chart');
+  var hit = document.getElementById('difficulty-hit');
+  var crosshair = document.getElementById('difficulty-crosshair');
+  var hoverVh = document.getElementById('difficulty-hoverdot-vh');
+  var tooltip = document.getElementById('difficulty-tooltip');
+  var wrap = document.getElementById('difficulty-chart-wrap');
+  if(!svg || !hit || !tooltip || !wrap) return;
+
+  var ttLevel = tooltip.querySelector('.tt-level');
+  var ttVals = tooltip.querySelectorAll('.tt-val');
+
+  function svgPoint(evt){
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    var ctm = svg.getScreenCTM();
+    if(!ctm) return null;
+    return pt.matrixTransform(ctm.inverse());
+  }
+
+  function nearest(svgX){
+    var approx = XMIN + (svgX-ML)/PW*(XMAX-XMIN);
+    var best = DATA[0], bestDist = Infinity;
+    for(var i=0;i<DATA.length;i++){
+      var d = DATA[i];
+      var dist = Math.abs(d.l - approx);
+      if(dist < bestDist){ bestDist = dist; best = d; }
+    }
+    return best;
+  }
+
+  function onMove(evt){
+    var p = svgPoint(evt);
+    if(!p) return;
+    var d = nearest(p.x);
+    var cx = X(d.l);
+
+    crosshair.setAttribute('x1', cx);
+    crosshair.setAttribute('x2', cx);
+    crosshair.style.opacity = 1;
+
+    hoverVh.setAttribute('cx', cx);
+    hoverVh.setAttribute('cy', Y(d.ev));
+    hoverVh.style.opacity = 1;
+
+    var rect = svg.getBoundingClientRect();
+    var scale = rect.width / W;
+    var px = rect.left + cx*scale;
+    var wrapRect = wrap.getBoundingClientRect();
+
+    ttLevel.textContent = 'Seviye ' + d.l;
+    ttVals[0].textContent = d.ev;
+    tooltip.style.opacity = 1;
+
+    var left = px - wrapRect.left + 12;
+    var maxLeft = wrapRect.width - 190;
+    if(left > maxLeft) left = px - wrapRect.left - 190;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = '4px';
+  }
+
+  function onLeave(){
+    crosshair.style.opacity = 0;
+    hoverVh.style.opacity = 0;
+    tooltip.style.opacity = 0;
+  }
+
+  hit.addEventListener('pointermove', onMove);
+  hit.addEventListener('pointerleave', onLeave);
+})();
+
+(function(){
+  var DATA = [
+    {l:1,ev:72},{l:2,ev:72},{l:3,ev:120},{l:4,ev:49},{l:5,ev:54},{l:6,ev:69},
+    {l:7,ev:108},{l:8,ev:72},{l:9,ev:81},{l:10,ev:112},{l:11,ev:25},{l:12,ev:36},
+    {l:13,ev:56},{l:14,ev:54},{l:15,ev:117},{l:16,ev:52},{l:17,ev:92},{l:18,ev:128},
+    {l:19,ev:90},{l:20,ev:500},{l:21,ev:85},{l:22,ev:78},{l:23,ev:99},{l:24,ev:150},
+    {l:25,ev:200},{l:26,ev:270},{l:27,ev:99},{l:28,ev:97},{l:29,ev:97}
+  ];
+  var ML=44, MR=20, MT=20, MB=40, W=880, H=360;
+  var PW=W-ML-MR, PH=H-MT-MB;
+  var XMIN=1, XMAX=29, YMIN=0, YMAX=500;
+  function X(l){ return ML + (l-XMIN)/(XMAX-XMIN)*PW; }
+  function Y(v){ return MT + PH - (v-YMIN)/(YMAX-YMIN)*PH; }
+
+  var svg = document.getElementById('tb-chart');
+  var hit = document.getElementById('tb-hit');
+  var crosshair = document.getElementById('tb-crosshair');
+  var hoverVh = document.getElementById('tb-hoverdot-vh');
+  var tooltip = document.getElementById('tb-tooltip');
+  var wrap = document.getElementById('tb-chart-wrap');
+  if(!svg || !hit || !tooltip || !wrap) return;
+
+  var ttLevel = tooltip.querySelector('.tt-level');
+  var ttVals = tooltip.querySelectorAll('.tt-val');
+
+  function svgPoint(evt){
+    var pt = svg.createSVGPoint();
+    pt.x = evt.clientX; pt.y = evt.clientY;
+    var ctm = svg.getScreenCTM();
+    if(!ctm) return null;
+    return pt.matrixTransform(ctm.inverse());
+  }
+
+  function nearest(svgX){
+    var approx = XMIN + (svgX-ML)/PW*(XMAX-XMIN);
+    var best = DATA[0], bestDist = Infinity;
+    for(var i=0;i<DATA.length;i++){
+      var d = DATA[i];
+      var dist = Math.abs(d.l - approx);
+      if(dist < bestDist){ bestDist = dist; best = d; }
+    }
+    return best;
+  }
+
+  function onMove(evt){
+    var p = svgPoint(evt);
+    if(!p) return;
+    var d = nearest(p.x);
+    var cx = X(d.l);
+
+    crosshair.setAttribute('x1', cx);
+    crosshair.setAttribute('x2', cx);
+    crosshair.style.opacity = 1;
+
+    hoverVh.setAttribute('cx', cx);
+    hoverVh.setAttribute('cy', Y(d.ev));
+    hoverVh.style.opacity = 1;
+
+    var rect = svg.getBoundingClientRect();
+    var scale = rect.width / W;
+    var px = rect.left + cx*scale;
+    var wrapRect = wrap.getBoundingClientRect();
+
+    ttLevel.textContent = 'Seviye ' + d.l;
+    ttVals[0].textContent = d.ev;
+    tooltip.style.opacity = 1;
+
+    var left = px - wrapRect.left + 12;
+    var maxLeft = wrapRect.width - 190;
+    if(left > maxLeft) left = px - wrapRect.left - 190;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = '4px';
+  }
+
+  function onLeave(){
+    crosshair.style.opacity = 0;
+    hoverVh.style.opacity = 0;
+    tooltip.style.opacity = 0;
+  }
+
+  hit.addEventListener('pointermove', onMove);
+  hit.addEventListener('pointerleave', onLeave);
+})();
+</script>
+</body>
+</html>

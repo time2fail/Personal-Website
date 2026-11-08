@@ -1,3 +1,6 @@
+---
+layout: null
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,28 +12,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500;1,600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+{% feed_meta %}
 </head>
 <body>
 
 <a class="skip-link" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="header-inner">
-    <a class="mark" href="#top">U.C.A.</a>
-    <nav class="nav" aria-label="Primary">
-      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navList">
-        <span></span><span></span><span></span>
-        <span class="sr-only">Menu</span>
-      </button>
-      <ul class="nav-list" id="navList">
-        <li><a href="#experience">Experience</a></li>
-        <li><a href="#education">Education</a></li>
-        <li><a href="#record">Record</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+{% include site-header.html home=true %}
 
 <main id="main">
 
@@ -133,9 +121,22 @@
     </div>
   </section>
 
-  <section class="section section-alt" id="education">
+  <section class="section section-alt" id="blog">
     <div class="section-inner">
-      <p class="section-label">SEC. B — Education</p>
+      <p class="section-label">SEC. B — Blog</p>
+
+      <ol class="post-list">
+        {%- for post in site.posts limit: 3 %}
+        {% include post-row.html post=post %}
+        {%- endfor %}
+      </ol>
+      <p class="post-more"><a class="inline-link" href="{{ '/blog/' | relative_url }}">Tüm yazılar →</a></p>
+    </div>
+  </section>
+
+  <section class="section" id="education">
+    <div class="section-inner">
+      <p class="section-label">SEC. C — Education</p>
 
       <div class="edu-entry reveal">
         <div class="entry-head">
@@ -177,9 +178,9 @@
     </div>
   </section>
 
-  <section class="section" id="skills">
+  <section class="section section-alt" id="skills">
     <div class="section-inner">
-      <p class="section-label">SEC. C — Skills</p>
+      <p class="section-label">SEC. D — Skills</p>
 
       <div class="skills-grid">
         <div class="skill-group reveal">
@@ -206,9 +207,9 @@
     </div>
   </section>
 
-  <section class="section section-alt" id="record">
+  <section class="section" id="record">
     <div class="section-inner">
-      <p class="section-label">SEC. D — Record</p>
+      <p class="section-label">SEC. E — Record</p>
 
       <div class="record-grid">
         <div class="edu-entry reveal">
@@ -267,9 +268,9 @@
     </div>
   </section>
 
-  <section class="section contact" id="contact">
+  <section class="section section-alt contact" id="contact">
     <div class="section-inner">
-      <p class="section-label">SEC. E — Contact</p>
+      <p class="section-label">SEC. F — Contact</p>
       <h2 class="contact-headline">Let's talk about data, research, or your team.</h2>
       <p class="contact-meta">Ankara, Turkey</p>
 
@@ -284,9 +285,7 @@
 
 </main>
 
-<footer class="site-footer">
-  <p>© 2026 Utku Cengiz Acar. References available on request.</p>
-</footer>
+{% include site-footer.html %}
 
 <script src="script.js"></script>
 </body>

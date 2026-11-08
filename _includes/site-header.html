@@ -1,0 +1,18 @@
+<header class="site-header">
+  <div class="header-inner">
+    <a class="mark" href="{% if include.home %}#top{% else %}{{ '/' | relative_url }}{% endif %}">U.C.A.</a>
+    <nav class="nav" aria-label="Primary">
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navList">
+        <span></span><span></span><span></span>
+        <span class="sr-only">Menu</span>
+      </button>
+      <ul class="nav-list" id="navList">
+        <li><a href="{{ '/#experience' | relative_url }}">Experience</a></li>
+        <li><a href="{{ '/blog/' | relative_url }}"{% if include.active == "blog" %} aria-current="page"{% endif %}>Blog</a></li>
+        <li><a href="{{ '/#education' | relative_url }}">Education</a></li>
+        <li><a href="{{ '/#record' | relative_url }}">Record</a></li>
+        <li><a href="{{ '/#contact' | relative_url }}">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

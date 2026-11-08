@@ -1,0 +1,42 @@
+---
+layout: blog-base
+---
+{%- assign post_words = content | strip_html | number_of_words -%}
+{%- assign post_minutes = post_words | plus: 199 | divided_by: 200 -%}
+<article class="post">
+  <header class="post-header">
+    <p class="eyebrow">
+      <a href="{{ '/blog/' | relative_url }}">Blog</a> /
+      <time datetime="{{ page.date | date_to_xmlschema }}">{% include tarih.html date=page.date %}</time> ·
+      {{ post_minutes }} dk okuma
+    </p>
+    <h1 class="post-title">{{ page.title }}</h1>
+    {%- if page.description %}
+    <p class="post-dek">{{ page.description }}</p>
+    {%- endif %}
+  </header>
+
+  <div class="post-body">
+{{ content }}
+  </div>
+
+  <footer class="post-footer">
+    {%- if page.previous or page.next %}
+    <nav class="post-nav" aria-label="Diğer yazılar">
+      {%- if page.previous %}
+      <a class="post-nav-link" href="{{ page.previous.url | relative_url }}">
+        <span class="post-nav-label">← Önceki yazı</span>
+        <span class="post-nav-title">{{ page.previous.title }}</span>
+      </a>
+      {%- endif %}
+      {%- if page.next %}
+      <a class="post-nav-link post-nav-next" href="{{ page.next.url | relative_url }}">
+        <span class="post-nav-label">Sonraki yazı →</span>
+        <span class="post-nav-title">{{ page.next.title }}</span>
+      </a>
+      {%- endif %}
+    </nav>
+    {%- endif %}
+    <p class="post-back"><a class="inline-link" href="{{ '/blog/' | relative_url }}">Tüm yazılar</a></p>
+  </footer>
+</article>

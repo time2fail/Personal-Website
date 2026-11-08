@@ -1,0 +1,30 @@
+---
+layout: blog-base
+---
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <p class="eyebrow">Utku Cengiz Acar / Blog</p>
+    <h1 class="headline">Yazılar</h1>
+    <p class="subhead">{{ site.blog_description }}</p>
+    <p class="page-hero-feed"><a class="inline-link" href="{{ '/blog/feed.xml' | relative_url }}">RSS ile takip et</a></p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-inner">
+    {%- if site.posts.size == 0 %}
+    <p class="post-empty">İlk yazı yakında.</p>
+    {%- endif %}
+    {%- assign posts_by_year = site.posts | group_by_exp: "p", "p.date | date: '%Y'" %}
+    {%- for year in posts_by_year %}
+    <div class="post-year">
+      <p class="section-label">{{ year.name }}</p>
+      <ol class="post-list">
+        {%- for post in year.items %}
+        {% include post-row.html post=post %}
+        {%- endfor %}
+      </ol>
+    </div>
+    {%- endfor %}
+  </div>
+</section>

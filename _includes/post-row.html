@@ -1,0 +1,25 @@
+{%- comment -%}
+  One row in a post list. Usage: include post-row.html post=post
+  HTML posts added by tools/yazi-ekle.py carry kicker / okuma in front matter;
+  Markdown posts fall back to a word-count estimate.
+{%- endcomment -%}
+{%- assign row_post = include.post -%}
+{%- if row_post.okuma -%}
+  {%- assign row_minutes = row_post.okuma -%}
+{%- else -%}
+  {%- assign row_words = row_post.content | strip_html | number_of_words -%}
+  {%- assign row_minutes = row_words | plus: 199 | divided_by: 200 -%}
+{%- endif -%}
+<li class="post-row reveal" lang="tr">
+  <p class="post-row-meta">
+    <time datetime="{{ row_post.date | date_to_xmlschema }}">{% include tarih.html date=row_post.date %}</time>
+    <span>{{ row_minutes }} dk okuma</span>
+  </p>
+  <div class="post-row-main">
+    {%- if row_post.kicker %}
+    <p class="post-row-kicker">{{ row_post.kicker }}</p>
+    {%- endif %}
+    <h3 class="post-row-title"><a href="{{ row_post.url | relative_url }}">{{ row_post.title }}</a></h3>
+    <p class="post-row-excerpt">{{ row_post.description | default: row_post.excerpt | strip_html | normalize_whitespace | truncatewords: 32 }}</p>
+  </div>
+</li>

@@ -1,2 +1,12 @@
 .DS_Store
 Frontend SKILL.md
+
+# Jekyll local build output
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Local preview config and unpublished drafts
+.claude/
+_drafts/

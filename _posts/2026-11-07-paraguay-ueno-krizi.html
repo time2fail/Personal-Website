@@ -1,0 +1,808 @@
+---
+layout: "none"
+title: "Paraguay'da bir banka battı, cumhurbaşkanı gitti"
+description: "Paraguaylıların neredeyse yarısının parası Ueno Bank'taydı. Merkez Bankası 2 Kasım'da bankaya el koydu, dört gün sonra Cumhurbaşkanı Santiago Peña görevden alındı."
+kicker: "Ekonomi · Gündem"
+okuma: 7
+kaynak: 14
+image: "/blog/assets/paraguay-ueno-krizi/gorsel-4.jpg"
+excerpt_separator: ""
+---
+{% raw %}<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paraguay'da bir banka battı, cumhurbaşkanı gitti · Utku Cengiz Acar</title>
+<meta name="description" content="Paraguaylıların neredeyse yarısının parası Ueno Bank'taydı. Merkez Bankası 2 Kasım'da bankaya el koydu, dört gün sonra Cumhurbaşkanı Santiago Peña görevden alındı.">
+<meta property="og:title" content="Paraguay'da bir banka battı, cumhurbaşkanı gitti">
+<meta property="og:description" content="Ueno Bank krizinin arka planı ve Paraguay'da beş günün kronolojisi.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="tr_TR">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,700;0,6..72,800;1,6..72,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: light;
+    /* Palet A: taba, konyak, kahve, lacivert */
+    --bg: #f5efe4;              /* krem zemin */
+    --paper: #fbf7f0;
+    --ink: #2b1d16;             /* koyu kahve: metin */
+    --ink-2: #5c4636;           /* orta kahve: ikincil metin */
+    --muted: #74614f;           /* soluk kahve: künye, altyazı */
+    --line: #dccbb0;            /* çizgiler */
+    --konyak: #9a4a2e;          /* vurgu */
+    --konyak-soft: #f3e3da;
+    --lacivert: #1f3a5f;        /* bağlantı, kaynak numarası */
+    --lacivert-soft: #e3e8f0;
+    --grafik-lacivert: #2b5c9e; /* grafiklerde karşılaştırma rengi */
+    --taba: #d6c09c;            /* nötr işaretler: boş kare, oy kullanmayan sandalye */
+    --taba-soft: #e8dcc8;       /* çubuk zemini, halka zemini */
+    --gold: #a36d17;
+    --font-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+    --font-serif: 'Newsreader', Charter, 'Iowan Old Style', Georgia, serif;
+    --measure: 40rem;
+    --text: 45rem;
+    --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    line-height: 1.65;
+    overflow-x: clip;
+  }
+  a { color: var(--lacivert); text-underline-offset: .18em; }
+  svg text { font-family: var(--font-sans); }
+
+  .progress { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 50; }
+  .progress span { display: block; height: 100%; background: var(--konyak); transform-origin: 0 50%; transform: scaleX(0); }
+
+  .wrap { max-width: var(--measure); margin: 0 auto; padding: 0 16px; }
+
+  /* Düzen: geniş ekranda metin solda, sözlük sağda */
+  .layout { max-width: var(--measure); margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 1040px) {
+    /* Kenar boşlukları eski düzenin yarısı: (ekran - 976) / 4. Yazı alanı esnek, en fazla 960 px. */
+    .layout {
+      max-width: none; padding-inline: max(16px, calc((100vw - 976px) / 4));
+      display: grid; grid-template-columns: minmax(0, 60rem) 17rem; column-gap: 4rem; justify-content: center;
+    }
+    .layout > .col { grid-column: 1; min-width: 0; }
+    /* Metin okunur genişlikte (720 px), görseller yazı alanının tamamında */
+    header.hero .col > .dek,
+    main.col > .tldr,
+    main.col > section > :is(p, h2),
+    main.col > .author-note,
+    main.col > .sources { max-width: var(--text); }
+    .timeline > li > :is(.day, h3, p, .clock) { max-width: calc(var(--text) - 2rem); }
+  }
+
+  /* Sözlük paneli */
+  .gloss-panel { font-family: var(--font-sans); }
+  .gloss-toggle { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: .5rem; width: 100%; }
+  .gloss-toggle:focus-visible { outline: 2px solid var(--lacivert); outline-offset: 3px; }
+  .gloss-title { font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--konyak); }
+  .gloss-count { font-size: .78rem; color: var(--muted); margin-left: auto; }
+  .chev { width: .8rem; height: .8rem; flex: none; color: var(--ink-2); transition: transform .3s ease; }
+  .gloss-panel.open .chev { transform: rotate(180deg); }
+  .gloss-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .35s ease; }
+  .gloss-panel.open .gloss-body { grid-template-rows: 1fr; }
+  .gloss-inner { min-height: 0; overflow: hidden; }
+  .gloss-list { margin: 0; padding-top: .5rem; }
+  .gloss-list div { border-top: 1px solid var(--line); padding: .65rem 0; }
+  .gloss-list dt { font-weight: 600; font-size: .9rem; color: var(--ink); }
+  .gloss-list dd { margin: .15rem 0 0; font-family: var(--font-serif); font-size: 1rem; line-height: 1.45; color: var(--ink-2); }
+  @media (min-width: 1040px) {
+    .gloss-panel {
+      grid-column: 2; grid-row: 1; align-self: start; position: sticky; top: 4.5rem;
+      margin-top: 2.25rem; border-top: 4px solid var(--ink); padding-top: .8rem;
+      max-height: calc(100vh - 6rem); overflow-y: auto;
+    }
+  }
+  @media (max-width: 1039px) {
+    .gloss-panel {
+      position: fixed; right: 16px; bottom: 16px; z-index: 40; width: min(21rem, calc(100vw - 32px));
+      background: var(--paper); border: 1px solid var(--line); padding: .75rem .95rem;
+      box-shadow: 0 14px 34px -14px rgba(0,0,0,.38);
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .gloss-panel:not(.open) { width: auto; background: var(--ink); border-color: var(--ink); border-radius: 999px; padding: .6rem 1rem; }
+    .gloss-panel:not(.open) .gloss-title, .gloss-panel:not(.open) .chev { color: #fff; }
+    .gloss-panel:not(.open) .gloss-count { display: none; }
+    .gloss-panel:not(.open) .gloss-toggle { width: auto; }
+    .gloss-panel:not(.open) .gloss-body { display: none; }
+    .gloss-panel.open .gloss-body { animation: gloss-rise .3s ease both; }
+    @keyframes gloss-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .gloss-panel.open .gloss-inner { overflow-y: auto; max-height: 55vh; }
+    .chev { transform: rotate(180deg); }
+    .gloss-panel.open .chev { transform: rotate(0deg); }
+    .gloss-panel.away { opacity: 0; transform: translateY(14px); pointer-events: none; }
+  }
+
+  /* Kapak */
+  header.hero { position: relative; padding: 3.25rem 0 1.5rem; border-bottom: 1px solid var(--line); }
+  header.hero::before { content: ''; position: absolute; inset: 0; background-image: var(--grain); opacity: .09; pointer-events: none; }
+  .kicker { font-family: var(--font-sans); font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--konyak); }
+  h1 {
+    font-family: var(--font-serif); font-weight: 800; letter-spacing: -.015em;
+    font-size: clamp(2.2rem, 7vw, 3.4rem); line-height: 1.04; margin: .7rem 0 1rem;
+  }
+  .dek { font-size: 1.32rem; line-height: 1.45; color: var(--ink-2); margin: 0 0 1.1rem; }
+  .meta { font-family: var(--font-sans); font-size: .85rem; color: var(--muted); }
+
+  .clipping { position: relative; margin: 2.2rem auto 0; max-width: 35rem; }
+  .clipping .sheet {
+    position: relative; background: #fff; padding: .6rem; transform: rotate(-1.2deg);
+    box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 18px 40px -22px rgba(0,0,0,.45);
+    animation: settle 1s cubic-bezier(.2,.8,.2,1) .2s both;
+  }
+  .clipping .sheet::after { content: ''; position: absolute; inset: 0; background-image: var(--grain); opacity: .22; mix-blend-mode: multiply; pointer-events: none; }
+  .clipping img { display: block; width: 100%; height: auto; filter: contrast(1.08); }
+  .clipping svg { position: absolute; inset: .6rem; width: calc(100% - 1.2rem); height: calc(100% - 1.2rem); overflow: visible; }
+  .clipping .marker { fill: none; stroke: var(--konyak); stroke-width: 5; stroke-linecap: round; opacity: .85; stroke-dasharray: 260; stroke-dashoffset: 260; animation: draw .9s ease-out 1.2s forwards; }
+  .clipping figcaption { font-family: var(--font-sans); font-size: .8rem; color: var(--muted); margin-top: 1rem; text-align: center; }
+  @keyframes settle { from { transform: translateY(14px) rotate(-3deg); } to { transform: rotate(-1.2deg); } }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+
+  /* Gövde */
+  main section { margin: 3.25rem 0; }
+  h2 { font-family: var(--font-serif); font-weight: 800; letter-spacing: -.01em; font-size: clamp(1.55rem, 4.4vw, 2rem); line-height: 1.15; margin: 0 0 .9rem; }
+  p { margin: 0 0 1.05rem; }
+  a.ref {
+    font-family: var(--font-sans); font-size: .64rem; font-weight: 600; text-decoration: none;
+    color: var(--lacivert); background: var(--lacivert-soft); border-radius: 3px;
+    padding: .05rem .28rem; margin-left: .12rem; vertical-align: .4em; line-height: 1;
+  }
+  a.ref:hover { background: var(--lacivert); color: #fff; }
+
+  /* Özet ve sözlük */
+  .tldr { border-top: 4px solid var(--ink); border-bottom: 1px solid var(--line); padding: 1rem 0 .4rem; margin: 2.25rem 0; }
+  .label { font-family: var(--font-sans); font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--konyak); margin: 0 0 .7rem; }
+  .tldr ul { margin: 0; padding-left: 1.1rem; }
+  .tldr li { margin-bottom: .65rem; font-size: 1.1rem; line-height: 1.5; }
+  .tldr li::marker { color: var(--konyak); }
+
+  /* Şekiller */
+  figure.viz { margin: 2rem 0; padding: 1.1rem 0 .9rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); }
+  .viz-title { font-family: var(--font-sans); font-weight: 600; font-size: 1.02rem; line-height: 1.35; margin: 0 0 .2rem; }
+  .viz-sub { font-family: var(--font-sans); font-size: .84rem; color: var(--muted); margin: 0 0 1rem; line-height: 1.45; }
+  figure.viz svg { width: 100%; height: auto; display: block; margin: 0 auto; }
+  figcaption { font-family: var(--font-sans); font-size: .8rem; color: var(--muted); line-height: 1.45; margin-top: .9rem; }
+  .legend { display: flex; flex-wrap: wrap; gap: .4rem 1.1rem; font-family: var(--font-sans); font-size: .84rem; color: var(--ink-2); margin-top: .7rem; }
+  .legend i { display: inline-block; width: .7rem; height: .7rem; border-radius: 2px; margin-right: .35rem; vertical-align: -.03rem; }
+
+  /* 100'lük ızgara */
+  .waffle-wrap { display: grid; grid-template-columns: minmax(0, 14rem) 1fr; gap: 1.5rem; align-items: center; }
+  .big-num { font-family: var(--font-serif); font-weight: 800; font-size: clamp(3.2rem, 12vw, 4.6rem); color: var(--konyak); line-height: .95; }
+  .big-num small { font-size: .4em; color: var(--muted); font-weight: 500; }
+  .side-txt { font-family: var(--font-sans); font-size: .92rem; color: var(--ink-2); line-height: 1.5; margin-top: .5rem; }
+  #waffle .sq { fill: var(--taba); transition: fill .3s ease var(--d, 0ms); }
+  .is-visible #waffle .sq.on { fill: var(--konyak); }
+
+  /* Sermaye şeması */
+  #solv { max-width: 30rem; }
+  #solv .bar-ueno { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(2.482); fill: var(--grafik-lacivert); transition: transform 1.6s cubic-bezier(.6,.05,.3,1) .3s, fill .6s ease 1.2s; }
+  .is-visible #solv .bar-ueno { transform: scaleY(1); fill: var(--konyak); }
+
+  /* Kronoloji */
+  .timeline { list-style: none; margin: 1.25rem 0; padding: 0; position: relative; }
+  .timeline::before { content: ''; position: absolute; left: .42rem; top: .6rem; bottom: .6rem; width: 1px; background: var(--line); }
+  .timeline > li { position: relative; padding-left: 2rem; margin-bottom: 1.6rem; }
+  .timeline > li::before { content: ''; position: absolute; left: 0; top: .45rem; width: .85rem; height: .85rem; border-radius: 50%; background: var(--bg); border: 2px solid var(--muted); }
+  .timeline > li.key::before { background: var(--konyak); border-color: var(--konyak); }
+  .timeline .day { font-family: var(--font-sans); font-size: .76rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--konyak); }
+  .timeline h3 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; margin: .1rem 0 .3rem; line-height: 1.3; }
+  .timeline p { font-size: 1.08rem; line-height: 1.6; margin: 0; color: var(--ink-2); }
+  .clock { list-style: none; padding: 0; margin: .7rem 0 0; display: grid; gap: .45rem; }
+  .clock li { display: grid; grid-template-columns: 3.3rem 1fr; gap: .6rem; font-size: 1.05rem; line-height: 1.5; color: var(--ink-2); }
+  .clock time { font-family: var(--font-sans); font-weight: 600; font-size: .85rem; color: var(--ink); border-bottom: 2px solid var(--line); height: fit-content; padding-top: .1rem; }
+  .clock li.hl { color: var(--ink); }
+  .clock li.hl time { border-color: var(--konyak); color: var(--konyak); }
+  .src-line { font-family: var(--font-sans); font-size: .8rem !important; color: var(--muted) !important; margin-top: .6rem !important; }
+
+  /* IPS çubukları */
+  .hbars { display: grid; gap: 1rem; margin-top: .4rem; }
+  .hbar-lbl { font-family: var(--font-sans); font-size: .85rem; color: var(--ink-2); display: flex; justify-content: space-between; gap: 1rem; margin-bottom: .3rem; }
+  .hbar-lbl b { color: var(--ink); font-weight: 600; }
+  .hbar-track { height: 2rem; background: #e8dcc8; position: relative; }
+  .hbar-fill { position: absolute; inset: 0 auto 0 0; width: var(--w); min-width: 4px; background: var(--grafik-lacivert); transform-origin: 0 50%; transform: scaleX(0); transition: transform 1.4s cubic-bezier(.6,.05,.3,1) var(--d, 0s); }
+  .hbar-fill.hot { background: var(--konyak); }
+  .is-visible .hbar-fill { transform: scaleX(1); }
+  .multiplier { margin-top: 1rem; font-family: var(--font-serif); font-weight: 800; font-size: 2.2rem; color: var(--konyak); line-height: 1; }
+  .multiplier small { font-family: var(--font-sans); font-weight: 500; font-size: .9rem; color: var(--muted); margin-left: .35rem; }
+
+  /* Meclisler */
+  .chambers { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1.5rem; }
+  .chamber h3 { font-family: var(--font-sans); font-size: .95rem; font-weight: 600; margin: 0 0 .1rem; }
+  .chamber .score { font-family: var(--font-serif); font-weight: 800; font-size: 2.4rem; line-height: 1.05; color: var(--konyak); }
+  .chamber .score small { font-family: var(--font-sans); font-size: .85rem; font-weight: 500; color: var(--muted); margin-left: .3rem; }
+  .chamber .cap { font-family: var(--font-sans); font-size: .8rem; color: var(--muted); margin-bottom: .5rem; }
+  .seat { fill: var(--taba); transition: fill .3s ease var(--d, 0ms); }
+  .is-visible .seat.yes { fill: var(--konyak); }
+
+  /* Garanti */
+  .ring-wrap { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1.25rem; align-items: center; }
+  #ring .arc { stroke-dasharray: 326.73; stroke-dashoffset: 326.73; transition: stroke-dashoffset 1.6s cubic-bezier(.6,.05,.3,1) .2s; }
+  .is-visible #ring .arc { stroke-dashoffset: 9.8; }
+  .steps { list-style: none; margin: 1.25rem 0 0; padding: 0; display: grid; gap: 0; }
+  .steps li { display: grid; grid-template-columns: 5rem 1fr; gap: 1rem; align-items: baseline; padding: .8rem 0; border-top: 1px solid var(--line); }
+  .steps .when { font-family: var(--font-serif); font-weight: 800; font-size: 1.5rem; color: var(--lacivert); line-height: 1; }
+  .steps .when small { display: block; font-family: var(--font-sans); font-weight: 500; font-size: .72rem; color: var(--muted); margin-top: .2rem; }
+  .steps p { margin: 0; font-size: 1.05rem; line-height: 1.5; }
+  .queue { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--line); }
+  .queue .q-num { font-family: var(--font-serif); font-weight: 800; font-size: 1.9rem; line-height: 1.05; }
+  .queue .q-txt { font-family: var(--font-sans); font-size: .86rem; color: var(--ink-2); line-height: 1.5; margin-top: .3rem; }
+
+  /* Fotoğraflar ve belge */
+  figure.photo { margin: 2rem 0; }
+  figure.photo .frame { position: relative; overflow: hidden; background: #ebe1d0; }
+  figure.photo img { width: 100%; height: auto; display: block; }
+  figure.photo .photo-img { clip-path: inset(0 0 100% 0); transform: scale(1.04); transition: clip-path 1.1s cubic-bezier(.6,.05,.3,1), transform 1.6s ease; }
+  figure.photo.is-visible .photo-img { clip-path: inset(0 0 0 0); transform: none; }
+  figure.photo.wide-crop img { aspect-ratio: 16 / 9; object-fit: cover; object-position: 50% 30%; }
+  figure.photo.doc .frame { background: #fff; border: 1px solid var(--line); box-shadow: 0 14px 34px -20px rgba(0,0,0,.4); }
+  figure.photo figcaption { margin-top: .6rem; }
+  figure.photo .credit { display: block; margin-top: .15rem; font-size: .72rem; }
+  .zoomable { cursor: zoom-in; }
+  .zoom-hint { position: absolute; right: .6rem; bottom: .6rem; font-family: var(--font-sans); font-size: .74rem; font-weight: 600; background: rgba(43,29,22,.85); color: #fff; padding: .28rem .55rem; pointer-events: none; }
+  .doc-quote { font-family: var(--font-serif); font-style: italic; font-size: 1.45rem; line-height: 1.4; border-left: 3px solid var(--konyak); padding: .1rem 0 .1rem 1rem; margin: 1.6rem 0 .4rem; }
+  .doc-quote-src { font-family: var(--font-sans); font-size: .82rem; color: var(--muted); margin: 0 0 1.6rem 1.2rem; }
+  .timeline .photo { margin: .8rem 0 .2rem; }
+  .lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(18,18,17,.92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+  .lightbox[hidden] { display: none; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; background: #fff; }
+  .lightbox button { position: absolute; top: 12px; right: 12px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; color: var(--ink); font-size: 1.5rem; cursor: pointer; }
+
+  /* Yazar yorumu (taslak) */
+  .author-note { border: 2px dashed var(--gold); background: #fbf3e4; padding: 1.1rem 1.2rem; margin: 2.5rem 0; }
+  .author-note .label { color: var(--gold); }
+  .author-note h2 { margin: 0 0 .5rem; font-size: 1.5rem; }
+  .author-note p, .author-note ul { font-size: 1.02rem; }
+  .author-note ul { margin: .25rem 0 0; padding-left: 1.2rem; line-height: 1.55; }
+
+  /* Kaynak vurgusu: haber ekran görüntüsü, cümle keçeli kalem sarısıyla çizilir */
+  figure.kaynak-vurgu { margin: 1.1rem 0 .3rem; }
+  .kv-kart { max-width: 34rem; background: #fff; border: 1px solid var(--line); box-shadow: 0 14px 34px -22px rgba(0,0,0,.4); padding: .85rem .85rem .5rem; }
+  .kv-etiket { display: inline-block; margin-bottom: .45rem; padding: .32rem .7rem; border-radius: 999px; background: var(--ink); color: #fff; font-family: var(--font-sans); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .kv-gorsel { position: relative; }
+  .kv-gorsel img { display: block; width: 100%; height: auto; }
+  .kv-isaret {
+    position: absolute; left: var(--x); top: var(--y); width: var(--w); height: var(--h);
+    background: linear-gradient(180deg, rgba(247,207,71,.82), #f7cf47 28%, #f7cf47 74%, rgba(247,207,71,.86));
+    mix-blend-mode: multiply; border-radius: 3px 7px 4px 8px / 7px 3px 8px 4px;
+    transform: rotate(-.35deg) scaleX(0); transform-origin: 0 50%;
+    transition: transform var(--t, .6s) cubic-bezier(.55,.08,.35,1) var(--d, 0s);
+  }
+  .kaynak-vurgu.is-visible .kv-isaret { transform: rotate(-.35deg) scaleX(1); }
+  .kaynak-vurgu figcaption { margin-top: .85rem; max-width: 34rem; }
+  .kv-ceviri-etiket { display: block; margin-bottom: .2rem; font-family: var(--font-sans); font-size: .8rem; color: var(--muted); }
+  .kv-ceviri { display: block; font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.45; color: var(--ink); }
+
+  /* Kaynaklar */
+  .sources { border-top: 4px solid var(--ink); padding-top: 1.25rem; }
+  .sources h2 { font-size: 1.35rem; }
+  .sources ol, .sources ul { margin: 0; padding-left: 1.6rem; font-family: var(--font-sans); font-size: .86rem; line-height: 1.55; color: var(--ink-2); }
+  .sources li { margin-bottom: .5rem; padding-left: .2rem; scroll-margin-top: 2rem; }
+  .sources li:target { background: var(--lacivert-soft); }
+  .sources a { word-break: break-word; }
+  .note { font-family: var(--font-sans); font-size: .82rem; color: var(--muted); line-height: 1.5; margin-top: 1rem; }
+  footer { padding: 2rem 0 4rem; font-family: var(--font-sans); font-size: .82rem; color: var(--muted); }
+
+  /* Kaydırınca beliren öğeler */
+  .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.is-visible { opacity: 1; transform: none; }
+
+  @media (max-width: 560px) {
+    body { font-size: 1.12rem; }
+    header.hero { padding-top: 2.4rem; }
+    .dek { font-size: 1.18rem; }
+    .waffle-wrap, .ring-wrap { grid-template-columns: 1fr; }
+    .waffle-wrap svg { max-width: 14rem; }
+    .ring-wrap svg { max-width: 8.5rem; }
+    .queue { grid-template-columns: 1fr; }
+    .steps li { grid-template-columns: 4.2rem 1fr; }
+    .doc-quote { font-size: 1.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .clipping .sheet { transform: rotate(-1.2deg); opacity: 1; }
+    .clipping .marker { stroke-dashoffset: 0; }
+    .reveal { opacity: 1; transform: none; }
+    #waffle .sq.on { fill: var(--konyak); }
+    #solv .bar-ueno { transform: scaleY(1); fill: var(--konyak); }
+    .hbar-fill { transform: scaleX(1); }
+    .seat.yes { fill: var(--konyak); }
+    #ring .arc { stroke-dashoffset: 9.8; }
+    figure.photo .photo-img { clip-path: none; transform: none; }
+    .kv-isaret { transform: rotate(-.35deg) scaleX(1); }
+  }
+</style>
+<link rel="canonical" href="https://utkucengizacar.net/blog/paraguay-ueno-krizi/">
+<meta property="og:url" content="https://utkucengizacar.net/blog/paraguay-ueno-krizi/">
+<meta property="og:site_name" content="Utku Cengiz Acar">
+<meta property="article:published_time" content="2026-11-07">
+<link rel="alternate" type="application/atom+xml" title="Utku Cengiz Acar · Blog" href="/blog/feed.xml">
+<meta property="og:image" content="https://utkucengizacar.net/blog/assets/paraguay-ueno-krizi/gorsel-4.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  /* Siteye dönüş şeridi (tools/yazi-ekle.py ekler) */
+  .site-bar { border-bottom: 1px solid var(--line, #dccbb0); font-family: var(--font-sans, system-ui, sans-serif); font-size: .82rem; }
+  .site-bar .col { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 0; }
+  .site-bar a { color: var(--ink-2, #5c4636); text-decoration: none; }
+  .site-bar a:hover, .site-bar a:focus-visible { color: var(--konyak, #9a4a2e); }
+  .site-bar .site-mark { color: var(--ink, #2b1d16); font-weight: 600; letter-spacing: .08em; }
+</style>
+</head>
+<body>
+
+<nav class="site-bar" aria-label="Site">
+  <div class="layout"><div class="col">
+    <a class="site-mark" href="/">U.C.A.</a>
+    <a href="/blog/">Tüm yazılar</a>
+  </div></div>
+</nav>
+
+
+<div class="progress" aria-hidden="true"><span></span></div>
+
+<header class="hero">
+  <div class="layout"><div class="col">
+    <div class="kicker">Ekonomi · Gündem</div>
+    <h1>Paraguay'da bir banka battı, cumhurbaşkanı gitti</h1>
+    <p class="dek">Paraguaylıların neredeyse yarısının parası Ueno Bank'taydı. Merkez Bankası 2 Kasım'da bankaya el koydu. Dört gün sonra Senato, bankanın ana şirketinde yıllarca hissedar olan Cumhurbaşkanı Santiago Peña'yı görevden aldı. Peña aynı akşam evinde gözaltına alındı.</p>
+    <div class="meta">7 Kasım 2026 · 7 dk okuma · 14 kaynak</div>
+
+    <figure class="clipping">
+      <div class="sheet">
+        <img src="/blog/assets/paraguay-ueno-krizi/gorsel-1.jpg" width="560" height="320" alt="Santiago Peña'nın istifa mektubunun ilk satırları: Asunción, 5 Kasım 2026 tarihli, Kongre'ye hitaben yazılmış İspanyolca metin.">
+        <svg viewBox="0 0 560 320" preserveAspectRatio="none" aria-hidden="true">
+          <path class="marker" d="M150 305 C 205 301, 300 308, 398 302"/>
+        </svg>
+      </div>
+      <figcaption>“...a fin de presentar formalmente mi renuncia...” (“...istifamı resmen sunmak üzere...”). Peña'nın 5 Kasım tarihli mektubundan.</figcaption>
+    </figure>
+  </div></div>
+</header>
+
+<div class="layout">
+<main class="col">
+
+  <aside class="tldr reveal" aria-labelledby="tldr-h">
+    <p class="label" id="tldr-h">30 saniyede</p>
+    <ul>
+      <li>Ueno Bank, sermayesi yasal sınırın yarısının altına düşünce 2 Kasım'da Paraguay Merkez Bankası'nın kontrolüne geçti. Yaklaşık 3 milyon müşterinin hesabı donduruldu.<a class="ref" href="#k1">1</a><a class="ref" href="#k3">3</a></li>
+      <li>Cumhurbaşkanı Santiago Peña, 2025'e kadar bankanın bağlı olduğu şirket grubunda ortaktı. Ağustos sonunda bankada yaklaşık 850 milyon dolar kamu parası vardı.<a class="ref" href="#k1">1</a><a class="ref" href="#k2">2</a></li>
+      <li>Peña 5 Kasım'da istifa mektubu gönderdi, Kongre istifayı oylamadı. Senato 6 Kasım'da onu görevden aldı; yerine yardımcısı Pedro Alliana geçti, Peña ev hapsine alındı.<a class="ref" href="#k4">4</a><a class="ref" href="#k5">5</a></li>
+      <li>Merkez Bankası, mevduat garantisi fonundan kişi başı en fazla yaklaşık 37.000 dolarlık geri ödemelere başladı.<a class="ref" href="#k6">6</a></li>
+    </ul>
+  </aside>
+
+  <section aria-labelledby="s1">
+    <h2 id="s1">Ülkenin yarısının bankası</h2>
+    <p>Paraguay, Brezilya, Arjantin ve Bolivya arasında kalan, denize kıyısı olmayan bir ülke. Nüfusu yaklaşık 6,4 milyon, yani İstanbul'un yarısı kadar bile değil.<a class="ref" href="#k3">3</a></p>
+    <p>Ueno, telefondan kullanılan bir dijital banka olarak büyüdü.<a class="ref" href="#k8">8</a> 2023'te banka lisansı aldı, 2024'te Visión Banco'yu satın alıp bünyesine kattı.<a class="ref" href="#k1">1</a> Lisansı aldıktan üç yıl sonra, 30 Eylül 2026'da, yaklaşık 3 milyon müşterisi vardı. Bu, ülkedeki yetişkinlerin yaklaşık %63'ü demek.<a class="ref" href="#k1">1</a> Sosyal güvenlik kurumu IPS'nin ve Ekonomi Bakanlığı'nın parasının bir kısmı da bu bankadaydı.<a class="ref" href="#k3">3</a></p>
+
+    <figure class="viz">
+      <p class="viz-title">Her 100 Paraguaylıdan yaklaşık 47'si Ueno müşterisi</p>
+      <p class="viz-sub">Çocuklar dahil tüm nüfusa göre</p>
+      <div class="waffle-wrap">
+        <svg id="waffle" viewBox="0 0 245 245" role="img" aria-label="Her 100 Paraguaylıdan 47'si Ueno müşterisi."></svg>
+        <div>
+          <div class="big-num"><span data-count="47">47</span><small> / 100</small></div>
+          <div class="side-txt">Yaklaşık 3 milyon müşterinin 6,4 milyonluk nüfusa oranı. Yalnızca yetişkinler sayıldığında oran %63'e çıkıyor.</div>
+          <div class="legend"><span><i style="background:var(--konyak)"></i>Ueno müşterisi</span><span><i style="background:var(--taba)"></i>Diğer</span></div>
+        </div>
+      </div>
+      <figcaption>Müşteri sayısı<a class="ref" href="#k1">1</a> ve nüfus<a class="ref" href="#k3">3</a> farklı kaynaklardan alındı; oran yaklaşıktır.</figcaption>
+    </figure>
+
+    <p>Aynı oran Türkiye'ye uygulansa kabaca 40 milyon kişi eder.</p>
+  </section>
+
+  <section aria-labelledby="s2">
+    <h2 id="s2">Yasal sınırın yarısının altında</h2>
+    <p>Bir bankaya yatırılan paranın çoğu kasada durmaz. Kredi olarak dağıtılır ya da yatırıma gider. Krediler geri dönmezse zararı önce bankanın kendi sermayesi karşılar. O yüzden yasa, sermayenin verilen kredilere ve yapılan yatırımlara oranla belli bir seviyenin altına inmesine izin vermez. Paraguay'da bu sınır %12.<a class="ref" href="#k1">1</a></p>
+
+    <figure class="viz">
+      <p class="viz-title">Ueno'nun sermaye tamponu yasal sınırın yarısının altına indi</p>
+      <p class="viz-sub">Ödeme gücü oranı. Banka 30 Eylül'de %13,8 açıklamıştı. Grup şirketleriyle ilgili sorunlu alacaklar hesaba katılınca oran %5,56'ya indi.</p>
+      <svg id="solv" viewBox="0 0 360 262" role="img" aria-label="Ueno 30 Eylül'de yüzde 13,8 sermaye oranı açıklamıştı. Düzeltilmiş oran yüzde 5,56; yasal alt sınır olan yüzde 12'nin yarısının altında.">
+        <line x1="20" y1="220" x2="340" y2="220" stroke="#c9b48f" stroke-width="1.5"/>
+        <line x1="20" y1="100" x2="340" y2="100" stroke="#2b1d16" stroke-width="2" stroke-dasharray="6 5"/>
+        <text x="20" y="92" font-size="13" font-weight="600" fill="#2b1d16">Yasal alt sınır: %12</text>
+        <line x1="20" y1="160" x2="340" y2="160" stroke="#74614f" stroke-width="1.5" stroke-dasharray="2 4"/>
+        <text x="20" y="152" font-size="12" fill="#74614f">Sınırın yarısı: %6</text>
+        <rect x="178" y="82" width="70" height="138" fill="#2b5c9e"><title>Ueno'nun açıkladığı oran, 30 Eylül: %13,8</title></rect>
+        <text x="213" y="104" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">%13,8</text>
+        <text x="213" y="237" text-anchor="middle" font-size="13" fill="#5c4636">Açıklanan</text>
+        <text x="213" y="252" text-anchor="middle" font-size="11" fill="#74614f">30 Eylül</text>
+        <rect class="bar-ueno" x="270" y="164.4" width="70" height="55.6"><title>Düzeltilmiş oran: %5,56</title></rect>
+        <text x="305" y="198" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">%5,56</text>
+        <text x="305" y="237" text-anchor="middle" font-size="13" font-weight="600" fill="#9a4a2e">Düzeltilmiş</text>
+        <text x="305" y="252" text-anchor="middle" font-size="11" fill="#74614f">denetimde</text>
+      </svg>
+      <figcaption>Oranlar ve yasal alt sınır.<a class="ref" href="#k1">1</a> Oranın sınırın yarısının altına düştüğünü Merkez Bankası da açıkladı.<a class="ref" href="#k3">3</a> Çubuk boyları oranlarla orantılı.</figcaption>
+    </figure>
+
+    <p>Paraguay Merkez Bankası, Ueno'da bu oranın yasal alt sınırın yarısının da altına indiğini tespit etti ve 2 Kasım'da oybirliğiyle bankaya el koydu.<a class="ref" href="#k1">1</a><a class="ref" href="#k3">3</a> Ertesi sabah müşteriler uygulamaya giremedi, kapalı şubelerin önünde kalabalıklar toplandı.<a class="ref" href="#k1">1</a></p>
+  </section>
+
+  <section aria-labelledby="s3">
+    <h2 id="s3">Kronoloji: 2-6 Kasım</h2>
+    <ol class="timeline">
+      <li class="reveal key">
+        <span class="day">Pazartesi, 2 Kasım</span>
+        <h3>Merkez Bankası bankaya el koydu</h3>
+        <p>Merkez Bankası yönetim kurulu kararı oybirliğiyle verdi. Ueno'daki hesaplar donduruldu.<a class="ref" href="#k1">1</a></p>
+      </li>
+      <li class="reveal">
+        <span class="day">Salı, 3 Kasım</span>
+        <h3>Şubeler kapalı kaldı, ilk istifa geldi</h3>
+        <p>Merkez Bankası Başkanı Carlos Carvallo, Peña'nın isteğiyle istifa etti. Savcılık sekiz banka yöneticisi hakkında yakalama kararı çıkardı. Sekizi de sonradan teslim oldu.<a class="ref" href="#k2">2</a><a class="ref" href="#k3">3</a></p>
+      </li>
+      <li class="reveal">
+        <span class="day">Çarşamba, 4 Kasım</span>
+        <h3>Azil süreci başladı</h3>
+        <p>Peña, mevduatların hızlı geri ödenmesini öngören yasayı onayladı. Muhalefet azil sürecini başlattı. Başkent Asunción'daki protestolarda polis gaz ve tazyikli su kullandı.<a class="ref" href="#k3">3</a><a class="ref" href="#k6">6</a></p>
+      </li>
+      <li class="reveal key">
+        <span class="day">Perşembe, 5 Kasım</span>
+        <h3>İstifa mektubu Kongre'ye ulaştı</h3>
+        <p>Peña'nın partisi Colorado'dan eski Cumhurbaşkanı Horacio Cartes, partinin azli destekleyeceğini açıkladı. Aynı gün Peña bir video mesajla istifa ettiğini duyurdu ve mektubunu Kongre'ye gönderdi. Kongre istifayı oylamadı, Temsilciler Meclisi ise azil suçlamasını 78'e karşı 0 oyla kabul etti. Merkez Bankası ilk garanti ödemelerini de bu gün başlattı.<a class="ref" href="#k2">2</a><a class="ref" href="#k3">3</a><a class="ref" href="#k9">9</a></p>
+      </li>
+      <li class="reveal key">
+        <span class="day">Cuma, 6 Kasım</span>
+        <h3>Senato Peña'yı görevden aldı</h3>
+        <figure class="photo wide-crop">
+          <div class="frame"><img class="photo-img" src="/blog/assets/paraguay-ueno-krizi/gorsel-2.jpg" width="960" height="720" loading="lazy" alt="Asunción'daki Paraguay Kongre binası Palacio Legislativo'nun cam cepheli girişi ve geniş merdivenleri."></div>
+          <figcaption>Paraguay Kongresi'nin bulunduğu Palacio Legislativo, Asunción. Azil oylaması ve yemin töreni bu binada yapıldı.
+            <span class="credit">Fotoğraf: Mx. Granger (2017) · CC0 · <a href="https://commons.wikimedia.org/wiki/File:Palacio_legislativo_en_Asunci%C3%B3n.jpg" target="_blank" rel="noopener">Wikimedia Commons</a></span>
+          </figcaption>
+        </figure>
+        <ul class="clock">
+          <li><time>11.42</time><span>Senato, Peña'nın savunma için istediği 72 saatlik ek süreyi 39'a karşı 3 oyla reddetti.</span></li>
+          <li><time>16.00</time><span>Savcılar kanıtlarını sundu. Emeklilik fonunun Ueno'daki parası da bunların arasındaydı.</span></li>
+          <li class="hl"><time>18.55</time><span>Senato, Peña'yı 44 oyla görevden aldı.</span></li>
+          <li class="hl"><time>19.45</time><span>Pedro Alliana cumhurbaşkanı olarak yemin etti.</span></li>
+          <li class="hl"><time>20.05</time><span>Polis, savcılığın talebiyle Peña'yı evinde gözaltına aldı.</span></li>
+        </ul>
+        <p class="src-line">Saatler: ABC Color'ın canlı aktarımı.<a class="ref" href="#k4">4</a><a class="ref" href="#k5">5</a><a class="ref" href="#k10">10</a></p>
+        <figure class="kaynak-vurgu">
+          <div class="kv-kart">
+            <span class="kv-etiket">AP · 6 Kasım 2026</span>
+            <div class="kv-gorsel">
+              <img src="/blog/assets/paraguay-ueno-krizi/gorsel-3.jpg" width="840" height="528" loading="lazy" alt="AP haberinin ekran görüntüsü. Sarıyla işaretli kısım: los 44 senadores presentes votaron a favor de destituir a Peña.">
+              <span class="kv-isaret" style="--x:41.74%;--y:22.73%;--w:38.04%;--h:9.47%;--d:0.25s;--t:0.56s"></span>
+              <span class="kv-isaret" style="--x:3.33%;--y:31.82%;--w:87.72%;--h:9.47%;--d:0.89s;--t:1.06s"></span>
+              <span class="kv-isaret" style="--x:3.33%;--y:40.91%;--w:12.22%;--h:9.47%;--d:2.03s;--t:0.3s"></span>
+            </div>
+          </div>
+          <figcaption><span class="kv-ceviri-etiket">Haberdeki işaretli cümlenin Türkçesi</span><span class="kv-ceviri">“Oylamaya katılan 44 senatör, Peña'nın görevden alınmasına evet dedi.”<a class="ref" href="#k10">10</a></span></figcaption>
+        </figure>
+      </li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="s4">
+    <h2 id="s4">Peña ile Ueno arasındaki bağ</h2>
+    <figure class="photo">
+      <div class="frame"><img class="photo-img" src="/blog/assets/paraguay-ueno-krizi/gorsel-4.jpg" width="1100" height="733" loading="lazy" alt="Santiago Peña, Ekvador Devlet Başkanı Daniel Noboa ile tokalaşırken. Arka planda Paraguay bayrağı."></div>
+      <figcaption>Santiago Peña (sağda), Ekvador Devlet Başkanı Daniel Noboa ile Asunción'da, 30 Haziran 2026.
+        <span class="credit">Fotoğraf: Isaac Castillo, Ekvador Cumhurbaşkanlığı · Kamu malı · <a href="https://commons.wikimedia.org/wiki/File:REUNI%C3%93N_BILATERAL_PRESIDENTES_DE_ECUADOR_Y_PARAGUAY._ASUNCI%C3%93N,_30_DE_JUNIO_DE_2026._(55366329983).jpg" target="_blank" rel="noopener">Wikimedia Commons</a></span>
+      </figcaption>
+    </figure>
+    <p>Peña, 2019'dan 2025 baharına kadar Ueno'nun bağlı olduğu şirket grubunda hissedardı. Yani 2023'te cumhurbaşkanı seçildikten sonra da yaklaşık iki yıl ortak kaldı. Kendisi hisselerini sattığını söylüyor.<a class="ref" href="#k1">1</a><a class="ref" href="#k2">2</a><a class="ref" href="#k3">3</a><a class="ref" href="#k13">13</a></p>
+    <p>Ağustos sonunda Ueno'da yaklaşık 850 milyon dolar kamu parası duruyordu. Devletin kendi bankası BNF'yi saymazsak, kamu kurumlarının en çok para yatırdığı banka Ueno'ydu.<a class="ref" href="#k1">1</a><a class="ref" href="#k2">2</a> Savcıların Senato'da gösterdiği rakam ise emeklilik fonuyla ilgiliydi:</p>
+
+    <figure class="viz">
+      <p class="viz-title">Emeklilik fonunun Ueno'daki parası iki buçuk yılda yaklaşık 31 kat arttı</p>
+      <p class="viz-sub">IPS (Paraguay'ın SGK'sı) fonları, guaraní cinsinden. Peña Ağustos 2023'te göreve başladı.</p>
+      <div class="hbars">
+        <div>
+          <div class="hbar-lbl"><span>Eylül 2023</span><b>70 milyar guaraní</b></div>
+          <div class="hbar-track" title="Eylül 2023: yaklaşık 70 milyar guaraní"><div class="hbar-fill" style="--w:3.26%;--d:.2s"></div></div>
+        </div>
+        <div>
+          <div class="hbar-lbl"><span>Nisan 2026</span><b>2,15 trilyon guaraní</b></div>
+          <div class="hbar-track" title="Nisan 2026: yaklaşık 2,15 trilyon guaraní"><div class="hbar-fill hot" style="--w:100%;--d:.5s"></div></div>
+        </div>
+      </div>
+      <div class="multiplier"><span data-count="31">31</span> kat<small>artış</small></div>
+      <figcaption>Savcıların Senato'daki yargılamada sunduğu rakamlar.<a class="ref" href="#k4">4</a> Peña'nın göreve başlama tarihi.<a class="ref" href="#k13">13</a></figcaption>
+    </figure>
+
+    <p>Savcılık, Peña'yla birlikte eski Merkez Bankası Başkanı Carvallo'nun da tutuklanmasını istedi. Başsavcılık, bankacılık denetimi ve kamu fonlarının nereye yatırıldığı konusunda üç ayrı ceza soruşturması açtı.<a class="ref" href="#k2">2</a><a class="ref" href="#k10">10</a> Bu suçlamaların hiçbiri henüz mahkemede kanıtlanmış değil. Senato ise Peña'yı ceza davalarından ayrı olarak “görevini kötü yerine getirmek” gerekçesiyle görevden aldı.<a class="ref" href="#k4">4</a><a class="ref" href="#k5">5</a></p>
+  </section>
+
+  <section aria-labelledby="s5">
+    <h2 id="s5">İstifa mektubu ve azil</h2>
+    <p>Peña, 5 Kasım'da Kongre Başkanı Basilio Núñez'e iki sayfalık bir istifa mektubu gönderdi. Mektupta önceliğinin birikimlerini bankalara emanet eden vatandaşlar olduğunu yazdı, Mevduat Garantisi Fonu'nun da görevini eksiksiz yapmasını istedi.<a class="ref" href="#k14">14</a></p>
+
+    <figure class="photo doc">
+      <div class="frame"><img class="photo-img zoomable" src="/blog/assets/paraguay-ueno-krizi/gorsel-5.jpg" width="1280" height="905" loading="lazy" alt="Santiago Peña'nın 5 Kasım 2026 tarihli, iki sayfalık İspanyolca istifa mektubu. Sağ altta imza ve teslim alındı notu."><span class="zoom-hint">Büyütmek için dokunun</span></div>
+      <figcaption>Mektubun iki sayfası. Sağ alttaki el yazısı not, mektubun Kongre'de teslim alındığı anı gösteriyor: 5 Kasım, saat 13.33.
+        <span class="credit">Belge: Paraguay Senatosu · Kamu malı · <a href="https://commons.wikimedia.org/wiki/File:Renuncia_Santiago_Pe%C3%B1a_5_de_noviembre_de_2026.pdf" target="_blank" rel="noopener">Wikimedia Commons</a></span>
+      </figcaption>
+    </figure>
+
+    <p class="doc-quote">“Hiçbir makam, Cumhuriyet'in istikrarından daha önemli değildir.”</p>
+    <p class="doc-quote-src">Peña'nın istifa mektubundan, Türkçe çeviri.<a class="ref" href="#k14">14</a></p>
+
+    <p>Kongre istifayı oylamadı ve yargılamayı sürdürdü. Paraguay'da eski cumhurbaşkanlarına ömür boyu senatörlük ve onunla gelen yasal koruma tanınıyor; görevden alınan bir cumhurbaşkanı bu hakkı kaybediyor.<a class="ref" href="#k2">2</a> İstifası kabul edilseydi Peña bu korumayla ayrılabilirdi.</p>
+
+    <figure class="viz">
+      <p class="viz-title">İki mecliste de “hayır” oyu çıkmadı</p>
+      <p class="viz-sub">Her nokta bir sandalye</p>
+      <div class="chambers">
+        <div class="chamber">
+          <h3>Temsilciler Meclisi, suçlama</h3>
+          <div class="score"><span data-count="78">78</span><small>evet · 0 hayır</small></div>
+          <div class="cap">80 sandalye · 5 Kasım<a class="ref" href="#k2">2</a></div>
+          <svg id="hc-dip" viewBox="0 0 300 160" role="img" aria-label="Temsilciler Meclisi: 80 sandalyeden 78'i evet, hayır oyu yok."></svg>
+        </div>
+        <div class="chamber">
+          <h3>Senato, görevden alma</h3>
+          <div class="score"><span data-count="44">44</span><small>evet · 0 hayır</small></div>
+          <div class="cap">45 sandalye · 6 Kasım<a class="ref" href="#k4">4</a><a class="ref" href="#k10">10</a></div>
+          <svg id="hc-sen" viewBox="0 0 300 160" role="img" aria-label="Senato: 45 sandalyeden 44'ü evet, hayır oyu yok."></svg>
+        </div>
+      </div>
+      <div class="legend"><span><i style="background:var(--konyak)"></i>Evet</span><span><i style="background:var(--taba)"></i>Oy kullanmadı</span></div>
+    </figure>
+
+    <p>Paraguay bu yolu daha önce de kullandı. 2012'de Cumhurbaşkanı Fernando Lugo, Senato'da 39'a karşı 4 oyla görevden alındı ve bütün süreç iki günden kısa sürdü. O zaman da savunmaya yeterli süre tanınmadığı eleştirildi.<a class="ref" href="#k11">11</a> Peña'nın avukatları bugün aynı itirazı yapıyor ve Amerikalılar Arası İnsan Hakları Mahkemesi'ne başvurabileceklerini söylüyor.<a class="ref" href="#k4">4</a></p>
+  </section>
+
+  <section aria-labelledby="s6">
+    <h2 id="s6">Mevduatların geri ödenmesi</h2>
+    <p>Paraguay'da 2003'ten beri bir Mevduat Garantisi Fonu var. Bankalar her üç ayda bir mevduatlarının %0,12'si kadar katkı payı ödüyor. Bir banka batarsa fon devreye giriyor.<a class="ref" href="#k7">7</a></p>
+
+    <figure class="viz">
+      <div class="ring-wrap">
+        <svg id="ring" viewBox="0 0 130 130" role="img" aria-label="Hesapların yüzde 97'si tamamen garanti kapsamında.">
+          <circle cx="65" cy="65" r="52" fill="none" stroke="#e8dcc8" stroke-width="12"/>
+          <circle class="arc" cx="65" cy="65" r="52" fill="none" stroke="#2b5c9e" stroke-width="12" transform="rotate(-90 65 65)"/>
+          <text x="65" y="73" text-anchor="middle" font-size="24" font-weight="700" fill="#2b1d16">%<tspan data-count="97">97</tspan></text>
+        </svg>
+        <div>
+          <p class="viz-title">Ueno'daki hesapların %97'si tamamen garanti kapsamında</p>
+          <p class="viz-sub" style="margin:0">Bu hesaplardaki para garanti tavanının altında kalıyor.<a class="ref" href="#k1">1</a> Tavanı aşan büyük mevduatlar için durum farklı.</p>
+        </div>
+      </div>
+
+      <ol class="steps">
+        <li class="reveal"><div class="when">Tavan</div><p>Kişi başı en fazla 75 asgari ücret, yaklaşık 228 milyon guaraní ya da 37.000 dolar. Kişinin kaç hesabı olduğu fark etmiyor.<a class="ref" href="#k6">6</a><a class="ref" href="#k7">7</a></p></li>
+        <li class="reveal"><div class="when">24<small>saat içinde</small></div><p>En fazla 40 asgari ücretlik avans, yaklaşık 19.300 dolar.<a class="ref" href="#k6">6</a></p></li>
+        <li class="reveal"><div class="when">15<small>gün içinde</small></div><p>Tavana kadar olan kalan tutar.<a class="ref" href="#k6">6</a></p></li>
+      </ol>
+
+      <div class="queue">
+        <div class="reveal"><div class="q-num"><span data-count="722">722</span> bin kişi</div><div class="q-txt">İlk aşamada ödeme alanlar: bakiyesi 10 milyon guaraní'ye (yaklaşık 1.565 dolar) kadar olan, Ueno'ya borcu bulunmayan ve başka bankada hesabı olanlar.<a class="ref" href="#k6">6</a><a class="ref" href="#k9">9</a><a class="ref" href="#k12">12</a></div></div>
+        <div class="reveal"><div class="q-num"><span data-count="262">262</span> bin kişi</div><div class="q-txt">Başka bankada hesabı olmayanlar. Onlar için belirlenen bankalarda hesap açılıyor.<a class="ref" href="#k6">6</a></div></div>
+      </div>
+      <figcaption>Ödeme koşulları Merkez Bankası duyurusuna ve Infobae'nin aktarımına dayanıyor. Sonraki aşamaları Merkez Bankası kendi kanallarından duyuracak. Dolar karşılıkları kaynaklardan olduğu gibi alındı. Guaraní o hafta hızla değer kaybettiği için kaynaklar farklı günlerin kurunu kullanıyor, bu yüzden rakamlar birbirini tam tutmuyor.</figcaption>
+    </figure>
+
+    <p>Dolar hesapları da guaraní olarak ödeniyor.<a class="ref" href="#k6">6</a> Brezilya'daki InvestNews'e göre guaraní bu hafta dolar karşısında yaklaşık %8 değer kaybetti.<a class="ref" href="#k7">7</a> Parasını yeniden dolara çevirmek isteyen biri bu yüzden daha az dolar alabilir.</p>
+    <p>Tavanı aşan paranın, örneğin kamu kurumlarının yaklaşık 850 milyon dolarının ne olacağına dair henüz bir açıklama yok. En azından ben bulamadım.</p>
+  </section>
+
+  <section aria-labelledby="s7">
+    <h2 id="s7">Önümüzdeki günler</h2>
+    <p>Yeni yasaya göre garanti ödemelerinin 15 gün içinde tamamlanması gerekiyor. Peña ve Carvallo hakkındaki ceza davalarının ne zaman görüleceği ise belli değil. Piyasada bakılacak iki şey var: diğer bankalardan para çekilip çekilmediği ve guaraní'nin seyri.</p>
+    <p>Pedro Alliana, dönemin sonu olan Ağustos 2028'e kadar görevde kalacak.<a class="ref" href="#k5">5</a></p>
+  </section>
+
+
+  <section class="sources" aria-labelledby="src-h">
+    <h2 id="src-h">Kaynaklar</h2>
+    <ol>
+      <li id="k1">Wikipedia, “<a href="https://en.wikipedia.org/wiki/2026_Paraguay_banking_crisis" target="_blank" rel="noopener">2026 Paraguay banking crisis</a>”. Erişim: 8 Kasım 2026. (Ueno'nun geçmişi, müşteri sayısı, sermaye oranı, kamu fonları, Merkez Bankası kararı; maddenin kendi kaynakları AP ve Paraguay basını.)</li>
+      <li id="k2">Al Jazeera ve Reuters, “<a href="https://www.aljazeera.com/news/2026/11/6/paraguay-resumes-pena-impeachment-proceedings-as-financial-crisis-deepens" target="_blank" rel="noopener">Paraguay resumes Pena impeachment proceedings as financial crisis deepens</a>”, 6 Kasım 2026.</li>
+      <li id="k3">Expansión, “<a href="https://expansion.mx/mundo/2026/11/06/crisis-paraguay-renuncia-presidente-ahorros-banco" target="_blank" rel="noopener">¿Qué está pasando en Paraguay? La crisis por la renuncia del presidente que dejó a millones sin sus ahorros</a>”, 6 Kasım 2026.</li>
+      <li id="k4">ABC Color, “<a href="https://www.abc.com.py/politica/2026/11/06/en-vivo-juicio-politico-a-pena-senado-retoma-proceso-en-medio-de-renuncia-trabada-y-pedido-de-prorroga/" target="_blank" rel="noopener">Cronología del juicio político: destitución de Santiago Peña y asunción de Alliana</a>”, 6 Kasım 2026.</li>
+      <li id="k5">Última Hora, “<a href="https://www.ultimahora.com/pedro-alliana-jura-como-presidente-tras-destitucion-de-santiago-pena" target="_blank" rel="noopener">Pedro Alliana jura como presidente tras destitución de Santiago Peña</a>”, 6 Kasım 2026.</li>
+      <li id="k6">Infobae, “<a href="https://www.infobae.com/economia/2026/11/06/cuanto-cobraran-los-ahorristas-del-ueno-bank-y-que-tienen-que-hacer-para-recuperar-su-dinero/" target="_blank" rel="noopener">Cuánto cobrarán los ahorristas del Ueno Bank y qué tienen que hacer para recuperar su dinero</a>”, 6 Kasım 2026.</li>
+      <li id="k7">InvestNews, “<a href="https://investnews.com.br/economia/caso-ueno-garantia-de-depositos-paraguai" target="_blank" rel="noopener">Caso Ueno: como funciona a garantia de depósitos no Paraguai</a>”, 6 Kasım 2026.</li>
+      <li id="k8">AP (NY1 üzerinden), “<a href="https://ny1.com/nyc/all-boroughs/ap-top-news/2026/11/03/paraguay-seizes-major-digital-bank-tied-to-president-leaving-millions-of-customers-in-limbo" target="_blank" rel="noopener">Paraguay seizes major digital bank tied to president, leaving millions of customers in limbo</a>”, 3 Kasım 2026.</li>
+      <li id="k9">1000 Noticias, “<a href="https://1000noticias.com.py/2026/11/05/bcp-inicia-el-pago-de-garantia-a-depositantes-de-ueno-bank-con-saldos-de-hasta-g-10-millones/" target="_blank" rel="noopener">BCP inicia el pago de garantía a depositantes de ueno bank con saldos de hasta G. 10 millones</a>”, 5 Kasım 2026.</li>
+      <li id="k10">AP (Local10 üzerinden), “<a href="https://www.local10.com/espanol/2026/11/06/presidente-de-paraguay-destituido-es-puesto-bajo-arresto-domiciliario-tras-colapso-de-banco/" target="_blank" rel="noopener">Presidente de Paraguay destituido es puesto bajo arresto domiciliario tras colapso de banco</a>”, 6 Kasım 2026.</li>
+      <li id="k11">Wikipedia, “<a href="https://en.wikipedia.org/wiki/Impeachment_of_Fernando_Lugo" target="_blank" rel="noopener">Impeachment of Fernando Lugo</a>”. Erişim: 7 Kasım 2026.</li>
+      <li id="k12">Banco Central del Paraguay, “<a href="https://www.bcp.gov.py/web/institucional/w/comunicado-sobre-inicio-de-pagos-de-garantia-a-los-depositantes-de-ueno-bank-sa" target="_blank" rel="noopener">Comunicado sobre inicio de pagos de garantía a los depositantes de ueno bank SA</a>”, Kasım 2026.</li>
+      <li id="k13">Wikipedia, “<a href="https://en.wikipedia.org/wiki/Santiago_Pe%C3%B1a" target="_blank" rel="noopener">Santiago Peña</a>”. Erişim: 7 Kasım 2026.</li>
+      <li id="k14">Santiago Peña, Kongre Başkanı'na istifa mektubu, 5 Kasım 2026. Paraguay Senatosu belgesi, <a href="https://commons.wikimedia.org/wiki/File:Renuncia_Santiago_Pe%C3%B1a_5_de_noviembre_de_2026.pdf" target="_blank" rel="noopener">Wikimedia Commons</a> üzerinden.</li>
+    </ol>
+    <h2 style="margin-top:1.75rem">Fotoğraflar ve belge</h2>
+    <ul>
+      <li>Kapaktaki kesit ve tam metin, Peña'nın istifa mektubu: Paraguay Senatosu. Resmi belge, kamu malı. <a href="https://commons.wikimedia.org/wiki/File:Renuncia_Santiago_Pe%C3%B1a_5_de_noviembre_de_2026.pdf" target="_blank" rel="noopener">Kaynak</a></li>
+      <li>Peña ve Noboa, Asunción, 30 Haziran 2026: Isaac Castillo, Ekvador Cumhurbaşkanlığı. Flickr'da kamu malı işaretiyle yayımlandı. <a href="https://commons.wikimedia.org/wiki/File:REUNI%C3%93N_BILATERAL_PRESIDENTES_DE_ECUADOR_Y_PARAGUAY._ASUNCI%C3%93N,_30_DE_JUNIO_DE_2026._(55366329983).jpg" target="_blank" rel="noopener">Kaynak</a></li>
+      <li>6 Kasım'daki haber kesiti: AP'nin Local10'da yayımlanan haberinin ekran görüntüsü, kısa alıntı olarak. <a href="https://www.local10.com/espanol/2026/11/06/presidente-de-paraguay-destituido-es-puesto-bajo-arresto-domiciliario-tras-colapso-de-banco/" target="_blank" rel="noopener">Kaynak</a></li>
+      <li>Palacio Legislativo, Asunción: Mx. Granger, 2017. <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.tr" target="_blank" rel="noopener">CC0 1.0</a>. <a href="https://commons.wikimedia.org/wiki/File:Palacio_legislativo_en_Asunci%C3%B3n.jpg" target="_blank" rel="noopener">Kaynak</a></li>
+    </ul>
+    <p class="note">Bu yazı 7 Kasım 2026 itibarıyla erişilebilen haberlere dayanıyor; gelişmeler sürüyor. Kaynak linkleri 8 Kasım 2026'da yeniden kontrol edildi. Kaynaklar arasında küçük farklar olduğunda (ör. istifanın “reddedildiği” mi yoksa “oylanamadığı” mı) Paraguay basınının aktarımı esas alındı. Grafikler bu yazı için hazırlandı; fotoğraflar ve belge yukarıdaki serbest lisanslarla, haber kesiti kısa alıntı olarak kullanıldı.</p>
+  </section>
+</main>
+
+<aside class="gloss-panel" id="sozluk" aria-label="Sözlük">
+  <button type="button" class="gloss-toggle" aria-expanded="false" aria-controls="gloss-body">
+    <span class="gloss-title">Sözlük</span>
+    <span class="gloss-count">4 kavram</span>
+    <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="gloss-body" id="gloss-body">
+    <div class="gloss-inner">
+      <dl class="gloss-list">
+        <div><dt>Mevduat garantisi</dt><dd>Banka batarsa devletin kurduğu fon, mudilere belli bir tutara kadar paralarını öder.</dd></div>
+        <div><dt>Sermaye yeterliliği (ödeme gücü oranı)</dt><dd>Bankanın zararları karşılamak için tuttuğu kendi parası. Yasa bu tamponun belli bir oranın altına inmesine izin vermez.</dd></div>
+        <div><dt>Azil (juicio político)</dt><dd>Temsilciler Meclisi'nin cumhurbaşkanını suçlaması, Senato'nun da yargılayıp görevden alması.</dd></div>
+        <div><dt>Guaraní</dt><dd>Paraguay'ın para birimi. 10 milyon guaraní yaklaşık 1.565 dolar ediyor.<a class="ref" href="#k6">6</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="layout"><div class="col"><a href="/blog/">Tüm yazılar</a> · <a href="/">Utku Cengiz Acar</a> · 7 Kasım 2026</div></div>
+</footer>
+
+<div class="lightbox" hidden role="dialog" aria-modal="true" aria-label="Büyütülmüş görsel">
+  <img alt="">
+  <button type="button" aria-label="Kapat">×</button>
+</div>
+
+<script>
+(function () {
+  /* Görsel büyütme */
+  var lb = document.querySelector('.lightbox'), lbImg = lb.querySelector('img');
+  function closeLb() { lb.hidden = true; document.body.style.overflow = ''; }
+  document.querySelectorAll('img.zoomable').forEach(function (img) {
+    img.addEventListener('click', function () {
+      lbImg.src = img.src; lbImg.alt = img.alt; lb.hidden = false; document.body.style.overflow = 'hidden';
+      lb.querySelector('button').focus();
+    });
+  });
+  lb.addEventListener('click', closeLb);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
+})();
+
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var NS = 'http://www.w3.org/2000/svg';
+
+  /* Okuma ilerleme çubuğu */
+  var bar = document.querySelector('.progress span');
+  function onScroll() {
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, h.scrollTop / max) : 0) + ')';
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* 100 karelik ızgara */
+  var waffle = document.getElementById('waffle');
+  for (var i = 0; i < 100; i++) {
+    var sq = document.createElementNS(NS, 'rect');
+    sq.setAttribute('x', (i % 10) * 25);
+    sq.setAttribute('y', Math.floor(i / 10) * 25);
+    sq.setAttribute('width', 20);
+    sq.setAttribute('height', 20);
+    sq.setAttribute('rx', 2);
+    sq.setAttribute('class', 'sq' + (i < 47 ? ' on' : ''));
+    sq.style.setProperty('--d', (i * 14) + 'ms');
+    waffle.appendChild(sq);
+  }
+
+  /* Meclis yarım daireleri */
+  function hemicycle(svg, total, yes, rows, seatR) {
+    var cx = 150, cy = 150, r0 = 58, r1 = 138, radii = [], sum = 0;
+    for (var k = 0; k < rows; k++) { var rr = r0 + (r1 - r0) * k / (rows - 1); radii.push(rr); sum += rr; }
+    var counts = radii.map(function (rr) { return Math.round(total * rr / sum); });
+    counts[rows - 1] += total - counts.reduce(function (a, b) { return a + b; }, 0);
+    var seats = [];
+    radii.forEach(function (rr, idx) {
+      var n = counts[idx];
+      for (var j = 0; j < n; j++) {
+        var a = n === 1 ? Math.PI / 2 : Math.PI - Math.PI * j / (n - 1);
+        seats.push({ x: cx + rr * Math.cos(a), y: cy - rr * Math.sin(a), a: a });
+      }
+    });
+    seats.sort(function (p, q) { return q.a - p.a; });
+    seats.forEach(function (s, idx) {
+      var el = document.createElementNS(NS, 'circle');
+      el.setAttribute('cx', s.x.toFixed(1));
+      el.setAttribute('cy', s.y.toFixed(1));
+      el.setAttribute('r', seatR);
+      el.setAttribute('class', 'seat' + (idx < yes ? ' yes' : ''));
+      el.style.setProperty('--d', (idx * 18) + 'ms');
+      var t = document.createElementNS(NS, 'title');
+      t.textContent = idx < yes ? 'Evet' : 'Oy kullanmadı';
+      el.appendChild(t);
+      svg.appendChild(el);
+    });
+  }
+  hemicycle(document.getElementById('hc-dip'), 80, 78, 5, 6.6);
+  hemicycle(document.getElementById('hc-sen'), 45, 44, 4, 8);
+
+  /* Sayaçlar */
+  function fmt(v, dec) { return v.toLocaleString('tr-TR', { minimumFractionDigits: dec, maximumFractionDigits: dec }); }
+  var counters = Array.prototype.slice.call(document.querySelectorAll('[data-count]'));
+  function runCount(el) {
+    if (el.dataset.done) return;
+    el.dataset.done = '1';
+    var end = parseFloat(el.dataset.count), dec = +(el.dataset.dec || 0);
+    if (reduce) { el.textContent = fmt(end, dec); return; }
+    var t0 = performance.now(), dur = 1300;
+    (function step(t) {
+      var p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(end * e, dec);
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
+  }
+  if (!reduce) counters.forEach(function (el) { el.textContent = fmt(0, +(el.dataset.dec || 0)); });
+
+  /* Görünür olunca canlandır */
+  var targets = document.querySelectorAll('.reveal, figure.viz, figure.photo, figure.kaynak-vurgu');
+  function activate(el) {
+    el.classList.add('is-visible');
+    el.querySelectorAll('[data-count]').forEach(runCount);
+  }
+  if (!('IntersectionObserver' in window) || reduce) {
+    targets.forEach(activate);
+    counters.forEach(runCount);
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (en.isIntersecting) { activate(en.target); io.unobserve(en.target); }
+    });
+  }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+  targets.forEach(function (el) { io.observe(el); });
+})();
+
+(function () {
+  /* Sözlük paneli: geniş ekranda sağda sabit, telefonda sağ altta düğme */
+  var panel = document.getElementById('sozluk');
+  if (!panel) return;
+  var btn = panel.querySelector('.gloss-toggle');
+  var mq = window.matchMedia('(min-width: 1040px)');
+  function key() { return 'sozluk-' + (mq.matches ? 'genis' : 'dar'); }
+  function setOpen(open, remember) {
+    panel.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    if (remember) { try { localStorage.setItem(key(), open ? '1' : '0'); } catch (e) {} }
+  }
+  function init() {
+    var saved = null;
+    try { saved = localStorage.getItem(key()); } catch (e) {}
+    setOpen(saved === null ? mq.matches : saved === '1', false);
+  }
+  init();
+  if (mq.addEventListener) mq.addEventListener('change', init); else if (mq.addListener) mq.addListener(init);
+  btn.addEventListener('click', function () { setOpen(!panel.classList.contains('open'), true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !mq.matches && panel.classList.contains('open')) setOpen(false, true);
+  });
+
+  /* Telefonda düğme kapak geçilince belirsin */
+  var hero = document.querySelector('header.hero');
+  function checkAway() {
+    if (!hero) return;
+    panel.classList.toggle('away', window.scrollY < hero.offsetHeight * 0.7);
+  }
+  window.addEventListener('scroll', checkAway, { passive: true });
+  checkAway();
+})();
+</script>
+</body>
+</html>
+{% endraw %}

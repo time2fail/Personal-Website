@@ -1,0 +1,42 @@
+# Site settings — GitHub Pages builds this site with Jekyll.
+title: Utku Cengiz Acar
+description: Industrial engineer, M.S. student in Data Informatics and research assistant at METU Graduate School of Informatics.
+url: https://utkucengizacar.net
+timezone: Europe/Istanbul
+lang: tr
+author:
+  name: Utku Cengiz Acar
+
+# Shown under the title on /blog/ and used as the feed description.
+blog_description: Veri bilişimi, araştırma ve öğrendiklerim üzerine notlar.
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+highlighter: rouge
+
+# Posts live in _posts/ as YYYY-MM-DD-slug.md and are served at /blog/slug/
+permalink: /blog/:title/
+
+plugins:
+  - jekyll-feed
+
+# Posts are full standalone HTML pages, so the feed carries the summary only.
+feed:
+  path: blog/feed.xml
+  excerpt_only: true
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: blog-post
+
+exclude:
+  - tools
+  - "Frontend SKILL.md"
+  - README.md
+  - Gemfile
+  - Gemfile.lock

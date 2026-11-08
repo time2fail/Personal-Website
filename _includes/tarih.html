@@ -1,0 +1,3 @@
+{%- comment -%} Turkish date, e.g. "7 Kasım 2026". Usage: include tarih.html date=post.date {%- endcomment -%}
+{%- assign tarih_ay = include.date | date: "%-m" | minus: 1 -%}
+{{- include.date | date: "%-d" }} {{ site.data.tr.aylar[tarih_ay] }} {{ include.date | date: "%Y" -}}

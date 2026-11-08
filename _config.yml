@@ -21,6 +21,7 @@ permalink: /blog/:title/
 
 plugins:
   - jekyll-feed
+  - jekyll-sitemap   # /sitemap.xml and /robots.txt for search engines
 
 # Posts are full standalone HTML pages, so the feed carries the summary only.
 feed:
@@ -33,6 +34,15 @@ defaults:
       type: posts
     values:
       layout: blog-post
+  # Case studies are kept online but unlinked; leave them out of the sitemap.
+  - scope:
+      path: "dream-games-case"
+    values:
+      sitemap: false
+  - scope:
+      path: "magic-sort-case-study.html"
+    values:
+      sitemap: false
 
 exclude:
   - tools

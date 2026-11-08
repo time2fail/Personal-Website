@@ -106,19 +106,23 @@ def main():
     before = len(s.encode("utf-8"))
     s = re.sub(r"data:(image/(?:jpeg|png|webp|gif));base64,([A-Za-z0-9+/=\s]+)", extract, s)
 
-    cover = None
+    def attr(tag, name):
+        m = re.search(rf'\s{name}="([^"]*)"', tag)
+        return m.group(1) if m else None
+
+    cover, cover_tag = None, None
     if images:
+        img_tags = [t for t in re.findall(r"<img\b[^>]*>", s) if attr(t, "src") in images]
         if args.kapak.isdigit():
             n = int(args.kapak)
             if not 1 <= n <= len(images):
                 fail(f"--kapak 1 ile {len(images)} arasında olmalı")
             cover = images[n - 1]
+            cover_tag = next((t for t in img_tags if attr(t, "src") == cover), None)
         else:
-            for tag in re.findall(r"<img\b[^>]*>", s):
-                src_m = re.search(r'\ssrc="([^"]+)"', tag)
-                alt_m = re.search(r'\salt="([^"]*)"', tag)
-                if src_m and src_m.group(1) in images and alt_m and args.kapak.casefold() in alt_m.group(1).casefold():
-                    cover = src_m.group(1)
+            for tag in img_tags:
+                if args.kapak.casefold() in (attr(tag, "alt") or "").casefold():
+                    cover, cover_tag = attr(tag, "src"), tag
                     break
             if not cover:
                 fail(f"alt metninde '{args.kapak}' geçen bir görsel yok")
@@ -126,18 +130,44 @@ def main():
     # <title> ve <head> eklemeleri
     s = re.sub(r"<title>(.*?)</title>", lambda mo: f"<title>{mo.group(1)} · Utku Cengiz Acar</title>", s, count=1, flags=re.S)
     url = f"{SITE}/blog/{slug}/"
+    published = f"{date}T00:00:00+03:00"
     head = [
         f'<link rel="canonical" href="{url}">',
+        '<link rel="icon" href="/favicon.svg" type="image/svg+xml">',
+        '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
         f'<meta property="og:url" content="{url}">',
         '<meta property="og:site_name" content="Utku Cengiz Acar">',
-        f'<meta property="article:published_time" content="{date}">',
+        f'<meta property="article:published_time" content="{published}">',
+        '<meta property="article:author" content="https://utkucengizacar.net/">',
         '<link rel="alternate" type="application/atom+xml" title="Utku Cengiz Acar · Blog" href="/blog/feed.xml">',
     ]
     if cover:
-        head += [
-            f'<meta property="og:image" content="{SITE}{cover}">',
-            '<meta name="twitter:card" content="summary_large_image">',
-        ]
+        head.append(f'<meta property="og:image" content="{SITE}{cover}">')
+        for prop, name in (("width", "width"), ("height", "height"), ("alt", "alt")):
+            value = attr(cover_tag, name) if cover_tag else None
+            if value:
+                head.append(f'<meta property="og:image:{prop}" content="{value}">')
+        head.append('<meta name="twitter:card" content="summary_large_image">')
+
+    # Google için yapılandırılmış veri (BlogPosting)
+    ld = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "description": description,
+        "datePublished": published,
+        "dateModified": published,
+        "inLanguage": "tr",
+        "url": url,
+        "mainEntityOfPage": url,
+        "author": {"@type": "Person", "name": "Utku Cengiz Acar", "url": f"{SITE}/"},
+    }
+    if cover:
+        ld["image"] = f"{SITE}{cover}"
+    if kicker:
+        ld["articleSection"] = kicker
+    ld_json = json.dumps(ld, ensure_ascii=False).replace("</", "<\\/")
+    head.append(f'<script type="application/ld+json">{ld_json}</script>')
     head_html = "\n".join(head) + f"\n<style>{SITE_BAR_CSS}</style>\n"
     if s.count("</head>") != 1:
         fail("</head> bulunamadı")

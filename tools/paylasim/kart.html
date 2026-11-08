@@ -1,0 +1,79 @@
+<!doctype html>
+<!--
+  1200x630 share-card template. Rendered to PNG by tools/paylasim/uret.sh.
+  ?tur=site  -> homepage card (English)
+  ?tur=blog  -> /blog/ card (Turkish)
+-->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,500;0,600;1,500&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=block" rel="stylesheet">
+<style>
+  :root { --paper: #E9EEF0; --raised: #F4F7F7; --ink: #14202B; --ink-soft: #3C4C58; --blue: #1F4E79; --brass: #B8873A; --moss: #4C7A5E; --line: #C7D4D6; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: var(--paper);
+    background-image: linear-gradient(rgba(31,78,121,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(31,78,121,.07) 1px, transparent 1px);
+    background-size: 48px 48px;
+    color: var(--ink);
+    font-family: "IBM Plex Sans", sans-serif;
+    position: relative;
+  }
+  .frame { position: absolute; inset: 40px; border: 1.5px solid var(--ink); }
+  .text { position: absolute; left: 96px; top: 96px; width: 660px; }
+  .eyebrow { font-family: "IBM Plex Mono", monospace; font-size: 22px; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); }
+  h1 { margin-top: 28px; font-family: "Newsreader", serif; font-style: italic; font-weight: 500; font-size: 92px; line-height: 1.02; letter-spacing: -.01em; }
+  .sub { margin-top: 30px; font-size: 30px; line-height: 1.4; color: var(--ink-soft); }
+  .foot { position: absolute; left: 96px; bottom: 82px; display: flex; align-items: center; gap: 18px; font-family: "IBM Plex Mono", monospace; font-size: 22px; color: var(--ink); }
+  .foot::before { content: ""; width: 56px; height: 3px; background: var(--brass); }
+  .fig { position: absolute; right: 96px; top: 150px; width: 300px; height: 300px; background: var(--raised); border: 1.5px solid var(--line); }
+  .fig svg { width: 100%; height: 100%; display: block; }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+<div class="text">
+  <p class="eyebrow" id="eyebrow"></p>
+  <h1 id="title"></h1>
+  <p class="sub" id="sub"></p>
+</div>
+<div class="fig"><svg id="dots" viewBox="0 0 300 300"></svg></div>
+<p class="foot" id="foot"></p>
+<script>
+  var cards = {
+    site: {
+      lang: "en",
+      eyebrow: "Ankara, TR",
+      title: "Utku Cengiz Acar",
+      sub: "Industrial engineer. M.S. student in Data Informatics and research assistant at METU.",
+      foot: "utkucengizacar.net"
+    },
+    blog: {
+      lang: "tr",
+      eyebrow: "Utku Cengiz Acar / Blog",
+      title: "Yazılar",
+      sub: "Veri bilişimi, araştırma ve öğrendiklerim üzerine notlar.",
+      foot: "utkucengizacar.net/blog"
+    }
+  };
+  var c = cards[new URLSearchParams(location.search).get("tur") || "site"];
+  document.documentElement.lang = c.lang;
+  ["eyebrow", "title", "sub", "foot"].forEach(function (k) { document.getElementById(k).textContent = c[k]; });
+
+  // Same three-cluster figure as the homepage hero (fixed positions, no randomness)
+  var colors = ["#1F4E79", "#B8873A", "#4C7A5E"], centers = [[92, 98], [210, 90], [150, 210]];
+  var svg = document.getElementById("dots"), NS = "http://www.w3.org/2000/svg";
+  for (var i = 0; i < 42; i++) {
+    var k = i % 3, a = i * 2.39996, r = 12 + (i * 37 % 29);
+    var dot = document.createElementNS(NS, "circle");
+    dot.setAttribute("cx", (centers[k][0] + Math.cos(a) * r).toFixed(1));
+    dot.setAttribute("cy", (centers[k][1] + Math.sin(a) * r).toFixed(1));
+    dot.setAttribute("r", (4.5 + (i * 13 % 7) * 0.45).toFixed(1));
+    dot.setAttribute("fill", colors[k]);
+    dot.setAttribute("fill-opacity", ".88");
+    svg.appendChild(dot);
+  }
+</script>
+</body>
+</html>

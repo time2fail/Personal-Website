@@ -1,0 +1,63 @@
+/* Hallet İK P&G denemesi kutusu (assets/halletik-pg/kutu.js).
+   Renkler ve yazı tipi yazının kendi değişkenlerinden gelir. */
+
+.hpg {
+  --hpg-w: 360px;          /* çerçevenin çizildiği genişlik */
+  --hpg-h: 600px;
+  --hpg-olcek: 1;
+  box-sizing: border-box;
+  font-family: var(--font-sans, 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif);
+  background: var(--paper, #fbf7f0);
+  border: 1px solid var(--line, #dccbb0);
+  border-top: 4px solid var(--ink, #2b1d16);
+}
+/* Halletik "hazır" diyene kadar yer kaplamaz ve görünmez */
+.hpg.is-bekliyor { visibility: hidden; height: 0; overflow: hidden; border: 0; margin: 0; }
+
+.hpg-bas { display: flex; align-items: center; gap: .75rem; padding: .6rem .8rem; }
+.hpg-ac { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: .5rem; flex: 1; min-width: 0; }
+.hpg-ac:focus-visible, .hpg-kucult:focus-visible { outline: 2px solid var(--lacivert, #1f3a5f); outline-offset: 3px; }
+.hpg-baslik { font-size: .75rem; font-weight: 700; letter-spacing: .1em; color: var(--konyak, #9a4a2e); }
+.hpg-chev { width: .8rem; height: .8rem; flex: none; margin-left: auto; color: var(--ink-2, #5c4636); transform: rotate(180deg); transition: transform .3s ease; }
+.hpg.is-kapali .hpg-chev { transform: none; }
+.hpg-kucult { all: unset; cursor: pointer; font-size: .78rem; color: var(--ink-2, #5c4636); text-decoration: underline; text-underline-offset: .18em; }
+.hpg-kucult[hidden] { display: none; }
+
+.hpg.is-kapali .hpg-govde { display: none; }
+.hpg-cerceve { overflow: hidden; background: #fff; border-top: 1px solid var(--line, #dccbb0); }
+.hpg-cerceve iframe { display: block; border: 0; background: #fff; }
+
+/* Yazının içinde (telefon; bilgisayarda sağ sütun yoksa) */
+#halletik-pg-yer > .hpg { margin: 2.25rem 0; max-width: 26rem; }
+#halletik-pg-yer .hpg-cerceve iframe { width: 100%; height: var(--hpg-h); }
+
+/* Bilgisayarda sağ sütun: Sözlük üstte, P&G altta ve ekranın altında sabit */
+@media (min-width: 1040px) {
+  .layout > .hpg {
+    --hpg-olcek: .75;
+    grid-column: 2; grid-row: 1;
+    align-self: end; justify-self: end;
+    position: sticky; bottom: 16px; z-index: 45;
+    box-shadow: 0 14px 34px -14px rgba(0, 0, 0, .38);
+  }
+  .layout > .hpg.is-buyuk { --hpg-olcek: 1; }
+  .layout > .hpg .hpg-cerceve {
+    width: calc(var(--hpg-w) * var(--hpg-olcek));
+    height: calc(var(--hpg-h) * var(--hpg-olcek));
+  }
+  .layout > .hpg .hpg-cerceve iframe {
+    width: var(--hpg-w); height: var(--hpg-h);
+    transform: scale(var(--hpg-olcek)); transform-origin: 0 0;
+  }
+  /* Sözlük, kutunun yüksekliği kadar kısalır (değeri kutu.js ayarlar) */
+  .gloss-panel { max-height: calc(100vh - 6rem - var(--halletik-pg-h, 0px)); }
+}
+/* Kısa ekranda küçük hâl daha kısa: daha geniş çizilip daha çok küçültülür, Sözlük'e yer kalır */
+@media (min-width: 1040px) and (max-height: 820px) {
+  .layout > .hpg { --hpg-w: 450px; --hpg-olcek: .6; }
+  .layout > .hpg.is-buyuk { --hpg-w: 360px; --hpg-olcek: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hpg-chev { transition: none; }
+}

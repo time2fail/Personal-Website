@@ -10,6 +10,8 @@ Kaynak dosyaya dokunmaz. Yaptıkları:
   - Sayfaya gömülü (base64) görselleri blog/assets/slug/ klasörüne ayrı dosya olarak çıkarır.
   - <head>'e canonical adres, paylaşım önizlemesi (og:image) ve RSS linki ekler.
   - En üste siteye dönüş şeridi koyar, alt bilgideki blog adını site linkleriyle değiştirir.
+  - Hallet İK P&G denemesi kutusunu ekler: ilk bölümden sonra bir yer tutucu, stil ve betik
+    (assets/halletik-pg/). Bilgisayarda kutu sağ sütunda, Sözlük'ün altında görünür.
   - Yazıda taslak kutusu (author-note / TASLAK) kalmışsa hiçbir şey yazmadan durur.
 
 --kapak: paylaşım önizlemesinde kullanılacak görsel. Görselin alt metninden bir kelime
@@ -46,8 +48,36 @@ SITE_BAR_HTML = """
 """
 
 
+PG_BOX_CSS = '<link rel="stylesheet" href="/assets/halletik-pg/kutu.css">'
+PG_BOX_SPOT = '<div id="halletik-pg-yer"></div>'
+PG_BOX_JS = '<script src="/assets/halletik-pg/kutu.js" defer data-kaynak="https://www.halletik.com"></script>'
+
+
 def fail(msg):
     sys.exit(f"Durdu: {msg}")
+
+
+def add_pg_box(s):
+    """Hallet İK P&G denemesi kutusu: yer tutucu <main>'deki ilk bölümün arkasına
+    (bölüm yoksa </main>'in önüne; yazıda zaten varsa yerinde kalır), stil <head>'e,
+    betik </body>'nin önüne. Zaten olanı ikinci kez eklemez."""
+    if 'id="halletik-pg-yer"' not in s:
+        main = s.find("<main")
+        if main < 0:
+            fail("<main> bulunamadı (P&G kutusunun yeri)")
+        main_end = s.find("</main>", main)
+        if main_end < 0:
+            fail("</main> bulunamadı")
+        section_end = s.find("</section>", main, main_end)
+        at = section_end + len("</section>") if section_end >= 0 else main_end
+        s = s[:at] + "\n" + PG_BOX_SPOT + "\n" + s[at:]
+    if s.count("</head>") != 1 or s.count("</body>") != 1:
+        fail("</head> ya da </body> bulunamadı")
+    if "halletik-pg/kutu.css" not in s:
+        s = s.replace("</head>", PG_BOX_CSS + "\n</head>")
+    if "halletik-pg/kutu.js" not in s:
+        s = s.replace("</body>", PG_BOX_JS + "\n</body>")
+    return s
 
 
 def text_of(fragment):
@@ -185,6 +215,8 @@ def main():
         return mo.group(1) + links + (f" · {rest}" if rest else "") + mo.group(3)
 
     s = re.sub(r'(<footer>.*?<div class="col">)(.*?)(</div>)', footer, s, count=1, flags=re.S)
+
+    s = add_pg_box(s)
 
     # Jekyll front matter; içerik {% raw %} içinde, Liquid dokunmasın
     fm = {

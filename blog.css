@@ -9,11 +9,6 @@
   padding: clamp(3rem, 8vw, 5.5rem) var(--edge) clamp(2rem, 5vw, 3rem);
 }
 .page-hero .subhead { max-width: 52ch; }
-.page-hero-feed {
-  margin-top: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-}
 .post-year + .post-year { margin-top: 3.5rem; }
 .post-year .section-label { margin-bottom: 1.25rem; }
 .post-empty {
